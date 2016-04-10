@@ -20,7 +20,7 @@ public class MainWindow {
 		mainWindow.getContentPane().setPreferredSize(new Dimension(800, 600));
 		mainWindow.setResizable(false);
 		mainWindow.getContentPane().add(Window.getJPanel());
-    	mainWindow.pack();
+    		mainWindow.pack();
 		mainWindow.setLocationRelativeTo(null);
 		mainWindow.setVisible(true);
 	}
