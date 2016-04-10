@@ -10,27 +10,27 @@ import javax.swing.*;
 public class AboutWindow {
 	
 	public JPanel getJPanel(){
-		JPanel aboutWindow = new JPanel(new BorderLayout());
-		JPanel aboutPanel = new JPanel();
-		
+		JPanel aboutWindow = new JPanel();
+		Box aboutBox = Box.createVerticalBox();
+
 		JLabel maker = new JLabel("cette merde est faite par deux hamals");
-		aboutWindow.add(maker, BorderLayout.PAGE_START);
-		
+		aboutBox.add(maker);
+
 		JLabel law = new JLabel("cette merde est faite par deux hamals");
-		aboutWindow.add(law, BorderLayout.CENTER);
-		
+		aboutBox.add(law);
+
 		JLabel end = new JLabel("cette merde est faite par deux hamals");
-		aboutWindow.add(end, BorderLayout.PAGE_END);
-		
+		aboutBox.add(end);
+
 		JButton backButton = new JButton("Retour");
 		backButton.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				MainWindow.showMainWindow();
 			}
 		});
-		backButton.setPreferredSize(new Dimension(50, 50));
-		aboutWindow.add(backButton, BorderLayout.WEST);
-		
+		aboutBox.add(backButton);
+		aboutWindow.add(aboutBox);
+
 		return (aboutWindow);
 	}
 

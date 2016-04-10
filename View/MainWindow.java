@@ -12,7 +12,7 @@ public class MainWindow {
 	}
 	
 	public static void main(String[] args){
-		MainWindow mwindow = new MainWindow();
+		MainWindow mainWindow = new MainWindow();
 	}
 	
 	public void initialize(){
@@ -22,7 +22,7 @@ public class MainWindow {
 		mainWindow.getContentPane().setPreferredSize(new Dimension(800, 600));
 		mainWindow.setResizable(false);
 		mainWindow.getContentPane().add(Window.getJPanel());
-		mainWindow.pack();//close jai finis d'ajouuter des trucs
+        mainWindow.pack();//close jai finis d'ajouuter des trucs
 		mainWindow.setLocationRelativeTo(null);
 		mainWindow.setVisible(true); // lance l'affichage
 	}
@@ -37,7 +37,7 @@ public class MainWindow {
 	
 	public static void showOptionWindow() {
 		OptionWindow Window = new OptionWindow();
-		mainWindow.getContentPane().removeAll();//on repart du main window mias on enlève tout le contenu
+		mainWindow.getContentPane().removeAll();//on repart du main window mias on enlï¿½ve tout le contenu
 		mainWindow.getContentPane().add(Window.getJPanel());//on modifie le contenu du panel
 		mainWindow.setVisible(false);
 		mainWindow.setVisible(true);

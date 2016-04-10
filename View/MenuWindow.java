@@ -11,45 +11,53 @@ class MenuWindow {
 	
 	public JPanel getJPanel(){
 		JPanel menuWindow = new JPanel(new BorderLayout());
-		JPanel menuPanel = new JPanel();
-		//menuPanel.setAlignmentY(Compenent.CENTER_ALIGNMENT);
-		
+		Box menuPanel = Box.createVerticalBox();
+		menuPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        menuPanel.add(Box.createGlue());
+
 		JButton Play = new JButton("Jouer");
-		menuPanel.add(Play,BorderLayout.PAGE_START);
-		Play.addActionListener(new ActionListener(){
-			public void actionPerformed(ActionEvent p){
+        Play.setPreferredSize(new Dimension(80, 40));
+        Play.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
 				MainWindow.showPlayWindow();
 			}
 		});
-		
-		JButton Option = new JButton("Option");
-		menuPanel.add(Option);
-		Option.addActionListener(new ActionListener(){
-			public void actionPerformed(ActionEvent o){
+        menuPanel.add(Play);
+        menuPanel.add(Box.createVerticalStrut(25));
+
+        JButton Option = new JButton("Option");
+        Option.setPreferredSize(new Dimension(80, 40));
+        Option.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
 				MainWindow.showOptionWindow();
 			}
 		});
-		
+        menuPanel.add(Option);
+        menuPanel.add(Box.createVerticalStrut(25));
+
 		JButton About = new JButton("About");
-		About.addActionListener(new ActionListener(){
-			public void actionPerformed(ActionEvent a){
+        About.setPreferredSize(new Dimension(80, 40));
+        About.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
 				MainWindow.showAboutWindow();
 			}
 		});
 		menuPanel.add(About);
-		
-		JButton Quit = new JButton("Quitter");
-		Quit.addActionListener(new ActionListener(){
-			public void actionPerformed(ActionEvent q){
+        menuPanel.add(Box.createVerticalStrut(25));
+
+
+        JButton Quit = new JButton("Quitter");
+        Quit.setPreferredSize(new Dimension(80, 40));
+        Quit.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
 				MainWindow.closeWindow();
 			}
 		});
-		menuPanel.add(Quit,BorderLayout.PAGE_END);
-		
-		
-		
-		menuWindow.add(menuPanel, BorderLayout.CENTER);
-		JLabel authors = new JLabel("fucking bitches");
+		menuPanel.add(Quit);
+        menuPanel.add(Box.createVerticalStrut(25));
+        menuWindow.add(menuPanel, BorderLayout.CENTER);
+
+        JLabel authors = new JLabel("fucking bitches");
 		menuWindow.add(authors, BorderLayout.PAGE_END);
 		return menuWindow;
 	}

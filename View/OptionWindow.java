@@ -11,14 +11,13 @@ class OptionWindow {
 		JPanel optionWindow = new JPanel(new BorderLayout());
 		JPanel optionPanel = new JPanel();
 		
-		JPanel soundPanel = new JPanel(new BorderLayout());	
+		Box soundBox = Box.createHorizontalBox();
 		JLabel soundLabel = new JLabel("Son");
-		JCheckBox soundBox = new JCheckBox();
-		
-		soundPanel.add(soundBox, BorderLayout.LINE_END);//ajout du boutton à la box
-		soundPanel.add(soundLabel, BorderLayout.LINE_START);//ajout du mot à la box
-		optionPanel.add(soundPanel);//ajout son à la box option
-		
+		JCheckBox soundCheckBox = new JCheckBox();
+
+		soundBox.add(soundLabel);//ajout du mot ï¿½ la box
+		soundBox.add(soundCheckBox);//ajout du boutton ï¿½ la box
+		optionPanel.add(soundBox);//ajout son ï¿½ la box option
 		JButton backButton = new JButton("Retour");
 		backButton.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
@@ -28,7 +27,7 @@ class OptionWindow {
 		
 		
 		optionWindow.add(optionPanel);
-		optionWindow.add(backButton, BorderLayout.WEST);
+		optionWindow.add(backButton, BorderLayout.PAGE_END);
 		
 		return (optionWindow);
 	}

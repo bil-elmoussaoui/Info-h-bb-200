@@ -1,45 +1,49 @@
 package Interface;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
+import java.awt.event.*;
+import java.io.*;
+import org.json.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.Arrays;
+
 
 public class MenuGameWindow {
 
 	public Component getJPanel() {
 		JPanel menuGameWindow = new JPanel(new BorderLayout());
-		JPanel levelsPanel = new JPanel();
-		
-		JLabel level1Label = new JLabel();
-		level1Label.setIcon(new ImageIcon("C:\\Users\\Bejamin\\workspace\\Projet Info\\src\\Interface\\bibi.jpg"));
-		level1Label.setPreferredSize(new Dimension(80, 80));
-		level1Label.addMouseListener(new MouseAdapter() {
+        File folder = new File("/home/bilal/Info/info-h-bb-200/Levels/");
+        File[] folders = folder.listFiles();
+        Arrays.sort(folders);
+        System.out.println(folders.length%2);
+        JPanel levelsPanel = new JPanel(new GridLayout(folders.length%3,  4));
 
-			public void mouseClick(MouseEvent e){
-				System.out.println("yeeaaah");
-			}
-		});
-		
-		levelsPanel.add(level1Label);
-		
-		JLabel level2Label = new JLabel();
-		level2Label.setIcon(new ImageIcon("C:\\Users\\Bejamin\\workspace\\Projet Info\\src\\Interface\\bibi.jpg"));
-		level2Label.setPreferredSize(new Dimension(80, 80));
-		levelsPanel.add(level2Label);
-		
-		JLabel level3Label = new JLabel();
-		level3Label.setIcon(new ImageIcon("C:\\Users\\Bejamin\\workspace\\Projet Info\\src\\Interface\\bibi.jpg"));
-		level3Label.setPreferredSize(new Dimension(80, 80));
-		levelsPanel.add(level3Label);
-		
-		menuGameWindow.add(levelsPanel, BorderLayout.LINE_START);
+        try {
+            for (File fileEntry : folders) {
+                String data = new String(Files.readAllBytes(Paths.get(fileEntry + "/config.json")));
+                JSONObject level = new JSONObject(data);
+                JLabel levelLabel = new JLabel();
+                levelLabel.setText(level.getString("title"));
+                levelLabel.setIcon(new ImageIcon(fileEntry + level.getString("image")));
+                levelLabel.setPreferredSize(new Dimension(240, 240));
+                levelLabel.addMouseListener(new MouseAdapter() {
+                    public void mouseClick(MouseEvent e) {
+                        System.out.println("yeeaaah");
+                    }
+
+                    public void mouseHover(MouseEvent e) {
+                        System.out.println("yeaaaaaaaaaaaaaaaaaaaah");
+                    }
+                });
+                levelLabel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+                levelsPanel.add(levelLabel);
+            }
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+        }
+        menuGameWindow.add(levelsPanel, BorderLayout.LINE_START);
 		
 		
 		JButton backButton = new JButton("Retour");
