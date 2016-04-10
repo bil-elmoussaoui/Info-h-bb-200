@@ -10,7 +10,7 @@ import java.nio.file.Paths;
 import java.util.Arrays;
 
 
-public class MenuGameWindow {
+class MenuGameWindow {
 
 	public Component getJPanel() {
 		JPanel menuGameWindow = new JPanel(new BorderLayout());
@@ -29,6 +29,7 @@ public class MenuGameWindow {
                 levelLabel.setIcon(new ImageIcon(fileEntry + level.getString("image")));
                 levelLabel.setPreferredSize(new Dimension(240, 240));
                 levelLabel.addMouseListener(new MouseAdapter() {
+
                     public void mouseClick(MouseEvent e) {
                         System.out.println("yeeaaah");
                     }
@@ -36,6 +37,7 @@ public class MenuGameWindow {
                     public void mouseHover(MouseEvent e) {
                         System.out.println("yeaaaaaaaaaaaaaaaaaaaah");
                     }
+
                 });
                 levelLabel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
                 levelsPanel.add(levelLabel);
@@ -44,17 +46,15 @@ public class MenuGameWindow {
             System.out.println(e.getMessage());
         }
         menuGameWindow.add(levelsPanel, BorderLayout.LINE_START);
-		
-		
+
 		JButton backButton = new JButton("Retour");
 		backButton.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				MainWindow.showMainWindow();
 			}
 		});
-		
+
 		menuGameWindow.add(backButton, BorderLayout.PAGE_END);
-		
 		return menuGameWindow;
 	}
 

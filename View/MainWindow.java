@@ -1,32 +1,30 @@
 package Interface;
 import java.awt.*;
-import java.awt.event.WindowEvent;
-
+import java.awt.event.*;
 import javax.swing.*;
 
 public class MainWindow {
-	private static JFrame mainWindow;		//pk static??
-	
+	private static JFrame mainWindow;
+
 	public MainWindow(){
 		this.initialize();
 	}
-	
+
 	public static void main(String[] args){
 		MainWindow mainWindow = new MainWindow();
 	}
-	
+
 	public void initialize(){
 		mainWindow = new JFrame("Le Nom du Jeu");
-		//JLabel fondecran = new JLabel(new ImageIcon(ImageIO.read(bibi.jpg)));
 		MenuWindow Window = new MenuWindow();
 		mainWindow.getContentPane().setPreferredSize(new Dimension(800, 600));
 		mainWindow.setResizable(false);
 		mainWindow.getContentPane().add(Window.getJPanel());
-        mainWindow.pack();//close jai finis d'ajouuter des trucs
+    	mainWindow.pack();
 		mainWindow.setLocationRelativeTo(null);
-		mainWindow.setVisible(true); // lance l'affichage
+		mainWindow.setVisible(true);
 	}
-	
+
 	public static void showPlayWindow(){
 		MenuGameWindow Window = new MenuGameWindow();
 		mainWindow.getContentPane().removeAll();
@@ -34,23 +32,23 @@ public class MainWindow {
 		mainWindow.setVisible(false);
 		mainWindow.setVisible(true);
 	}
-	
+
 	public static void showOptionWindow() {
 		OptionWindow Window = new OptionWindow();
-		mainWindow.getContentPane().removeAll();//on repart du main window mias on enl�ve tout le contenu
-		mainWindow.getContentPane().add(Window.getJPanel());//on modifie le contenu du panel
+		mainWindow.getContentPane().removeAll();
+		mainWindow.getContentPane().add(Window.getJPanel());
 		mainWindow.setVisible(false);
 		mainWindow.setVisible(true);
 	}
-	
+
 	public static void showAboutWindow(){
 		AboutWindow Window = new AboutWindow();
 		mainWindow.getContentPane().removeAll();
 		mainWindow.getContentPane().add(Window.getJPanel());
 		mainWindow.setVisible(false);
-		mainWindow.setVisible(true);		
+		mainWindow.setVisible(true);
 	}
-	
+
 	public static void closeWindow(){
 		mainWindow.dispatchEvent(new WindowEvent(mainWindow, WindowEvent.WINDOW_CLOSING));
 	}
@@ -61,8 +59,6 @@ public class MainWindow {
 		mainWindow.getContentPane().add(Window.getJPanel());
 		mainWindow.setVisible(false);
 		mainWindow.setVisible(true);
-		
 	}
 
-	
 }

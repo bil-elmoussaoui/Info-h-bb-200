@@ -1,14 +1,11 @@
 package Interface;
 
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
+import java.awt.*;
+import java.awt.event.*;
 import javax.swing.*;
 
-public class AboutWindow {
-	
+class AboutWindow {
+
 	public JPanel getJPanel(){
 		JPanel aboutWindow = new JPanel();
 		Box aboutBox = Box.createVerticalBox();
@@ -31,7 +28,7 @@ public class AboutWindow {
 		aboutBox.add(backButton);
 		aboutWindow.add(aboutBox);
 
-		return (aboutWindow);
+		return aboutWindow;
 	}
 
 }

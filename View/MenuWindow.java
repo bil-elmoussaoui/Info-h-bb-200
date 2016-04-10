@@ -5,10 +5,8 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-//puisque ces classes ne peuvent se lancer tttes seules elles ne sont pas public
-
 class MenuWindow {
-	
+
 	public JPanel getJPanel(){
 		JPanel menuWindow = new JPanel(new BorderLayout());
 		Box menuPanel = Box.createVerticalBox();
@@ -45,7 +43,6 @@ class MenuWindow {
 		menuPanel.add(About);
         menuPanel.add(Box.createVerticalStrut(25));
 
-
         JButton Quit = new JButton("Quitter");
         Quit.setPreferredSize(new Dimension(80, 40));
         Quit.addActionListener(new ActionListener(){
@@ -61,6 +58,5 @@ class MenuWindow {
 		menuWindow.add(authors, BorderLayout.PAGE_END);
 		return menuWindow;
 	}
-	
 
 }
