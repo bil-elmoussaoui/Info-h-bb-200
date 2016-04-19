@@ -1,53 +1,35 @@
-package Interface;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
-public class MainWindow {
+class MainWindow  {
 	private static JFrame mainWindow;
-
 	public MainWindow(){
-		this.initialize();
+		initialize();
 	}
-
-	public static void main(String[] args){
-		MainWindow mainWindow = new MainWindow();
-	}
-
+    public static void main(String args[]){
+        MainWindow mainWindow = new MainWindow();
+    }
 	public void initialize(){
-		mainWindow = new JFrame("Le Nom du Jeu");
+		mainWindow = new JFrame();
+		mainWindow.setTitle("Le Nom du Jeu");
 		MenuWindow Window = new MenuWindow();
 		mainWindow.getContentPane().setPreferredSize(new Dimension(800, 600));
-		mainWindow.setResizable(false);
+        mainWindow.setResizable(false);
 		mainWindow.getContentPane().add(Window.getJPanel());
-    		mainWindow.pack();
+		mainWindow.pack();
 		mainWindow.setLocationRelativeTo(null);
 		mainWindow.setVisible(true);
 	}
 
-	public static void showPlayWindow(){
-		MenuGameWindow Window = new MenuGameWindow();
-		mainWindow.getContentPane().removeAll();
-		mainWindow.getContentPane().add(Window.getJPanel());
-		mainWindow.setVisible(false);
-		mainWindow.setVisible(true);
-	}
-
-	public static void showOptionWindow() {
-		OptionWindow Window = new OptionWindow();
-		mainWindow.getContentPane().removeAll();
-		mainWindow.getContentPane().add(Window.getJPanel());
-		mainWindow.setVisible(false);
-		mainWindow.setVisible(true);
-	}
-
-	public static void showAboutWindow(){
-		AboutWindow Window = new AboutWindow();
-		mainWindow.getContentPane().removeAll();
-		mainWindow.getContentPane().add(Window.getJPanel());
-		mainWindow.setVisible(false);
-		mainWindow.setVisible(true);
-	}
+    public static void showLevelWindow(){
+        LevelWindow Window = new LevelWindow();
+        mainWindow.getContentPane().removeAll();
+        mainWindow.getContentPane().add(Window.getJPanel());
+        mainWindow.setFocusable(true);
+        mainWindow.requestFocusInWindow();
+        mainWindow.revalidate();
+    }
 
 	public static void closeWindow(){
 		mainWindow.dispatchEvent(new WindowEvent(mainWindow, WindowEvent.WINDOW_CLOSING));
@@ -57,8 +39,14 @@ public class MainWindow {
 		MenuWindow Window = new MenuWindow();
 		mainWindow.getContentPane().removeAll();
 		mainWindow.getContentPane().add(Window.getJPanel());
-		mainWindow.setVisible(false);
-		mainWindow.setVisible(true);
+		mainWindow.revalidate();
+	}
+
+	public static void showLoadWindow(){
+		LoadWindow Window = new LoadWindow();
+		mainWindow.getContentPane().removeAll();
+		mainWindow.getContentPane().add(Window.getJPanel());
+		mainWindow.revalidate();
 	}
 
 }

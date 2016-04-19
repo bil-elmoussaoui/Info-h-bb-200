@@ -1,6 +1,6 @@
 import java.util.Random;
 
-public class Ennemi extends Personn {
+public class Ennemi extends Person {
 	
 	public Ennemi(Weapon weapon, int health, int armor, int speedOfMoove) {
 		super(weapon, health, armor, speedOfMoove);
@@ -16,17 +16,17 @@ public class Ennemi extends Personn {
 	}
 	
 	public void setFieldOfView(){
-		//def la valeur du FOV (le meme sur coté+devant)
+		//def la valeur du FOV (le meme sur cotï¿½+devant)
 		//peut diminuer avec des sorts ou autresS
 	}
 	
 	public void move(){
 		//se ferra par Threads
-		//système aléatoire soit immobile soit prédéfini
+		//systï¿½me alï¿½atoire soit immobile soit prï¿½dï¿½fini
 	}
 	
 	public void attck(){
-		/*mthsimilaire à celle prédéfinie: dès quil est à coté du player il attaque
+		/*mthsimilaire ï¿½ celle prï¿½dï¿½finie: dï¿½s quil est ï¿½ cotï¿½ du player il attaque
 		 * IsPlayerThere()
 		 * oui attaque
 		 * non avance selon FOV
@@ -36,8 +36,8 @@ public class Ennemi extends Personn {
 	
 	public void disapear(){
 	/*if(vivant == false){
-	 * 	envoie de msg pour spécifier que la casse change de nature
-	 * 	chgment de nature selon les probabilitées suivantes		
+	 * 	envoie de msg pour spï¿½cifier que la casse change de nature
+	 * 	chgment de nature selon les probabilitï¿½es suivantes		
 		}*/
 		Random rand = new Random();
 		int nombre = rand.nextInt(1);
@@ -45,13 +45,13 @@ public class Ennemi extends Personn {
 			//case == rien donc nv emplacement libre
 		}
 		if(nombre <= 0.2 & nombre < 0.4){
-			//vie à prendre donc case d'intéraction
+			//vie ï¿½ prendre donc case d'intï¿½raction
 		}
 		if(nombre <= 0.4 & nombre < 0.6){
-			//sous à prendre donc case d'intéraction 
+			//sous ï¿½ prendre donc case d'intï¿½raction 
 		}
 		if(nombre <= 0.6 & nombre < 0.8){
-			//armure à prendre donc case d'intéraction 
+			//armure ï¿½ prendre donc case d'intï¿½raction 
 		}
 		else{
 			//??

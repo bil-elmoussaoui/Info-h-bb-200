@@ -1,9 +1,9 @@
 import java.util.ArrayList;
 
-public class Player extends Personn {
+public class Player extends Person {
 	
 	public Player(Weapon weapon, int health, int armor , int speedOfMoove) {
-		super(weapon, health, armor, speedOfMoove);//mettre un super pk ca va changer les vies et autres sont spécifiques...
+		super(weapon, health, armor, speedOfMoove);//mettre un super pk ca va changer les vies et autres sont spï¿½cifiques...
 	}
 
 	public ArrayList<Position> ennemiPositions;
@@ -11,11 +11,12 @@ public class Player extends Personn {
 	public ArrayList<Position> doorLevels;
 	public ArrayList<Position> freePositionsN;	//avance normale
 	public ArrayList<Position> freePositionsH;	//avance hard//pk va pas chercher sa dans la classe personne
-	
-	
-	//céer des array list qui se mettent à jour à chaque instant
-	//cases libre de déplacement == freePositions
-	//cases avec des choses à ramasser == items
+
+
+
+	//cï¿½er des array list qui se mettent ï¿½ jour ï¿½ chaque instant
+	//cases libre de dï¿½placement == freePositions
+	//cases avec des choses ï¿½ ramasser == items
 	//cases aves portes doorsToNextLevel
 	//cases avec les ennemis
 	
@@ -25,13 +26,13 @@ public class Player extends Personn {
 		//par un keyListener
 		//pointe vers la case droit devant lui
 		//retourne un double de nombre (x,y) = Position pointeur
-		Position pointeur = null;//défini plus loin par le keylinstener
+		Position pointeur = null;//dï¿½fini plus loin par le keylinstener
 		for (Position elem : this.itemsPositions){
 			if (pointeur == elem);
 			//(ce qu'il y a en elem)
 			//si c'eest vie
-			//player.setHealth(health + 1) ??comment dire que ca ajoute à sa vie
-			//jai géré si il y a plus de 5 vies
+			//player.setHealth(health + 1) ??comment dire que ca ajoute ï¿½ sa vie
+			//jai gï¿½rï¿½ si il y a plus de 5 vies
 			//si c'est armure 
 			//player.setArmor(armor + 1)
 			//autre
@@ -49,10 +50,10 @@ public class Player extends Personn {
 	
 	public void move(){
 		/* par les keyListeners 
-		 * génère un Position nextPosition
-		 * et isPossible toMove déja fais dans la superclasse Personn
+		 * gï¿½nï¿½re un Position nextPosition
+		 * et isPossible toMove dï¿½ja fais dans la superclasse Personn
 		 * Position playerPosition = player.getPosition
-		 * Gros IFFF ou FOR avec dans quelle type de case on est déplacement normal ou ralentit
+		 * Gros IFFF ou FOR avec dans quelle type de case on est dï¿½placement normal ou ralentit
 		 * for (Position elem : freePositionN)
 		 * 	if (elem == player.getPosition()){
 		 * 		speedOfMoove = 4;
@@ -66,7 +67,7 @@ public class Player extends Personn {
 	}
 	
 	public void attack(Position mire){
-		//se fait différet la par keyListener
+		//se fait diffï¿½ret la par keyListener
 		
 	}
 }

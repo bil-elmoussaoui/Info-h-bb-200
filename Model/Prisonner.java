@@ -1,8 +1,8 @@
 
-public class Prisonner extends Personn {
+public class Prisonner extends Person{
 	
 	public Prisonner(Weapon weapon, int health, int armor , int speedOfMoove) {
-		super(weapon, health, armor, speedOfMoove);//mettre un super pk ca va changer les vies et autres sont spécifiques...
+		super(weapon, health, armor, speedOfMoove);//mettre un super pk ca va changer les vies et autres sont spï¿½cifiques...
 	}
 	
 	boolean isAlive;
@@ -17,7 +17,7 @@ public class Prisonner extends Personn {
 	}
 	
 	//On le fait bouger ou pas????
-	//est ce que les ennemis cherche à le tuer?
+	//est ce que les ennemis cherche ï¿½ le tuer?
 	
 	public boolean getIsAlive(){
 		return(isAlive);
