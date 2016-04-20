@@ -1,12 +1,30 @@
+package Model;
 
-class Block {
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+
+/**
+ * Created by bilal on 19/04/16.
+ */
+public class Door {
+    private Boolean needKey;
     private int positionX;
     private int positionY;
 
 
-    public Block(int x, int y){
-        this.setPositionX(x);
-        this.setPositionY(y);
+    public Door(int positionX, int positionY){
+        this.positionX = positionX;
+        this.positionY = positionY;
+    }
+
+    public void setNeedKey(Boolean needKey){
+        this.needKey = needKey;
+    }
+
+    public Boolean getNeedKey(){
+        return this.needKey;
     }
 
     public int getPositionX(){
@@ -40,4 +58,16 @@ class Block {
             e.printStackTrace();
         }
     }
+
+    public static BufferedImage draw(){
+        BufferedImage img = null;
+        try {
+            img = ImageIO.read(new File("Images/PlayerPortalEmpty_Complete.png"));
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+        return img;
+    }
+
+
 }

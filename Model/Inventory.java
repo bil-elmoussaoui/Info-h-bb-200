@@ -1,15 +1,16 @@
+package Model;
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class Inventory {
-	
-	//interface graphique??
+    private int sizeMaxArme = 3;
+    private int sizeMaxItem = 5;
+    private ArrayList<Weapon> weaponsOfInventory = new ArrayList<Weapon>();
+    private ArrayList<Item> itemsOfInventory = new ArrayList<Item>();
 
-	
-	int sizeMaxArme = 3;
-	int sizeMaxItem = 5;
-	ArrayList<Weapon> weaponsOfInventory = new ArrayList<Weapon>();
-	ArrayList<Item> itemsOfInventory = new ArrayList<Item>();
-	
 	//uneArme provient de la fction collect du player
 	
 	public void ajoutWeapon(Weapon uneArme){
@@ -32,21 +33,21 @@ public class Inventory {
 	
 
 	public void deleteArme(Weapon pointeA){
-		//activé et selectionné par un keyListener ==> de nouveau un pointeur
+		//activï¿½ et selectionnï¿½ par un keyListener ==> de nouveau un pointeur
 		//Position dans l'inventaire
 		//n peu comme la carte mais en plus petit
 		weaponsOfInventory.remove(pointeA);
 	}
 	
 	public void deleteItem(Item pointeI){
-		//activé et selectionné par un keyListener ==> de nouveau un pointeur
+		//activï¿½ et selectionnï¿½ par un keyListener ==> de nouveau un pointeur
 		//Position dans l'inventaire
 		//n peu comme la carte mais en plus petit
 		itemsOfInventory.remove(pointeI);		
 	}
 	
 	public void use(){
-		//selection par keyListenner flèche et utilisation une touche
+		//selection par keyListenner flï¿½che et utilisation une touche
 		//potion
 		//vie
 		//player.setHealth(health + 1);

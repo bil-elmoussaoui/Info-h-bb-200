@@ -1,9 +1,14 @@
+package View;
+
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
-class MainWindow  {
+public class MainWindow  {
 	private static JFrame mainWindow;
+    private static Map levelMap = new Map();
+
+
 	public MainWindow(){
 		initialize();
 	}
@@ -12,18 +17,20 @@ class MainWindow  {
     }
 	public void initialize(){
 		mainWindow = new JFrame();
-		mainWindow.setTitle("Le Nom du Jeu");
+		mainWindow.setTitle("The Little Knight");
 		MenuWindow Window = new MenuWindow();
 		mainWindow.getContentPane().setPreferredSize(new Dimension(800, 600));
         mainWindow.setResizable(false);
 		mainWindow.getContentPane().add(Window.getJPanel());
-		mainWindow.pack();
+        mainWindow.getContentPane().setBackground(Color.gray);
+        mainWindow.pack();
 		mainWindow.setLocationRelativeTo(null);
-		mainWindow.setVisible(true);
+        mainWindow.setLocationByPlatform(true);
+        mainWindow.setVisible(true);
 	}
 
     public static void showLevelWindow(){
-        LevelWindow Window = new LevelWindow();
+        LevelWindow Window = new LevelWindow(MainWindow.levelMap);
         mainWindow.getContentPane().removeAll();
         mainWindow.getContentPane().add(Window.getJPanel());
         mainWindow.setFocusable(true);
@@ -48,5 +55,14 @@ class MainWindow  {
 		mainWindow.getContentPane().add(Window.getJPanel());
 		mainWindow.revalidate();
 	}
+
+
+    public static void draw(int[][] map){
+        MainWindow.levelMap.setMapMatrix(map);
+    }
+
+    public static void setKeyListener(KeyListener keyboard){
+        mainWindow.addKeyListener(keyboard);
+    }
 
 }

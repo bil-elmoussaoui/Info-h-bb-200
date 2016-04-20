@@ -1,12 +1,22 @@
+package Model;
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
-public class Salesman {
-	
-	/* je le vois plus comme une sous-classe de item
-	 * un peu plus spéciale, avec lequel il est possible d'intéragir
-	 * et ouvrir une interface similaire à celle de l'inventaire
-	 * ????????
-	 * on metterai pas tt le monde comme des blocs
-	 * 
-	 */
+public class Salesman extends Item {
 
+    public Salesman(int positionX, int positionY){
+        super(positionX, positionY);
+    }
+
+    public static BufferedImage draw(){
+        BufferedImage img = null;
+        try {
+            img = ImageIO.read(new File("Images/zombie.gif"));
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+        return img;
+    }
 }

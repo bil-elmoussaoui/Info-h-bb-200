@@ -1,5 +1,5 @@
+package Model;
 
-public class FieldOfView {
-	//ensemble de cases devant +deux cotés
+class FieldOfView {
 
 }

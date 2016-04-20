@@ -1,3 +1,5 @@
+package Model;
+
 import java.util.ArrayList;
 
 public class Weapon {
@@ -20,11 +22,11 @@ public class Weapon {
 	
 	/*
 	public void setDamage(){
-		if (instanceof xox.class == Ennemi){//xox cestle perso pointé
+		if (instanceof xox.class == Ennemi){//xox cestle perso pointï¿½
 			damage = enemiDamage[level];
 		}
 		else if (instanceof xox.class == Player){
-			//dpdt du niveau t du type de larme==> arme 1 à damage 1
+			//dpdt du niveau t du type de larme==> arme 1 ï¿½ damage 1
 		}
 		else if (instanceof xox.class = Prisonner){
 			damage = 2;
