@@ -6,9 +6,6 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
-/**
- * Created by bilal on 20/04/16.
- */
 public class Key extends Item{
     private int positionX;
     private int positionY;
@@ -16,7 +13,6 @@ public class Key extends Item{
     public Key(int positionX, int positionY){
         super(positionX, positionY);
     }
-
 
     public static void draw(Graphics g, int x, int y) {
         BufferedImage img = null;

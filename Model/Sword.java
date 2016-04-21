@@ -5,7 +5,10 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.nio.Buffer;
-
+/*
+ TODO :
+ - implement sword draw function and animation
+ */
 public class Sword extends Weapon {
 
     public Sword(int damage){

@@ -1,13 +1,5 @@
 package Model;
 
-import sun.awt.image.BufferedImageDevice;
-
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import java.nio.Buffer;
-
 public class Weapon {
 	
 	private int damage;
@@ -36,16 +28,5 @@ public class Weapon {
 	public int getLevel(){
 		return this.level;
 	}
-
-    public BufferedImage draw(){
-        BufferedImage img = null;
-        try {
-            img = ImageIO.read(new File("Images/zombie.gif"));
-        }catch (IOException e){
-            e.printStackTrace();
-        }
-        return img;
-    }
-
 
 }

@@ -1,23 +1,22 @@
 package Model;
+
 import java.awt.Toolkit;
 import java.awt.Dimension;
 import java.util.ArrayList;
 import View.MainWindow;
-import sun.applet.Main;
 
 public class Game{
     public Player player;
     public static int[][] freePositions;
     public ArrayList<Monster> monsters = new ArrayList<>();
     private ArrayList<Wall> walls = new ArrayList<>();
-    private ArrayList<WoodBox> woodBoxs = new ArrayList<>();
+    private ArrayList<WoodBox> woodBoxes = new ArrayList<>();
     private ArrayList<Item> items = new ArrayList<>();
     private Inventory inventory;
     private MainWindow window;
-
     private int[][] map;
-    private int sizeY = 28;
-    private int sizeX = 57;
+    private int sizeY;
+    private int sizeX;
 
     public Game(MainWindow window) throws Exception {
         this.window = window;
@@ -58,11 +57,11 @@ public class Game{
         }
 
 
-        woodBoxs.add(new WoodBox(10,12));
-        woodBoxs.add(new WoodBox(30,10));
-        woodBoxs.add(new WoodBox(3, 8));
-        woodBoxs.add(new WoodBox(2,2));
-        woodBoxs.add(new WoodBox(9, 10));
+        woodBoxes.add(new WoodBox(10,12));
+        woodBoxes.add(new WoodBox(30,10));
+        woodBoxes.add(new WoodBox(3, 8));
+        woodBoxes.add(new WoodBox(2,2));
+        woodBoxes.add(new WoodBox(9, 10));
         monsters.add(new Monster(5, 5, this));
         monsters.add(new Monster(20, 3, this));
         monsters.add(new Monster(10, 13, this));
@@ -86,7 +85,7 @@ public class Game{
             freePositions[x][y] = 1;
         }
 
-        for(WoodBox woodbox: woodBoxs){
+        for(WoodBox woodbox: woodBoxes){
             int x = woodbox.getPositionX();
             int y = woodbox.getPositionY();
             map[x][y] = 3;

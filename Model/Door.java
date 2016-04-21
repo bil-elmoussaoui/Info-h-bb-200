@@ -5,14 +5,16 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
-/**
- * Created by bilal on 19/04/16.
+/*
+TODO:
+  - implement opening the door, only if the player have a key and remove the key from the player is key variable !
+  - draw the door image directly
  */
+
 public class Door {
     private Boolean needKey;
     private int positionX;
     private int positionY;
-
 
     public Door(int positionX, int positionY){
         this.positionX = positionX;
@@ -68,6 +70,5 @@ public class Door {
         }
         return img;
     }
-
 
 }

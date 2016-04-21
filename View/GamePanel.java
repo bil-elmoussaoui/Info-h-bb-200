@@ -2,6 +2,7 @@ package View;
 
 import javax.swing.*;
 import java.awt.*;
+
 public class GamePanel {
 
     public JPanel getJPanel(){
@@ -10,7 +11,7 @@ public class GamePanel {
         playerBar.setBorder(BorderFactory.createEmptyBorder(0, 80, 0, 0));
         JLabel heartIcon = new JLabel();
         heartIcon.setLayout(new BoxLayout(heartIcon, BoxLayout.X_AXIS));
-        for(int i = 0; i < MainWindow.player.getHealth(); i++) {
+        for(int i = 0; i < 5; i++) {
             JLabel heartLabel = new JLabel();
             heartLabel.setIcon(new ImageIcon("Images/heart.png"));
             heartIcon.add(heartLabel);
@@ -20,7 +21,7 @@ public class GamePanel {
 
         JLabel armorIcon = new JLabel();
         armorIcon.setLayout(new BoxLayout(armorIcon, BoxLayout.X_AXIS));
-        for(int i = 0; i < MainWindow.player.getArmor(); i++) {
+        for(int i = 0; i < 3; i++) {
             JLabel armorLabel = new JLabel();
             armorLabel.setIcon(new ImageIcon("Images/Armor.png"));
             armorIcon.add(armorLabel);
@@ -30,7 +31,7 @@ public class GamePanel {
 
         JLabel coinsIcon = new JLabel();
         coinsIcon.setIcon(new ImageIcon("Images/coin1.png"));
-        coinsIcon.setText("x " + MainWindow.player.getCoins());
+        coinsIcon.setText("x 0" );
         playerBar.add(new JLabel("Coins : "));
         playerBar.add(coinsIcon);
 
@@ -50,7 +51,8 @@ public class GamePanel {
         playerBar.add(armIcon);
 
         playerBar.add(new JLabel("Exp : "));
-        playerBar.add(new JLabel(String.valueOf(MainWindow.player.getExp())));
+        playerBar.add(new JLabel("0"));
+
         return playerBar;
     }
 }

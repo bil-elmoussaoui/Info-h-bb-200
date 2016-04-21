@@ -4,7 +4,14 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.Random;
+
+/*
+TODO :
+- how to implement attack & collect if the player does not have access to both lists and map?
+- use a real weapon
+- add animation
+- draw a different image for each direction
+*/
 
 public class Player extends Person {
 	public int coins;
@@ -24,8 +31,6 @@ public class Player extends Person {
         }
     }
 
-
-
     public int getCoins(){
         return this.coins;
     }
@@ -40,6 +45,7 @@ public class Player extends Person {
             this.exp = 0;
         }
     }
+
     public void addCoins(int coins){
         this.coins += coins;
         if(this.coins  < 0){
@@ -74,7 +80,6 @@ public class Player extends Person {
             }
         }*/
     }
-
 
     public BufferedImage drawWeapon(){
         return this.weapon.draw();
@@ -147,7 +152,4 @@ public class Player extends Person {
             }
         }*/
     }
-
-
-
 }

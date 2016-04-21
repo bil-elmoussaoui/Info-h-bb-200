@@ -9,10 +9,16 @@ import java.io.IOException;
 public class Tile {
     private int positionX;
     private int positionY;
+    private static BufferedImage img;
 
-    public Tile(int positionX, int positionY){
+    public Tile(int positionX, int positionY) {
         this.setPositionX(positionX);
         this.setPositionY(positionY);
+        try {
+            img = ImageIO.read(new File("Images/StoneWallBackground.png"));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public int getPositionX(){
@@ -47,12 +53,6 @@ public class Tile {
         }
     }
     public static void draw(Graphics g, int x, int y) {
-        BufferedImage img = null;
-        try {
-            img = ImageIO.read(new File("Images/StoneWallBackground.png"));
-            g.drawImage(img, x * 24, y * 24, 24, 24, null);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        g.drawImage(Tile.img, x * 24, y * 24, 24, 24, null);
     }
 }

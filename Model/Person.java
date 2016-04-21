@@ -1,5 +1,5 @@
 package Model;
-import java.lang.reflect.Array;
+
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -96,19 +96,20 @@ abstract class Person {
 			e.printStackTrace();
 		}
 	}
+
     public int[] getRandomPosition(){
         int[] position = null;
         Random randomGenerator = new Random();
-        ArrayList<int[]> acceciblePositions = this.getAcceciblePositions();
-        if(acceciblePositions.size() > 0) {
-            int index = randomGenerator.nextInt(acceciblePositions.size());
-            position = acceciblePositions.get(index);
+        ArrayList<int[]> accessiblePositions = this.getAccessiblePositions();
+        if(accessiblePositions.size() > 0) {
+            int index = randomGenerator.nextInt(accessiblePositions.size());
+            position = accessiblePositions.get(index);
         }
         return position;
     }
 
-    public ArrayList<int[]> getAcceciblePositions(){
-        ArrayList<int[]> acceciblePositions = new ArrayList<>();
+    public ArrayList<int[]> getAccessiblePositions(){
+        ArrayList<int[]> accessiblePositions = new ArrayList<>();
         int[] position = new int [2];
         int x = this.getPositionX();
         int y = this.getPositionY();
@@ -119,19 +120,19 @@ abstract class Person {
                     if (Game.freePositions[x][y + i] == 0) {
                         position[0] = x;
                         position[1] = y + i;
-                        acceciblePositions.add(position);
+                        accessiblePositions.add(position);
                     }
                     if (Game.freePositions[x + i][y] == 0) {
                         position[0] = x + i;
                         position[1] = y;
-                        acceciblePositions.add(position);
+                        accessiblePositions.add(position);
                     }
                     position = new int [2];
                 }
                 i += 1;
             }
         }
-        return acceciblePositions;
+        return accessiblePositions;
     }
 
 	public boolean isPossibleToMove(int positionX, int positionY){
@@ -159,7 +160,6 @@ abstract class Person {
             this.setPositionX(positionX);
             this.setPositionY(positionY);
             Game.freePositions[oldPositionX][oldPositionY] = 0;
-
         }
     }
 }

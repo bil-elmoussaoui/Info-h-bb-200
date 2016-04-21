@@ -3,23 +3,23 @@ package View;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
-import Model.Player;
+
 public class MainWindow  {
-	public static GraphicsDevice device = GraphicsEnvironment
-			.getLocalGraphicsEnvironment().getScreenDevices()[0];
+	public static GraphicsDevice device;
 	public static boolean gamePaused = false;
 	public static boolean newGame = false;
-
 	private static JFrame mainWindow;
     private static Map levelMap = new Map();
-	public static Player player;
 
 	public MainWindow(){
 		initialize();
+		device = GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices()[0];
 	}
-    public static void main(String args[]){
+
+	public static void main(String args[]){
         MainWindow mainWindow = new MainWindow();
     }
+
 	public void initialize(){
 		mainWindow = new JFrame();
 		mainWindow.setTitle("The Little Knight");
@@ -61,7 +61,6 @@ public class MainWindow  {
 		mainWindow.revalidate();
 	}
 
-
     public static void draw(int[][] map){
         MainWindow.levelMap.setMapMatrix(map);
     }
@@ -69,9 +68,5 @@ public class MainWindow  {
     public static void setKeyListener(KeyListener keyboard){
         mainWindow.addKeyListener(keyboard);
     }
-
-	public static void setPlayer(Player player){
-		MainWindow.player = player;
-	}
 
 }

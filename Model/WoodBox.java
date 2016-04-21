@@ -1,11 +1,16 @@
 package Model;
 
-
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+
+/*
+TODO:
+- Implement box opening animation
+- Implement random box item in the WoodBox class instead of the Game class!
+ */
 
 public class WoodBox extends Item{
     public WoodBox(int positionX, int positionY){
@@ -15,7 +20,6 @@ public class WoodBox extends Item{
     public void open(){
         System.out.println("opened");
     }
-
 
     public static void draw(Graphics g, int x, int y) {
         BufferedImage img = null;

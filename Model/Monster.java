@@ -10,7 +10,7 @@ import java.io.IOException;
 
 public class Monster extends Person implements Runnable{
 	private Thread thread;
-    private int waitTime = 5000;
+    private int waitTime = 500;
     private Game game;
     FieldOfView FOV;
 
@@ -34,7 +34,6 @@ public class Monster extends Person implements Runnable{
             e.printStackTrace();
         }
     }
-
 
     public static void draw(Graphics g, int x, int y) {
         BufferedImage img = null;
