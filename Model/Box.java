@@ -2,28 +2,27 @@ package Model;
 
 
 import javax.imageio.ImageIO;
-import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
-public class WoodBox extends Item{
-    public WoodBox(int positionX, int positionY){
+public class Box extends Item{
+    public Box(int positionX, int positionY){
         super(positionX, positionY);
     }
 
     public void open(){
-        System.out.println("opened");
+        // do nothing!
     }
 
-
-    public static void draw(Graphics g, int x, int y) {
+    public static BufferedImage draw(){
         BufferedImage img = null;
         try {
             img = ImageIO.read(new File("Images/Wood_Box.png"));
-            g.drawImage(img, x * 24, y * 24, 24, 24, null);
-        } catch (IOException e) {
+        }catch (IOException e){
             e.printStackTrace();
         }
+        return img;
     }
+
 }

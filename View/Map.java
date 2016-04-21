@@ -26,34 +26,18 @@ public class Map extends JPanel{
         }
         for(int i = 0; i< mapMatrix.length; i++){
             for(int j = 0; j< mapMatrix[i].length; j++){
-
                 int type = mapMatrix[i][j];
+                Tile.draw(g, i ,j);
                 switch(type) {
-                    case 0: // floor
-                        g.drawImage(stoneBackground, i * 16, j * 16, 16, 16, null);
-                        break;
-                    case 1: // wall
-                        g.drawImage(Wall.draw(), i * 16, j * 16, 16, 16, null);
-                        break;
-                    case 2: // player
-                        g.drawImage(stoneBackground, i * 16, j * 16, 16, 16, null);
-                        g.drawImage(Player.draw(), i * 16, j * 16, 16, 16, null);
-                        break;
-                    case 3: //Tile
-                        g.drawImage(WoodBox.draw(), i * 16, j * 16, 16, 16, null);
-                    break;
-                    case 4: //Door
-                        g.drawImage(stoneBackground, i * 16, j * 16, 16, 16, null);
-                        g.drawImage(Door.draw(), i * 16, j * 16, 16, 16, null);
-                    break;
-                    case 5: // Monster
-                        g.drawImage(stoneBackground, i*16, j*16, 16, 16, null);
-                        g.drawImage(Monster.draw(), i*16, j*16, 16, 16, null);
-                    break;
-                    case 6:
-                        g.drawImage(stoneBackground, i*16, j*16, 16, 16, null);
-                        g.drawImage(Salesman.draw(), i*16, j*16, 16, 16, null);
-                    break;
+                    case 1: Wall.draw(g, i, j); break;
+                    case 2: Player.draw(g, i, j); break;
+                    case 3: WoodBox.draw(g, i ,j); break;
+                    case 4: g.drawImage(Door.draw(), i * 24, j * 24, 24, 24, null); break;
+                    case 5: Monster.draw(g, i, j); break;
+                    case 6: Coin.draw(g, i, j); break;
+                    case 7: Heart.draw(g, i ,j); break;
+                    case 8: Key.draw(g, i, j); break;
+                    case 10: g.drawImage(Salesman.draw(), i*24, j*24, 24, 24, null); break;
                 }
             }
         }

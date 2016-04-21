@@ -3,6 +3,7 @@ package Controller;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import Model.Game;
+import View.MainWindow;
 
 public class Keyboard implements KeyListener{
     private Game game;
@@ -30,7 +31,31 @@ public class Keyboard implements KeyListener{
                 nextPositionY += 1;
             break;
         }
-        game.movePlayer(nextPositionX, nextPositionY);
+        if(nextPositionX != game.player.getPositionX() || nextPositionY != game.player.getPositionY()) {
+            if(!MainWindow.gamePaused) {
+                game.player.move(nextPositionX, nextPositionY);
+                game.refreshMap();
+            }
+        } else {
+            switch (key){
+                case KeyEvent.VK_SPACE:
+                    if(!MainWindow.gamePaused) {
+                        game.player.attack();
+                        game.refreshMap();
+                    }
+                break;
+                case KeyEvent.VK_E:
+                    if(!MainWindow.gamePaused) {
+                        game.player.collect();
+                        game.refreshMap();
+                    }
+                break;
+                case KeyEvent.VK_ESCAPE:
+                    MainWindow.gamePaused = true;
+                    MainWindow.showMainWindow();
+                break;
+            }
+        }
     }
 
     @Override

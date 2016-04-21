@@ -18,7 +18,7 @@ public class BButton extends JButton {
             e.printStackTrace();
         }
         this.setText(text);
-        this.setPreferredSize(new Dimension(100, 40));
+        this.setPreferredSize(new Dimension(200, 50));
     }
 
 }

@@ -1,13 +1,16 @@
 package Model;
 
+import View.MainWindow;
+
 import javax.imageio.ImageIO;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
 public class Monster extends Person implements Runnable{
 	private Thread thread;
-    private int waitTime = 250;
+    private int waitTime = 5000;
     private Game game;
     FieldOfView FOV;
 
@@ -23,9 +26,8 @@ public class Monster extends Person implements Runnable{
             while(true) {
                 Thread.sleep(this.waitTime);
                 int[] position = this.getRandomPosition();
-                if (position != null) {
-                    this.move(position[0], position[1]);
-                    this.game.refreshMap();
+                if (position != null && !MainWindow.gamePaused) {
+                    move(position[0], position[1]);
                 }
             }
         }catch (Exception e){
@@ -33,14 +35,15 @@ public class Monster extends Person implements Runnable{
         }
     }
 
-    public static BufferedImage draw(){
+
+    public static void draw(Graphics g, int x, int y) {
         BufferedImage img = null;
         try {
             img = ImageIO.read(new File("Images/zombie.gif"));
-        }catch (IOException e){
+            g.drawImage(img, x * 24, y * 24, 24, 24, null);
+        } catch (IOException e) {
             e.printStackTrace();
         }
-        return img;
     }
 
 }

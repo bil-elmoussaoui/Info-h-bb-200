@@ -8,12 +8,13 @@ abstract class Person {
 	static int health;
 	private int armor;
 	public Weapon weapon;
-	private int positionX;
-	private int positionY;
+    private int positionX;
+    public int direction;
+    private int positionY;
 	public ArrayList<Weapon> weapons = new ArrayList<>();
 
 	public Person (int positionX, int positionY){
-	    this.setHealth(5);
+	    this.setHealth(3);
         this.setArmor(0);
         this.setPositionX(positionX);
         this.setPositionY(positionY);
@@ -57,7 +58,7 @@ abstract class Person {
 
 	public void setHealth(int health){
 		try{
-			if (health > 0 & health <5){
+			if (health >= 0 & health <5){
 				this.health = health;
 			} else {
 				throw new Exception ("Pb sur les vies");
@@ -90,17 +91,7 @@ abstract class Person {
 
 	public void setWeapon(Weapon weapon)throws Exception{
 		try{
-			boolean estLa = false;
-			for (Weapon arme : weapons){
-				if (weapon == arme){
-					estLa = true;
-				}
-			}
-			if (estLa){
-				this.weapon = weapon;
-			}else{
-				throw new Exception ("pb arme inexistante");
-			}
+			this.weapon = weapon;
 		}catch(Exception e){
 			e.printStackTrace();
 		}
@@ -135,6 +126,7 @@ abstract class Person {
                         position[1] = y;
                         acceciblePositions.add(position);
                     }
+                    position = new int [2];
                 }
                 i += 1;
             }
@@ -148,10 +140,26 @@ abstract class Person {
 
 	public void move(int positionX , int positionY){
 		if(isPossibleToMove(positionX, positionY)){
-            Game.freePositions[this.getPositionX()][this.getPositionY()] = 0;
+            int oldPositionX = this.getPositionX();
+            int oldPositionY = this.getPositionY();
+            if(oldPositionY - positionY == 0) {
+                if ((oldPositionX - positionX) > 0) {
+                    direction = 1; // left
+                } else {
+                    direction = 2; // right
+                }
+            } else {
+                if((oldPositionY - positionY) > 0) {
+                    direction = 3; // bottom
+                }  else {
+                    direction = 4; // top
+                }
+            }
+            Game.freePositions[positionX][positionY] = 1;
             this.setPositionX(positionX);
             this.setPositionY(positionY);
-            Game.freePositions[positionX][positionY] = 1;
+            Game.freePositions[oldPositionX][oldPositionY] = 0;
+
         }
     }
 }

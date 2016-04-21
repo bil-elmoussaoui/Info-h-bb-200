@@ -7,16 +7,37 @@ import View.BButton;
 
 class MenuWindow {
 
+
 	public JPanel getJPanel(){
 		JPanel menuWindow = new JPanel();
-        menuWindow.setBorder(BorderFactory.createEmptyBorder(220, 350, 220, 350));
-        JPanel menuPanel = new JPanel(new GridLayout(3, 0, 10, 10));
+        menuWindow.setBorder(BorderFactory.createEmptyBorder(220, 400, 220, 350));
+        JPanel menuPanel = new JPanel();
+        BButton Play;
 
-		BButton Play = new BButton("Play");
+		if(MainWindow.gamePaused){
+            menuPanel.setLayout(new GridLayout(4, 0, 10, 10));
+			BButton Resume = new BButton("Resume");
+			Resume.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent actionEvent) {
+                    MainWindow.showLevelWindow();
+				}
+			});
+            menuPanel.add(Resume);
+            Play = new BButton("New Game");
+        } else {
+            menuPanel.setLayout(new GridLayout(3, 0, 10, 10));
+            Play = new BButton("Play");
+
+        }
 		Play.addActionListener(new ActionListener(){
-			public void actionPerformed(ActionEvent e){
+			public void actionPerformed(ActionEvent e)
+            {
+                if(MainWindow.gamePaused){
+                    MainWindow.newGame = true;
+                }
 				MainWindow.showLevelWindow();
-			}
+            }
 		});
 		menuPanel.add(Play);
 
