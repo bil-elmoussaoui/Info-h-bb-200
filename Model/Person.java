@@ -3,15 +3,14 @@ package Model;
 import java.util.ArrayList;
 import java.util.Random;
 
-abstract class Person {
-
+abstract class Person{
 	static int health;
 	private int armor;
 	public Weapon weapon;
-    private int positionX;
     public int direction;
-    private int positionY;
-	public ArrayList<Weapon> weapons = new ArrayList<>();
+    public int positionX;
+    public int positionY;
+    public ArrayList<Weapon> weapons = new ArrayList<>();
 
 	public Person (int positionX, int positionY){
 	    this.setHealth(3);
@@ -117,15 +116,19 @@ abstract class Person {
             int i = -1;
             while (i <= 1) {
                 if (i != 0) {
-                    if (Game.freePositions[x][y + i] == 0) {
-                        position[0] = x;
-                        position[1] = y + i;
-                        accessiblePositions.add(position);
+                    if(y + i >= 0) {
+                        if (Game.freePositions[x][y + i] == 0) {
+                            position[0] = x;
+                            position[1] = y + i;
+                            accessiblePositions.add(position);
+                        }
                     }
-                    if (Game.freePositions[x + i][y] == 0) {
-                        position[0] = x + i;
-                        position[1] = y;
-                        accessiblePositions.add(position);
+                    if(x + i >= 0) {
+                        if (Game.freePositions[x + i][y] == 0) {
+                            position[0] = x + i;
+                            position[1] = y;
+                            accessiblePositions.add(position);
+                        }
                     }
                     position = new int [2];
                 }

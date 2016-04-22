@@ -7,7 +7,10 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-
+/*
+TODO :
+- Monster shouldn't have access to game class?
+ */
 public class Monster extends Person implements Runnable{
 	private Thread thread;
     private int waitTime = 500;
@@ -28,6 +31,8 @@ public class Monster extends Person implements Runnable{
                 int[] position = this.getRandomPosition();
                 if (position != null && !MainWindow.gamePaused) {
                     move(position[0], position[1]);
+                    // are you sure??
+                    game.refreshMap();
                 }
             }
         }catch (Exception e){
@@ -39,7 +44,7 @@ public class Monster extends Person implements Runnable{
         BufferedImage img = null;
         try {
             img = ImageIO.read(new File("Images/zombie.gif"));
-            g.drawImage(img, x * 24, y * 24, 24, 24, null);
+            g.drawImage(img, x * 32, y * 32, 32, 32, null);
         } catch (IOException e) {
             e.printStackTrace();
         }

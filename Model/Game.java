@@ -13,21 +13,23 @@ public class Game{
     private ArrayList<WoodBox> woodBoxes = new ArrayList<>();
     private ArrayList<Item> items = new ArrayList<>();
     private Inventory inventory;
-    private MainWindow window;
+    public MainWindow window;
     private int[][] map;
-    private int sizeY;
-    private int sizeX;
+    public static int sizeY = 100;
+    public static int sizeX = 100;
+    public static int shownSizeX;
+    public static int shownSizeY;
 
     public Game(MainWindow window) throws Exception {
         this.window = window;
         player = new Player(1, 1);
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        this.sizeX = (int)(Math.floor(screenSize.getWidth()/24)) + 1;
-        this.sizeY = (int)(Math.floor(screenSize.getHeight()/24)) - 3;
+        shownSizeX = (int)(Math.floor(screenSize.getWidth()/32)) + 1;
+        shownSizeY = (int)(Math.floor(screenSize.getHeight()/32));
         freePositions = new int[this.sizeX][this.sizeY];
         map = new int[this.sizeX][this.sizeY];
         this.generateMap();
-        window.draw(this.getMap());
+        this.refreshMap();
     }
 
     public int[][] getFreePositions(){
@@ -56,7 +58,6 @@ public class Game{
             walls.add(new Wall(i, sizeY -1));
         }
 
-
         woodBoxes.add(new WoodBox(10,12));
         woodBoxes.add(new WoodBox(30,10));
         woodBoxes.add(new WoodBox(3, 8));
@@ -65,13 +66,14 @@ public class Game{
         monsters.add(new Monster(5, 5, this));
         monsters.add(new Monster(20, 3, this));
         monsters.add(new Monster(10, 13, this));
+        Coin coin = new Coin(20, 20);
+        coin.setGame(this);
+        items.add(coin);
 
     }
 
     public int[][] getMap(){
-        if(MainWindow.newGame){
-            this.generateMap();
-        }
+
         for(int i = 0; i < this.sizeX; i++){
             for(int j = 0; j < this.sizeY; j++){
                 map[i][j] = 0;
@@ -116,8 +118,54 @@ public class Game{
         return map;
     }
 
+    public int[][] getVisibleMap(){
+        int[][] map = this.getMap();
+        int startPositionX = player.getPositionX() - (int)Math.floor(Game.shownSizeX/2) - 1;
+        int endPositionX = player.getPositionX() + (int)Math.floor(Game.shownSizeX/2);
+        int startPositionY = player.getPositionY() - (int)Math.floor(Game.shownSizeY/2);
+        int endPositionY = player.getPositionY() + (int)Math.floor(Game.shownSizeY/2);
+        if(endPositionX > Game.sizeX || endPositionX - startPositionX < Game.shownSizeX){
+            startPositionX = Game.sizeX - Game.shownSizeX;
+            endPositionX = Game.sizeX;
+        }
+        if(startPositionX < 0){
+            startPositionX = 0;
+            endPositionX = Game.sizeX;
+        }
+        if(endPositionY > Game.sizeY  || endPositionY - startPositionY < Game.shownSizeY) {
+            startPositionY = Game.sizeY - Game.shownSizeY;
+            endPositionY = Game.sizeY;
+        }
+        if(startPositionY < 0){
+            startPositionY = 0;
+            endPositionY = Game.sizeY;
+        }
+        int[][] visibleMap = new int[endPositionX - startPositionX][endPositionY - startPositionY];
+        for (int i = startPositionX; i < endPositionX; i++) {
+            for(int j = startPositionY; j < endPositionY; j ++){
+                visibleMap[i - startPositionX][j - startPositionY] = map[i][j];
+            }
+        }
+        return visibleMap;
+    }
+
     public void refreshMap(){
-        window.draw(this.getMap());
+        if(MainWindow.newGame){
+           /* not sure about my code?
+            monsters = new ArrayList<>();
+            woodBoxes = new ArrayList<>();
+            walls = new ArrayList<>();
+            items = new ArrayList<>();
+            MainWindow.newGame = false;
+            MainWindow.gamePaused = false;
+            this.generateMap();
+            try {
+                Thread.sleep(300);
+            }catch (Exception e){
+
+            }*/
+        }
+        window.draw(this.getVisibleMap());
     }
 
 }

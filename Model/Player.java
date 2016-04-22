@@ -13,24 +13,45 @@ TODO :
 - draw a different image for each direction
 */
 
-public class Player extends Person {
+public class Player extends Person implements Runnable {
 	public int coins;
     public int exp;
+    private int counter = 0;
+    private static BufferedImage img;
 
     public Player(int positionX, int positionY){
         super(positionX, positionY);
-    }
-
-    public static void draw(Graphics g, int x, int y) {
-        BufferedImage img = null;
         try {
             img = ImageIO.read(new File("Images/Player.gif"));
-            g.drawImage(img, x * 24, y * 24, 24, 24, null);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
+    public static void draw(Graphics g, int x, int y) {
+        g.drawImage(img, x * 32, y * 32, 32, 32, null);
+
+    }
+
+    @Override
+    public void run(){
+        while(true){
+            switch (counter){
+                case 0:
+                break;
+                case 1:
+                break;
+                case 2:
+                break;
+                case 3:
+                break;
+            }
+            counter += 1;
+            if(counter > 4){
+                counter = 0;
+            }
+        }
+    }
     public int getCoins(){
         return this.coins;
     }
@@ -79,10 +100,6 @@ public class Player extends Person {
                 j+=1;
             }
         }*/
-    }
-
-    public BufferedImage drawWeapon(){
-        return this.weapon.draw();
     }
 
     public int[] getAttackedPosition(){

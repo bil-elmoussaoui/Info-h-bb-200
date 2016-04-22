@@ -19,6 +19,7 @@ class MenuWindow {
 				@Override
 				public void actionPerformed(ActionEvent actionEvent) {
                     MainWindow.showLevelWindow();
+					MainWindow.gamePaused = false;
 				}
 			});
             menuPanel.add(Resume);
@@ -26,15 +27,16 @@ class MenuWindow {
         } else {
             menuPanel.setLayout(new GridLayout(3, 0, 10, 10));
             Play = new BButton("Play");
-
         }
+
 		Play.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e)
             {
                 if(MainWindow.gamePaused){
-                    MainWindow.newGame = true;
+					MainWindow.newGame = true;
                 }
 				MainWindow.showLevelWindow();
+                MainWindow.gamePaused = false;
             }
 		});
 		menuPanel.add(Play);

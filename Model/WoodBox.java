@@ -25,7 +25,7 @@ public class WoodBox extends Item{
         BufferedImage img = null;
         try {
             img = ImageIO.read(new File("Images/Wood_Box.png"));
-            g.drawImage(img, x * 24, y * 24, 24, 24, null);
+            g.drawImage(img, x * 32, y * 32, 32, 32, null);
         } catch (IOException e) {
             e.printStackTrace();
         }

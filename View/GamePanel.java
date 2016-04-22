@@ -2,10 +2,18 @@ package View;
 
 import javax.swing.*;
 import java.awt.*;
+import Model.Player;
 
 public class GamePanel {
+    private Player player;
+    private Map levelMap;
 
-    public JPanel getJPanel(){
+    public void setPlayer(Player player){
+        this.player = player;
+        //this.repaint();
+    }
+
+    /*public JPanel getJPanel(){
         JPanel playerBar = new JPanel();
         playerBar.setLayout(new GridLayout(3 , 4,  5, 5));
         playerBar.setBorder(BorderFactory.createEmptyBorder(0, 80, 0, 0));
@@ -54,5 +62,5 @@ public class GamePanel {
         playerBar.add(new JLabel("0"));
 
         return playerBar;
-    }
+    }*/
 }

@@ -18,6 +18,6 @@ public class Wall extends Tile{
     }
 
     public static void draw(Graphics g, int x, int y) {
-        g.drawImage(img, x * 24, y * 24, 24, 24, null);
+        g.drawImage(img, x * 32, y * 32, 32, 32, null);
     }
 }

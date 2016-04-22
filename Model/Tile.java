@@ -4,7 +4,6 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.IOException;
 
 public class Tile {
     private int positionX;
@@ -15,7 +14,7 @@ public class Tile {
         this.setPositionX(positionX);
         this.setPositionY(positionY);
         try {
-            img = ImageIO.read(new File("Images/StoneWallBackground.png"));
+            img = ImageIO.read(new File("Images/leaves.png"));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -52,7 +51,8 @@ public class Tile {
             e.printStackTrace();
         }
     }
+
     public static void draw(Graphics g, int x, int y) {
-        g.drawImage(Tile.img, x * 24, y * 24, 24, 24, null);
+        g.drawImage(Tile.img, x * 32, y * 32, 32, 32, null);
     }
 }

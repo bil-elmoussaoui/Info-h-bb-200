@@ -9,11 +9,11 @@ public class MainWindow  {
 	public static boolean gamePaused = false;
 	public static boolean newGame = false;
 	private static JFrame mainWindow;
-    private static Map levelMap = new Map();
+    public static Map levelMap = new Map();
 
 	public MainWindow(){
-		initialize();
 		device = GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices()[0];
+		initialize();
 	}
 
 	public static void main(String args[]){
