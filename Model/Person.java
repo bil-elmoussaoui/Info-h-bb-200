@@ -13,7 +13,8 @@ abstract class Person{
     public ArrayList<Weapon> weapons = new ArrayList<>();
 
 	public Person (int positionX, int positionY){
-	    this.setHealth(3);
+        Game.freePositions[positionX][positionY] = 1;
+        this.setHealth(3);
         this.setArmor(0);
         this.setPositionX(positionX);
         this.setPositionY(positionY);

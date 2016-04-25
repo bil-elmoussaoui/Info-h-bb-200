@@ -50,10 +50,7 @@ public class Keyboard implements KeyListener{
                         game.refreshMap();
                     }
                 break;
-                case KeyEvent.VK_ESCAPE:
-                    MainWindow.gamePaused = true;
-                    MainWindow.showMainWindow();
-                break;
+
             }
         }
     }

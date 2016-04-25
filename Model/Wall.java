@@ -6,18 +6,21 @@ import java.io.File;
 import java.awt.Graphics;
 
 public class Wall extends Tile{
-    private static BufferedImage img;
+    private String imgPath;
+    private BufferedImage img;
 
     public Wall(int positionX, int positionY){
         super(positionX, positionY);
+        Game.freePositions[positionX][positionY] = 1;
+        imgPath = "Images/StoneWallStandard.png";
         try {
-            img = ImageIO.read(new File("Images/StoneWallStandard.png"));
+            img = ImageIO.read(new File(imgPath));
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public static void draw(Graphics g, int x, int y) {
-        g.drawImage(img, x * 32, y * 32, 32, 32, null);
+    public BufferedImage getImage() {
+        return img;
     }
 }

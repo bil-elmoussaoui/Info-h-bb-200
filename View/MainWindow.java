@@ -1,15 +1,18 @@
 package View;
 
+import Model.Game;
+
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
-public class MainWindow  {
+public class MainWindow {
 	public static GraphicsDevice device;
 	public static boolean gamePaused = false;
 	public static boolean newGame = false;
-	private static JFrame mainWindow;
-    public static Map levelMap = new Map();
+	private JFrame mainWindow;
+    private Map levelMap = new Map();
+    private Game game;
 
 	public MainWindow(){
 		device = GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices()[0];
@@ -22,12 +25,26 @@ public class MainWindow  {
 
 	public void initialize(){
 		mainWindow = new JFrame();
+        mainWindow.addKeyListener(new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent keyEvent) {}
+            @Override
+            public void keyReleased(KeyEvent keyEvent) {}
+
+            @Override
+            public void keyPressed(KeyEvent keyEvent) {
+                if(keyEvent.getKeyCode() == KeyEvent.VK_ESCAPE){
+                    MainWindow.gamePaused = true;
+                    showMenuWindow();
+                }
+            }
+
+        });
 		mainWindow.setTitle("The Little Knight");
-		MenuWindow Window = new MenuWindow();
 		mainWindow.setExtendedState(JFrame.MAXIMIZED_BOTH);
 		mainWindow.setUndecorated(true);
 		mainWindow.setResizable(false);
-		mainWindow.getContentPane().add(Window.getJPanel());
+        showMenuWindow();
         mainWindow.pack();
 		mainWindow.setLocationRelativeTo(null);
 		mainWindow.setLocationByPlatform(true);
@@ -35,38 +52,41 @@ public class MainWindow  {
 		mainWindow.setVisible(true);
 	}
 
-    public static void showLevelWindow(){
-        LevelWindow Window = new LevelWindow(MainWindow.levelMap);
+    public void showLevelWindow(){
+        LevelWindow Window = new LevelWindow(levelMap);
         mainWindow.getContentPane().removeAll();
         mainWindow.getContentPane().add(Window.getJPanel());
         mainWindow.requestFocusInWindow();
         mainWindow.revalidate();
     }
 
-	public static void closeWindow(){
-		mainWindow.dispatchEvent(new WindowEvent(mainWindow, WindowEvent.WINDOW_CLOSING));
+	public  void closeWindow(){
+        mainWindow.dispatchEvent(new WindowEvent(mainWindow, WindowEvent.WINDOW_CLOSING));
 	}
 
-	public static void showMainWindow() {
-		MenuWindow Window = new MenuWindow();
+	public void showMenuWindow() {
+		MenuWindow Window = new MenuWindow(this);
 		mainWindow.getContentPane().removeAll();
 		mainWindow.getContentPane().add(Window.getJPanel());
 		mainWindow.revalidate();
 	}
 
-	public static void showLoadWindow(){
+	public void showLoadWindow(){
 		LoadWindow Window = new LoadWindow();
 		mainWindow.getContentPane().removeAll();
 		mainWindow.getContentPane().add(Window.getJPanel());
 		mainWindow.revalidate();
 	}
 
-    public static void draw(int[][] map){
-        MainWindow.levelMap.setMapMatrix(map);
-    }
+    public void draw(int[][] map, Game game){
+        levelMap.setGame(game);
+        levelMap.setMapMatrix(map);
+	}
 
-    public static void setKeyListener(KeyListener keyboard){
+
+    public void setKeyListener(KeyListener keyboard){
         mainWindow.addKeyListener(keyboard);
     }
 
-}
+
+    }

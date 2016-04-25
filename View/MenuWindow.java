@@ -5,6 +5,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 class MenuWindow {
+	private MainWindow window;
+
+	public MenuWindow(MainWindow window){
+		this.window = window;
+	}
 
 	public JPanel getJPanel(){
 		JPanel menuWindow = new JPanel();
@@ -18,7 +23,7 @@ class MenuWindow {
 			Resume.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent actionEvent) {
-                    MainWindow.showLevelWindow();
+                    window.showLevelWindow();
 					MainWindow.gamePaused = false;
 				}
 			});
@@ -35,7 +40,7 @@ class MenuWindow {
                 if(MainWindow.gamePaused){
 					MainWindow.newGame = true;
                 }
-				MainWindow.showLevelWindow();
+				window.showLevelWindow();
                 MainWindow.gamePaused = false;
             }
 		});
@@ -45,7 +50,7 @@ class MenuWindow {
 		Load.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-					MainWindow.showLoadWindow();
+					window.showLoadWindow();
 			}
 		});
         menuPanel.add(Load);
@@ -53,7 +58,7 @@ class MenuWindow {
         BButton Quit = new BButton("Exit");
 		Quit.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
-				MainWindow.closeWindow();
+				window.closeWindow();
 			}
 		});
 		menuPanel.add(Quit);

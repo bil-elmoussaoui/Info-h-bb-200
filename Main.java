@@ -9,7 +9,7 @@ public class Main {
         MainWindow window = new MainWindow();
         Game game = new Game(window);
         Keyboard keyboard = new Keyboard(game);
-        MainWindow.setKeyListener(keyboard);
+        window.setKeyListener(keyboard);
         Animation animation = new Animation(game);
     }
 }

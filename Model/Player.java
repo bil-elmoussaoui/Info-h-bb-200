@@ -4,6 +4,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.nio.Buffer;
 
 /*
 TODO :
@@ -17,7 +18,7 @@ public class Player extends Person implements Runnable {
 	public int coins;
     public int exp;
     private int counter = 0;
-    private static BufferedImage img;
+    private BufferedImage img;
 
     public Player(int positionX, int positionY){
         super(positionX, positionY);
@@ -26,11 +27,11 @@ public class Player extends Person implements Runnable {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
     }
 
-    public static void draw(Graphics g, int x, int y) {
-        g.drawImage(img, x * 32, y * 32, 32, 32, null);
-
+    public BufferedImage getImage(){
+        return img;
     }
 
     @Override

@@ -8,16 +8,18 @@ import java.io.File;
 public class Tile {
     private int positionX;
     private int positionY;
-    private static BufferedImage img;
+    private BufferedImage img;
+    private String imgPath;
 
     public Tile(int positionX, int positionY) {
         this.setPositionX(positionX);
         this.setPositionY(positionY);
-        try {
-            img = ImageIO.read(new File("Images/leaves.png"));
+        imgPath = "Images/leaves.png";try {
+        img = ImageIO.read(new File(imgPath));
         } catch (Exception e) {
             e.printStackTrace();
         }
+
     }
 
     public int getPositionX(){
@@ -52,7 +54,9 @@ public class Tile {
         }
     }
 
-    public static void draw(Graphics g, int x, int y) {
-        g.drawImage(Tile.img, x * 32, y * 32, 32, 32, null);
+    public BufferedImage getImage(){
+
+        return this.img;
     }
+
 }
