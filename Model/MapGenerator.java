@@ -7,6 +7,11 @@ import java.util.Random;
 public class MapGenerator {
     private int[][] generatedMap;
     private Game game;
+    private int maxMonster = 6;
+    private int minMonsters = 2;
+    private int minItems = 2;
+    private int maxItems = 5;
+
 
     public MapGenerator(Game game){
         this.game = game;
@@ -16,19 +21,13 @@ public class MapGenerator {
         this.initWalls();
         this.initPlayer();
         this.intiMonsters();
-        int position[] = this.getRandomPosition();
-        game.items.add(new Coin(position[0], position[1]));
+        this.intiItems();
+        /*int[] inPosition = this.getRandomPosition();
+        int[] outPosition = this.getRandomPosition();
+        game.tiles.add(new Portal(inPosition[0], inPosition[1], outPosition[0], outPosition[1]));
+        */
     }
-    /*
-        case 0: tiles.add(new Tile(i,j)); break;
-        case 1: walls.add(new Wall(i,j));break;
-        case 2: player.move(i,j); break;
-        case 3: woodBoxes.add(new WoodBox(i,j)); break;
-        case 5: monsters.add(new Monster(i,j, this)); break;
-        case 6: items.add(new Coin(i,j)); break;
-        case 7: items.add(new Heart(i,j)); break;
-        case 8: items.add(new Key(i,j)); break;
-     */
+
     public void initWalls(){
         // draw outline walls
         for(int i = 0; i < Game.sizeX; i++){
@@ -104,7 +103,7 @@ public class MapGenerator {
     public boolean canBeDevided(Rectangle square){
         int width = square.width - square.x;
         int height = square.height - square.y;
-        return (width*height > 10 && width > 2 && height > 2);
+        return (width*height > 10 && width > 3 && height > 3);
     }
 
     public void initPlayer(){
@@ -114,10 +113,31 @@ public class MapGenerator {
 
     public void intiMonsters(){
         Random rand = new Random();
-        int nbMonsters = rand.nextInt(10) + 10;
+        int nbMonsters = rand.nextInt(maxMonster - minMonsters) + minMonsters;
         for(int i = 0 ; i < nbMonsters; i ++ ){
             int[] randomPosition = this.getRandomPosition();
             game.monsters.add(new Monster(randomPosition[0], randomPosition[1]));
+        }
+    }
+
+    public void intiItems(){
+        int[] keyPosition = this.getRandomPosition();
+        game.items.add(new Key(keyPosition[0], keyPosition[1]));
+        Random rand = new Random();
+        int nbItems = rand.nextInt(maxItems - minItems) + minItems;
+        for(int i = 0 ; i < nbItems; i ++ ){
+            int[] randomPosition = this.getRandomPosition();
+            switch (rand.nextInt(3)){
+                case 0:
+                    game.items.add(new Coin(randomPosition[0], randomPosition[1]));
+                break;
+                case 1:
+                    game.items.add(new Heart(randomPosition[0], randomPosition[1]));
+                break;
+                case 2:
+                    game.items.add(new WoodBox(randomPosition[0], randomPosition[1]));
+                break;
+            }
         }
     }
 

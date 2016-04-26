@@ -1,50 +1,104 @@
 package Controller;
-import Model.Game;
-import View.MainWindow;
-import Model.Monster;
-import Model.Item;
-import Model.Coin;
 
-public class Animation implements Runnable {
-    private int counter = 0;
-    private int monsterMovesTime = 250;
-    private int animationRefresh = 250;
+import Model.*;
+import View.MainWindow;
+
+import java.util.ArrayList;
+
+public class Animation {
+    private int monsterMovesTime = 1000;
+    private int animationRefresh = 100;
     private Game game;
-    private Thread thread;
+    private Thread monstersThread;
+    private Thread animationThread;
+    private Thread playerAttackThread;
 
 
     public Animation(Game game){
         this.game = game;
-        this.thread = new Thread(this);
-        this.thread.start();
-    }
-
-    @Override
-    public void run(){
-        try{
-            while(true) {
-                Thread.sleep(this.monsterMovesTime);
-                if(game.getMonsters().size() > 0) {
-                    for (Monster monster : game.monsters) {
-                        int[] position = monster.getRandomPosition();
-                        if (position != null && !MainWindow.gamePaused) {
-                            if(monster.getCanMove()) {
-                                monster.move(position[0], position[1]);
+        this.monstersThread = new Thread(){
+            public void run(){
+                try {
+                    while (true) {
+                        Thread.sleep(monsterMovesTime);
+                        if (game.getMonsters().size() > 0) {
+                            for (Monster monster : game.monsters) {
+                                int[] position = monster.getRandomPosition();
+                                if (position != null && !MainWindow.gamePaused) {
+                                    if (monster.getCanMove()) {
+                                        monster.isMoving = true;
+                                        monster.move(position[0], position[1]);
+                                    }
+                                    monster.isMoving = false;
+                                }
                             }
                         }
+                        game.refreshMap();
                     }
-                }
-                if(game.getItems().size() > 0) {
-                    for (Item item : game.items) {
-                        if(item instanceof Coin){
-                            ((Coin) item).upCounter();
+                }catch(Exception e){}
+            }
+        };
+        this.monstersThread.start();
+
+
+       playerAttackThread = new Thread(){
+            public void run(){
+                try {
+                    while(true) {
+                        Thread.sleep(animationRefresh);
+                        if(game.player.isAttacking && !game.player.isMoving) {
+                            game.player.setCanMove(false);
+                            while (game.player.weapon.counter.getCounter() <game.player.weapon.counter.getCounterMax()) {
+                                game.player.weapon.counter.up();
+                                game.player.counter.up();
+                                game.refreshMap();
+                                Thread.sleep(50);
+                            }
+                            game.player.setCanMove(true);
+                            game.player.setAttackMode(false);
+                            game.player.weapon.counter.init();
+                            game.player.counter.init();
+                            game.refreshMap();
                         }
                     }
-                }
-                game.refreshMap();
+
+                }catch (Exception e){}
             }
-        }catch (Exception e){
-            e.printStackTrace();
-        }
+        };
+        playerAttackThread.start();
+
+        animationThread = new Thread(){
+            public void run() {
+                try {
+                    while (true) {
+                        Thread.sleep(animationRefresh);
+                        if(game.player.isMoving) {
+                            game.player.counter.up();
+                        }
+
+                        if(game.player.weapon instanceof Bow){
+                            ArrayList<Arrow> arrows = new ArrayList<>();
+                        }
+                        if (game.getMonsters().size() > 0) {
+                            for (Monster monster : game.monsters) {
+                                if(monster.isMoving) {
+                                    monster.counter.up();
+                                }
+                            }
+                        }
+                        if (game.getItems().size() > 0) {
+                            for (Item item : game.items) {
+                                if (item instanceof Coin) {
+                                    ((Coin) item).counter.up();
+                                }
+                            }
+                        }
+                        game.refreshMap();
+                    }
+                }catch(Exception e){}
+            }
+        };
+        animationThread.start();
     }
+
 }

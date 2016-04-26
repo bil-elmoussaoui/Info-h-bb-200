@@ -1,39 +1,27 @@
 package Model;
 
-import View.MainWindow;
-import sun.applet.Main;
-
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.awt.Graphics;
-import java.awt.Rectangle;
 import java.io.File;
-/*
-TODO :
- - implement a random value for coins! and an image for each coin interval value :)
- */
-
 
 public class Coin extends Item{
     public int value = 10;
-    private int counter = 0;
+    public boolean animated = true;
     private BufferedImage img;
-    private Game game;
-    private Thread thread;
+    private String imgPath = "Images/coin_gold.png";
+    public Counter counter;
 
     public Coin(int positionX, int positionY){
         super(positionX, positionY);
+        this.setIsCollectable(true);
+        this.setIsBreakable(false);
+        this.setIsWalkable(true);
+        counter = new Counter(7);
+        value = (int) Math.floor(Math.random()*10);
         try {
-            img = ImageIO.read(new File("Images/coin_gold.png"));
+            img = ImageIO.read(new File(imgPath));
         } catch (Exception e) {
             e.printStackTrace();
-        }
-    }
-
-    public void upCounter() {
-        counter += 1;
-        if (counter > 8) {
-            counter = 0;
         }
     }
 
@@ -46,7 +34,7 @@ public class Coin extends Item{
     }
 
     public BufferedImage getImage() {
-        return img.getSubimage(counter *32, 0, 32, 32);
+        return img.getSubimage(counter.getCounter() *(img.getWidth()/8), 0, 32, 32);
     }
 
 }

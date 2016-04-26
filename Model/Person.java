@@ -4,21 +4,28 @@ import java.util.ArrayList;
 import java.util.Random;
 
 abstract class Person{
-	static int health;
+    private int health;
 	private int armor;
 	public Weapon weapon;
-    public int direction;
+    public int direction  = 1;
     public int positionX;
     public int positionY;
     public ArrayList<Weapon> weapons = new ArrayList<>();
+    public boolean isMoving = false;
+    public boolean isAttacking = false;
+    private boolean canMove = true;
+    public Counter counter;
 
-	public Person (int positionX, int positionY){
-        Game.freePositions[positionX][positionY] = 1;
-        this.setHealth(3);
-        this.setArmor(0);
+
+    public Person (int positionX, int positionY, int counterMax){
         this.setPositionX(positionX);
         this.setPositionY(positionY);
+        counter = new Counter(counterMax);
+        Game.freePositions[positionX][positionY] = 1;
+        this.setHealth(5);
+        this.setArmor(0);
     }
+
 
     public int getPositionX(){
         return this.positionX;
@@ -58,7 +65,7 @@ abstract class Person{
 
 	public void setHealth(int health){
 		try{
-			if (health >= 0 & health <5){
+			if (health >= 0 & health < 5){
 				this.health = health;
 			} else {
 				throw new Exception ("Pb sur les vies");
@@ -89,13 +96,21 @@ abstract class Person{
 		return weapon;
 	}
 
-	public void setWeapon(Weapon weapon)throws Exception{
+	public void setWeapon(Weapon weapon){
 		try{
 			this.weapon = weapon;
 		}catch(Exception e){
 			e.printStackTrace();
 		}
 	}
+
+    public void setCanMove(boolean canMove){
+        this.canMove = canMove;
+    }
+
+    public boolean getCanMove(){
+        return this.canMove;
+    }
 
     public int[] getRandomPosition(){
         int[] position = null;
@@ -110,7 +125,6 @@ abstract class Person{
 
     public ArrayList<int[]> getAccessiblePositions(){
         ArrayList<int[]> accessiblePositions = new ArrayList<>();
-        int[] position = new int [2];
         int x = this.getPositionX();
         int y = this.getPositionY();
         if(Game.freePositions != null) {
@@ -119,19 +133,14 @@ abstract class Person{
                 if (i != 0) {
                     if(y + i >= 0) {
                         if (Game.freePositions[x][y + i] == 0) {
-                            position[0] = x;
-                            position[1] = y + i;
-                            accessiblePositions.add(position);
+                            accessiblePositions.add(new int[]{x ,y + i});
                         }
                     }
                     if(x + i >= 0) {
                         if (Game.freePositions[x + i][y] == 0) {
-                            position[0] = x + i;
-                            position[1] = y;
-                            accessiblePositions.add(position);
+                            accessiblePositions.add(new int[]{x +i ,y});
                         }
                     }
-                    position = new int [2];
                 }
                 i += 1;
             }
@@ -144,26 +153,33 @@ abstract class Person{
 	}
 
 	public void move(int positionX , int positionY){
-		if(isPossibleToMove(positionX, positionY)){
-            int oldPositionX = this.getPositionX();
-            int oldPositionY = this.getPositionY();
-            if(oldPositionY - positionY == 0) {
-                if ((oldPositionX - positionX) > 0) {
-                    direction = 1; // left
-                } else {
-                    direction = 2; // right
-                }
+        int oldPositionX = this.getPositionX();
+        int oldPositionY = this.getPositionY();
+        if(oldPositionY - positionY == 0) {
+            if ((oldPositionX - positionX) > 0) {
+                direction = 2; // left
             } else {
-                if((oldPositionY - positionY) > 0) {
-                    direction = 3; // bottom
-                }  else {
-                    direction = 4; // top
-                }
+                direction = 4; // right
             }
+        } else {
+            if((oldPositionY - positionY) > 0) {
+                direction = 1; // bottom
+            }  else {
+                direction = 3; // top
+            }
+        }
+        if(this.weapon != null) {
+            this.weapon.setDirection(direction);
+        }
+		if(isPossibleToMove(positionX, positionY)){
             Game.freePositions[positionX][positionY] = 1;
             this.setPositionX(positionX);
             this.setPositionY(positionY);
             Game.freePositions[oldPositionX][oldPositionY] = 0;
         }
+    }
+
+    public boolean isAlive(){
+        return (getHealth() > 0);
     }
 }

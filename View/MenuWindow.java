@@ -18,7 +18,7 @@ class MenuWindow {
         BButton Play;
 
 		if(MainWindow.gamePaused){
-            menuPanel.setLayout(new GridLayout(4, 0, 10, 10));
+            menuPanel.setLayout(new GridLayout(5, 0, 10, 10));
 			BButton Resume = new BButton("Resume");
 			Resume.addActionListener(new ActionListener() {
 				@Override
@@ -45,7 +45,16 @@ class MenuWindow {
             }
 		});
 		menuPanel.add(Play);
-
+		if(MainWindow.gamePaused) {
+			BButton Save = new BButton("Save");
+            Save.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					window.showLoadWindow();
+				}
+			});
+			menuPanel.add(Save);
+		}
 		BButton Load = new BButton("Load");
 		Load.addActionListener(new ActionListener() {
 			@Override

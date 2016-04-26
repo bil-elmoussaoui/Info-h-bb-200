@@ -10,7 +10,7 @@ TODO :
 - implement useItem
  */
 
-public class Inventory {
+class Inventory {
     private int sizeMaxWeapon = 3;
     private int sizeMaxItem = 5;
     private ArrayList<Weapon> weaponsInventory = new ArrayList<>();
@@ -19,16 +19,17 @@ public class Inventory {
 	public void addWeapon(Weapon weapon){
 		if (weaponsInventory.size() < sizeMaxWeapon){
             weaponsInventory.add(weapon);
-		}else{
-
 		}
 	}
+
+    public boolean containsWeapon(Weapon weapon){
+        return weaponsInventory.contains(weapon);
+    }
+
 	
     public void addItem(Item item){
 		if (itemsInventory.size() < sizeMaxItem){
             itemsInventory.add(item);
-		}else{
-
 		}
 	}
 
@@ -40,11 +41,11 @@ public class Inventory {
         itemsInventory.remove(item);
 	}
 
-    public void useItem(){
+    public void useItem(Item item){
 
     }
 
-    public void useWeapon(){
+    public void useWeapon(Weapon weapon){
 
     }
 }

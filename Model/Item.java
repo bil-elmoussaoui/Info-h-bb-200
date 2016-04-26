@@ -3,10 +3,39 @@ package Model;
 public class Item {
     private int positionX;
     private int positionY;
+    private boolean isBreakable = false;
+    private boolean isCollectable = false;
+    private boolean isWalkable = true;
 
     public Item(int positionX, int positionY){
         this.setPositionX(positionX);
         this.setPositionY(positionY);
+    }
+
+    public void setIsWalkable(boolean isWalkable){
+        this.isWalkable = isWalkable;
+        Game.freePositions[this.getPositionX()][this.getPositionY()] = isWalkable ? 0 : 1;
+
+    }
+
+    public boolean getIsWalkable(){
+        return this.isWalkable;
+    }
+
+    public void setIsBreakable(boolean isBreakable){
+        this.isBreakable = isBreakable;
+    }
+
+    public void setIsCollectable(boolean isCollectable){
+        this.isCollectable = isCollectable;
+    }
+
+    public boolean getIsBreakable(){
+        return this.isBreakable;
+    }
+
+    public boolean getIsCollectable(){
+        return this.isCollectable;
     }
 
     public int getPositionX(){

@@ -1,7 +1,6 @@
 package Model;
 
 import javax.imageio.ImageIO;
-import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -13,21 +12,23 @@ TODO:
  */
 
 public class WoodBox extends Item{
+    public boolean breakable = true;
+    public BufferedImage img;
+    public String imgPath = "Images/Wood_Box.png";
+
     public WoodBox(int positionX, int positionY){
         super(positionX, positionY);
-    }
-
-    public void open(){
-        System.out.println("opened");
-    }
-
-    public static void draw(Graphics g, int x, int y) {
-        BufferedImage img = null;
+        this.setIsCollectable(false);
+        this.setIsBreakable(true);
+        this.setIsWalkable(false);
         try {
-            img = ImageIO.read(new File("Images/Wood_Box.png"));
-            g.drawImage(img, x * 32, y * 32, 32, 32, null);
+            img = ImageIO.read(new File(imgPath));
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public BufferedImage getImage() {
+        return img;
     }
 }

@@ -10,16 +10,36 @@ public class Tile {
     private int positionY;
     private BufferedImage img;
     private String imgPath;
+    private boolean isWalkable = true;
+    private boolean isBreakable = false;
 
     public Tile(int positionX, int positionY) {
         this.setPositionX(positionX);
         this.setPositionY(positionY);
-        imgPath = "Images/leaves.png";try {
+//        Game.freePositions[positionX][positionY] = 1;
+
+        imgPath = "Images/tile.png";try {
         img = ImageIO.read(new File(imgPath));
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
 
+    public void setIsWalkable(boolean isWalkable){
+        this.isWalkable = isWalkable;
+        Game.freePositions[this.getPositionX()][this.getPositionY()] = isWalkable ? 0 : 1;
+    }
+
+    public boolean getIsWalkable(){
+        return this.isWalkable;
+    }
+
+    public void setIsBreakable(boolean isBreakable){
+        this.isBreakable = isBreakable;
+    }
+
+    public boolean getIsBreakable(){
+        return this.isBreakable;
     }
 
     public int getPositionX(){

@@ -2,6 +2,7 @@ package View;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.logging.Level;
 
 public class LevelWindow{
     private JPanel levelMap;

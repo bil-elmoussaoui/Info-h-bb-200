@@ -3,16 +3,15 @@ package Model;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.awt.Graphics;
 
 public class Wall extends Tile{
-    private String imgPath;
+    private String imgPath = "Images/wall.png";
     private BufferedImage img;
 
     public Wall(int positionX, int positionY){
         super(positionX, positionY);
-        Game.freePositions[positionX][positionY] = 1;
-        imgPath = "Images/StoneWallStandard.png";
+        this.setIsBreakable(false);
+        this.setIsWalkable(false);
         try {
             img = ImageIO.read(new File(imgPath));
         } catch (Exception e) {

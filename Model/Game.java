@@ -1,36 +1,42 @@
 package Model;
 
-import java.awt.Toolkit;
-import java.awt.Dimension;
-import java.util.ArrayList;
 import View.MainWindow;
 
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.Random;
+
 public class Game{
-    public Player player;
+    public Player player = null;
     public static int[][] freePositions;
     public ArrayList<Monster> monsters = new ArrayList<>();
     public ArrayList<Wall> walls = new ArrayList<>();
-    public ArrayList<WoodBox> woodBoxes = new ArrayList<>();
     public ArrayList<Item> items = new ArrayList<>();
     public ArrayList<Tile> tiles = new ArrayList<>();
     private Inventory inventory;
     public MainWindow window;
     private int[][] map;
+
+
     // screen information
-    public static int sizeY = 50;
-    public static int sizeX = 50;
+    public static int sizeY = 100;
+    public static int sizeX = 100 ;
     public static int shownSizeX;
     public static int shownSizeY;
     public static int screenX;
     public static int screenY;
+    public static int pixelX = 64;
+    public static int pixelY = 64;
 
     public Game(MainWindow window) throws Exception {
         this.window = window;
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         screenX = (int)screenSize.getWidth();
         screenY = (int)screenSize.getHeight();
-        shownSizeX = (int)Math.floor(screenX/32) + 1;
-        shownSizeY = (int)Math.floor(screenY/32);
+        shownSizeX = (int)Math.floor(screenX/pixelX) + 1;
+        shownSizeY = (int)Math.floor(screenY/pixelY);
+        sizeX = shownSizeX;
+        sizeY = shownSizeY;
         freePositions = new int[this.sizeX][this.sizeY];
         map = new int[this.sizeX][this.sizeY];
         this.generateMap();
@@ -58,19 +64,90 @@ public class Game{
         this.map = mapGenerator.getGeneratedMap();
     }
 
-    /*public int[][] getVisibleMap(){
+    public void refreshMap(){
+        if(MainWindow.newGame){
+            tiles = new ArrayList<>();
+            monsters = new ArrayList<>();
+            items = new ArrayList<>();
+            walls = new ArrayList<>();
+            freePositions = new int[this.sizeX][this.sizeY];
+            map = new int[this.sizeX][this.sizeY];
+            this.generateMap();
+        }
+        window.draw(this.map, this);
+    }
 
-        int[][] visibleMap = new int[endPositionX - startPositionX][endPositionY - startPositionY];
-        for (int i = startPositionX; i < endPositionX; i++) {
-            for(int j = startPositionY; j < endPositionY; j ++){
-                visibleMap[i - startPositionX][j - startPositionY] = map[i][j];
+    public void playerAttack(){
+        int[] position = player.getAttackedPosition();
+        int monstersSize = monsters.size();
+        int i = 0;
+        while (i < monstersSize && monstersSize != 0) {
+            Monster monster = monsters.get(i);
+            int x = monster.getPositionX();
+            int y = monster.getPositionY();
+            if (position[0] == x && position[1] == y) {
+                player.attack(monster);
+                if (!monster.isAlive()) {
+                    monsters.remove(monster);
+                    monstersSize -= 1;
+                    map[x][y] = 0;
+                    Game.freePositions[x][y] = 0;
+                    this.refreshMap();
+                }
+            }
+            i += 1;
+        }
+        int itemsSize = items.size();
+
+        if(itemsSize > 0) {
+            int j = 0;
+            while (j < itemsSize && itemsSize != 0) {
+                Item item  = items.get(j);
+                if(item.getIsBreakable()) {
+                    int x = item.getPositionX();
+                    int y = item.getPositionY();
+                    if (position[0] == x && position[1] == y) {
+                        items.remove(item);
+                        itemsSize -= 1;
+                        Random randomItem = new Random();
+                        switch (randomItem.nextInt(3)) {
+                            case 1:
+                                items.add(new Coin(x, y));
+                            break;
+                            case 2:
+                                items.add(new Heart(x, y));
+                            break;
+                            case 3:
+                                items.add(new Key(x, y));
+                            break;
+                        }
+                        Game.freePositions[x][y] = 0;
+                    }
+                }
+                j+=1;
             }
         }
-        return visibleMap;
-    }*/
+    }
 
-    public void refreshMap(){
-        window.draw(this.map, this);
+    public void playerCollect(){
+        int itemsSize = items.size();
+        if(itemsSize > 0){
+            int j = 0;
+            while (j < itemsSize && itemsSize != 0) {
+                Item item = items.get(j);
+                if(item.getIsCollectable()) {
+                    int x = item.getPositionX();
+                    int y = item.getPositionY();
+                    if (player.getPositionX() == x && player.getPositionY() == y) {
+                        player.collect(item);
+                        items.remove(item);
+                        itemsSize -= 1;
+                        freePositions[x][y] = 0;
+                    }
+                }
+                j+=1;
+            }
+        }
     }
 
 }

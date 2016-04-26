@@ -12,7 +12,6 @@ public class MainWindow {
 	public static boolean newGame = false;
 	private JFrame mainWindow;
     private Map levelMap = new Map();
-    private Game game;
 
 	public MainWindow(){
 		device = GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices()[0];
@@ -34,8 +33,13 @@ public class MainWindow {
             @Override
             public void keyPressed(KeyEvent keyEvent) {
                 if(keyEvent.getKeyCode() == KeyEvent.VK_ESCAPE){
-                    MainWindow.gamePaused = true;
-                    showMenuWindow();
+					if(!MainWindow.gamePaused) {
+						MainWindow.gamePaused = true;
+						showMenuWindow();
+					} else {
+						MainWindow.gamePaused = false;
+						showLevelWindow();
+					}
                 }
             }
 

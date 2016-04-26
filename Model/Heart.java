@@ -17,12 +17,16 @@ public class Heart extends Item {
     private int positionX;
     private int positionY;
     private int health = 1;
-    private static BufferedImage img;
+    private BufferedImage img;
+    private String imgPath = "Images/heart.png";
 
     public Heart(int positionX, int positionY){
         super(positionX, positionY);
+        this.setIsCollectable(true);
+        this.setIsBreakable(false);
+        this.setIsWalkable(true);
         try {
-            img = ImageIO.read(new File("Images/Images/heart.png"));
+            img = ImageIO.read(new File(imgPath));
         }catch (Exception e) {
         }
     }
@@ -31,8 +35,8 @@ public class Heart extends Item {
         return this.health;
     }
 
-    public static void draw(Graphics g, int x, int y) {
-        g.drawImage(img, x * 32, y * 32, 32, 32, null);
+    public BufferedImage getImage() {
+        return img;
     }
 
 }
