@@ -34,7 +34,7 @@ public class Game{
         screenX = (int)screenSize.getWidth();
         screenY = (int)screenSize.getHeight();
         shownSizeX = (int)Math.floor(screenX/pixelX) + 1;
-        shownSizeY = (int)Math.floor(screenY/pixelY);
+        shownSizeY = (int)Math.floor(screenY/pixelY) - 1;
         sizeX = shownSizeX;
         sizeY = shownSizeY;
         freePositions = new int[this.sizeX][this.sizeY];
@@ -129,6 +129,38 @@ public class Game{
         }
     }
 
+    public void trapDammage(Tile tile){
+        int[] position = new int[]{tile.getPositionX(),tile.getPositionY()};
+        int monstersSize = monsters.size();
+        int i = 0;
+        while (i < monstersSize && monstersSize != 0) {
+            Monster monster = monsters.get(i);
+            int x = monster.getPositionX();
+            int y = monster.getPositionY();
+            if (position[0] == x && position[1] == y) {
+                ((Trap)tile).attack(monster);
+                if (!monster.isAlive()) {
+                    monsters.remove(monster);
+                    monstersSize -= 1;
+                    map[x][y] = 0;
+                    Game.freePositions[x][y] = 0;
+                    this.refreshMap();
+                }
+            }
+            i += 1;
+        }
+        if (position[0] == player.getPositionX() && position[1] == player.getPositionY()) {
+            ((Trap)tile).attack(player);
+            if (!player.isAlive()) {
+                /*monsters.remove(monster);
+                monstersSize -= 1;
+                map[x][y] = 0;
+                Game.freePositions[x][y] = 0;
+                this.refreshMap();*/
+            }
+        }
+    }
+
     public void playerCollect(){
         int itemsSize = items.size();
         if(itemsSize > 0){
@@ -139,10 +171,12 @@ public class Game{
                     int x = item.getPositionX();
                     int y = item.getPositionY();
                     if (player.getPositionX() == x && player.getPositionY() == y) {
-                        player.collect(item);
-                        items.remove(item);
-                        itemsSize -= 1;
-                        freePositions[x][y] = 0;
+                        if(player.inventory.countItems() < player.inventory.sizeMaxItem) {
+                            player.collect(item);
+                            items.remove(item);
+                            itemsSize -= 1;
+                            freePositions[x][y] = 0;
+                        }
                     }
                 }
                 j+=1;

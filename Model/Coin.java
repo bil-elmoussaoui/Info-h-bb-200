@@ -17,7 +17,7 @@ public class Coin extends Item{
         this.setIsBreakable(false);
         this.setIsWalkable(true);
         counter = new Counter(7);
-        value = (int) Math.floor(Math.random()*10);
+        value = (int) Math.floor(Math.random()*10) + 1;
         try {
             img = ImageIO.read(new File(imgPath));
         } catch (Exception e) {

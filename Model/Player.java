@@ -4,7 +4,6 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 
 /*
 TODO :
@@ -14,16 +13,16 @@ TODO :
 public class Player extends Person {
 	public int coins;
     public int exp;
-    public ArrayList<Key> keys = new ArrayList<>();
+    public boolean hasKey = false;
     private BufferedImage img;
     public String imgPath = "Images/player.png";
     public String attackingImgPath;
-    private Inventory inventory;
+    public Inventory inventory;
 
     public Player(int positionX, int positionY){
         super(positionX, positionY, 7);
         this.inventory = new Inventory();
-        this.setWeapon(new Staff(1));
+        this.setWeapon(new Dagger(1));
         try {
             img = ImageIO.read(new File(imgPath));
         } catch (IOException e) {
@@ -38,11 +37,28 @@ public class Player extends Person {
         }
     }
 
+    public Inventory getInventory(){
+        return this.inventory;
+    }
+
     public void setWeapon(Weapon weapon){
         if(!this.inventory.containsWeapon(weapon)){
             this.inventory.addWeapon(weapon);
         }
         this.weapon = weapon;
+    }
+
+    public void throwWeapon(Weapon weapon){
+        // need more enhancement! throwing the weapon so it can be collected later? use an other weapon or nothing
+        if(this.inventory.containsWeapon(weapon)){
+            this.inventory.removeWeapon(weapon);
+            if (this.inventory.countWeapons() > 1) {
+                this.setWeapon(this.inventory.randomWeapon());
+            } else {
+                this.setWeapon(null);
+                this.setAttackMode(false);
+            }
+        }
     }
 
     public void setImage(String imgPath){
@@ -54,7 +70,7 @@ public class Player extends Person {
 
     public void setAttackMode(boolean attackMode){
         this.isAttacking = attackMode;
-        if(attackMode) {
+        if(attackMode && this.weapon != null) {
             this.setImage(attackingImgPath);
             counter.setCounterMax(weapon.counter.getCounterMax());
         } else {
@@ -102,15 +118,18 @@ public class Player extends Person {
     }
 
     public void addKey(Key key){
-        // nombre limité de clefs?
-        this.keys.add(key);
+        this.hasKey = true;
     }
 
     public void collect(Item item){
         if(item instanceof Coin){
             this.addCoins(((Coin)item));
         } else if (item instanceof Heart){
-            this.setHealth(this.getHealth() + 1);
+            if(this.getHealth() < 5) {
+                this.setHealth(this.getHealth() + 1);
+            } else {
+                this.inventory.addItem(item);
+            }
         } else if (item instanceof Key){
             this.addKey(((Key)item));
         }
@@ -129,6 +148,8 @@ public class Player extends Person {
     }
 
     public void attack(Monster monster){
-        monster.setHealth(monster.getHealth() - 1);
+        if(weapon != null) {
+            monster.setHealth(monster.getHealth() - 1);
+        }
     }
 }

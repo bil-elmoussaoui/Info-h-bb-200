@@ -7,9 +7,9 @@ import java.util.Random;
 public class MapGenerator {
     private int[][] generatedMap;
     private Game game;
-    private int maxMonster = 6;
-    private int minMonsters = 2;
-    private int minItems = 2;
+    private int maxMonster = 8;
+    private int minMonsters = 4;
+    private int minItems = 3;
     private int maxItems = 5;
 
 
@@ -22,10 +22,9 @@ public class MapGenerator {
         this.initPlayer();
         this.intiMonsters();
         this.intiItems();
-        /*int[] inPosition = this.getRandomPosition();
-        int[] outPosition = this.getRandomPosition();
-        game.tiles.add(new Portal(inPosition[0], inPosition[1], outPosition[0], outPosition[1]));
-        */
+        int[] inPosition = this.getRandomPosition();
+        //int[] outPosition = this.getRandomPosition();
+        game.tiles.add(new Trap(inPosition[0], inPosition[1]));
     }
 
     public void initWalls(){
@@ -44,7 +43,7 @@ public class MapGenerator {
             }
         }
 
-        devide(new Rectangle(1, 1, Game.sizeX - 1, Game.sizeY - 1));
+        devide(new Rectangle(1, 1, Game.sizeX - 1, Game.sizeY - 1), false);
         int j = 0;
         int tilesSize = game.tiles.size();
         while (j < tilesSize && tilesSize != 0) {
@@ -58,13 +57,35 @@ public class MapGenerator {
             j+=1;
         }
     }
-
-    public void devide(Rectangle square){
+    /*
+    public int[] randomWall(Rectangle square, boolean isHorizental){
+        Random rand = new Random();
+        boolean found = false;
+        int wallPosition = 0;
+        int wallRandom = 0;
+        int wallX, wallY;
+        boolean condition = false;
+        while(!found){
+            wallRandom = (isHorizental ? rand.nextInt(square.height - 2) : rand.nextInt(square.width - 2));
+            wallPosition = (isHorizental ? square.y +  wallRandom : square.x +  wallRandom);
+            condition = (isHorizental? Math.abs(square.height - wallPosition) > 2 && Math.abs(square.y - wallPosition) > 2 :
+                    Math.abs(square.x - wallPosition) > 2 && Math.abs(square.width - wallPosition) > 2);
+            if(condition){
+                found = true;
+            }
+        }
+        wallX = square.x + (isHorizental ? 0 : wallRandom);
+        wallY = square.y + (isHorizental ? wallRandom: 0);
+        return new int[]{wallX, wallY};
+    }
+    */
+    public void devide(Rectangle square, boolean wasHorizental){
         if(canBeDevided(square)) {
             Random rand = new Random();
-            boolean isHorizental = this.getOrientation(square.width, square.height);
-            int wallX = square.x + (isHorizental ? 0 : rand.nextInt(square.width - 2));
-            int wallY = square.y + (isHorizental ? rand.nextInt(square.height - 2) : 0);
+            boolean isHorizental = this.getOrientation(square.width, square.height, wasHorizental);
+            //int[] randWall = randomWall(square, isHorizental);
+            int wallX = square.x + (isHorizental? 0 :rand.nextInt(square.width - 2));
+            int wallY = square.y + (isHorizental? rand.nextInt(square.height - 2) : 0);
             int passageX = wallX + (isHorizental ? rand.nextInt(square.width) : 0);
             ArrayList<Integer> passageXList = new ArrayList<>();
             for(int i = -1; i < 1; i ++){ passageXList.add(passageX + i);}
@@ -81,13 +102,13 @@ public class MapGenerator {
                 wallY += isHorizental ? 0 : 1;
                 i++;
             }
-            devide(new Rectangle(square.x, square.y, isHorizental ? square.width : wallX - square.x + 1, isHorizental ? wallY - square.y + 1 : square.height));
-            devide(new Rectangle(isHorizental ? square.x : wallX + 1, isHorizental ? wallY + 1 : square.y, isHorizental ? square.width : square.x + square.width - wallX - 1, isHorizental ? square.y + square.height - wallY - 1 : square.height));
+            devide(new Rectangle(square.x, square.y, isHorizental ? square.width : wallX - square.x + 1, isHorizental ? wallY - square.y + 1 : square.height), isHorizental);
+            devide(new Rectangle(isHorizental ? square.x : wallX + 1, isHorizental ? wallY + 1 : square.y, isHorizental ? square.width : square.x + square.width - wallX - 1, isHorizental ? square.y + square.height - wallY - 1 : square.height),isHorizental);
 
         }
     }
 
-    public boolean getOrientation(int width, int height){
+    public boolean getOrientation(int width, int height, boolean wasHorizental){
         boolean isHorizental;
         Random rand = new Random();
         if(width < height){
@@ -95,7 +116,7 @@ public class MapGenerator {
         } else if(width > height){
             isHorizental = false;
         } else {
-            isHorizental = (rand.nextInt(2) == 0) ? true : false;
+            isHorizental = !wasHorizental;
         }
         return isHorizental;
     }
@@ -103,7 +124,7 @@ public class MapGenerator {
     public boolean canBeDevided(Rectangle square){
         int width = square.width - square.x;
         int height = square.height - square.y;
-        return (width*height > 10 && width > 3 && height > 3);
+        return (width > 2 && height > 2);
     }
 
     public void initPlayer(){

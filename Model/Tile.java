@@ -1,7 +1,6 @@
 package Model;
 
 import javax.imageio.ImageIO;
-import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 
@@ -12,6 +11,7 @@ public class Tile {
     private String imgPath;
     private boolean isWalkable = true;
     private boolean isBreakable = false;
+    private boolean isDangerous = false;
 
     public Tile(int positionX, int positionY) {
         this.setPositionX(positionX);
@@ -36,6 +36,14 @@ public class Tile {
 
     public void setIsBreakable(boolean isBreakable){
         this.isBreakable = isBreakable;
+    }
+
+    public void setIsDangerous(boolean isDangerous){
+        this.isDangerous = isDangerous;
+    }
+
+    public boolean getIsDangerous(){
+        return this.isDangerous;
     }
 
     public boolean getIsBreakable(){

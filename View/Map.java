@@ -88,13 +88,13 @@ public class Map extends JPanel{
                     if (startPositionX <= item.getPositionX() && item.getPositionX() <= endPositionX) {
                         if (startPositionY <= item.getPositionY() && item.getPositionY() <= endPositionY) {
                             if (item instanceof Coin) {
-                                g.drawImage(((Coin) item).getImage(), (item.getPositionX() - startPositionX) * Game.pixelX, (item.getPositionY() - startPositionY) * Game.pixelY, Game.pixelX, Game.pixelY, null);
+                                g.drawImage(((Coin) item).getImage(), (item.getPositionX() - startPositionX) * Game.pixelX + 16, (item.getPositionY() - startPositionY) * Game.pixelY + 16, 32 , 32, null);
                             } else if (item instanceof Key) {
-                                g.drawImage(((Key) item).getImage(), (item.getPositionX() - startPositionX) * Game.pixelX, (item.getPositionY() - startPositionY) * Game.pixelY, Game.pixelX, Game.pixelY, null);
+                                g.drawImage(((Key) item).getImage(), (item.getPositionX() - startPositionX) * Game.pixelX + 16, (item.getPositionY() - startPositionY) * Game.pixelY + 16, 32, 32, null);
                             } else if (item instanceof WoodBox) {
                                 g.drawImage(((WoodBox) item).getImage(), (item.getPositionX() - startPositionX) * Game.pixelX, (item.getPositionY() - startPositionY) * Game.pixelY, Game.pixelX, Game.pixelY, null);
                             } else if (item instanceof Heart) {
-                                g.drawImage(((Heart) item).getImage(), (item.getPositionX() - startPositionX) * Game.pixelX, (item.getPositionY() - startPositionY) * Game.pixelY, Game.pixelX, Game.pixelY, null);
+                                g.drawImage(((Heart) item).getImage(), (item.getPositionX() - startPositionX) * Game.pixelX + 16, (item.getPositionY() - startPositionY) * Game.pixelY + 16 , 32 , 32, null);
                             }
                         }
                     }
@@ -104,19 +104,50 @@ public class Map extends JPanel{
             g.setColor(Color.WHITE);
             g.setFont(new Font("TimesRoman", Font.BOLD, 22));
 
-            int startX = Game.screenX - 180;
-            int startY = 20;
+            int startX = Game.screenX - 200;
+            int startY = 80;
             try {
                 //Font customFont = Font.createFont(Font.TRUETYPE_FONT, new File("Fonts/ARCADE.TTF")).deriveFont(22f);
                 //g.setFont(new Font(customFont, Font.BOLD, 22));
                 BufferedImage heart = ImageIO.read(new File("Images/heart.png"));
                 BufferedImage coin = ImageIO.read(new File("Images/coin.png"));
                 for (int i = 0; i < game.player.getHealth(); i++) {
-                    g.drawImage(heart, startX + 32 * i + 5, startY, 16, 16, null);
+                    g.drawImage(heart, startX + 32 * i + 5, startY, 32, 32, null);
                 }
                 g.drawImage(coin, startX + 12, startY + 40, 24, 24, null);
                 g.drawString(("x" + game.player.getCoins()), startX + 42, startY + 57);
             } catch (Exception e) {
+            }
+            g.setColor(Color.black);
+            g.fillRect(0, (Game.shownSizeY)*Game.pixelY, Game.shownSizeX*Game.pixelX , Game.shownSizeY*Game.pixelX);
+            try {
+                BufferedImage inventoryBg = ImageIO.read(new File("Images/inventory.png"));
+                BufferedImage keyImg = ImageIO.read(new File("Images/key.png"));
+                for (int i = 0; i < game.player.inventory.sizeMaxWeapon; i++){
+                    g.drawImage(inventoryBg, (Game.shownSizeX - 1 -  (game.player.inventory.sizeMaxWeapon + game.player.inventory.sizeMaxItem + 3 - i))*Game.pixelX, (Game.shownSizeY)*Game.pixelY, Game.pixelX, Game.pixelY, null);
+                }
+                BufferedImage dagger = ImageIO.read(new File("Images/sword_iron.png"));
+                for (int i = 0; i < game.player.inventory.countWeapons(); i++){
+                    if(game.player.inventory.getWeapon(i) instanceof Dagger) {
+                        g.drawImage(dagger, (Game.shownSizeX - 1 -  (game.player.inventory.sizeMaxWeapon + game.player.inventory.sizeMaxItem + 3 - i))*Game.pixelX + 16, (Game.shownSizeY)*Game.pixelY + 16, 32, 32, null);
+                    }
+                }
+                for (int i = 0; i < game.player.inventory.sizeMaxItem; i++){
+                    g.drawImage(inventoryBg, (Game.shownSizeX - 1 -  (game.player.inventory.sizeMaxItem  + 2 -i))*Game.pixelX, (Game.shownSizeY)*Game.pixelY, Game.pixelX, Game.pixelY, null);
+                }
+                for (int i = 0; i < game.player.inventory.countItems(); i++){
+                    if(game.player.inventory.getItem(i) instanceof Heart) {
+                        g.drawImage(((Heart)game.player.inventory.getItem(i)).getImage() , (Game.shownSizeX - 1 -  (game.player.inventory.sizeMaxItem  + 2 -i))*Game.pixelX + 16, (Game.shownSizeY) * Game.pixelY  + 16, 32, 32, null);
+                    }
+                }
+
+                g.drawImage(inventoryBg, (Game.shownSizeX - 2)*Game.pixelX, (Game.shownSizeY)*Game.pixelY, Game.pixelX, Game.pixelY, null);
+                if(game.player.hasKey){
+                    g.drawImage(keyImg, (Game.shownSizeX - 2)*Game.pixelX + 16, (Game.shownSizeY)*Game.pixelY + 16, 32, 32, null);
+                }
+
+            }catch (Exception e){
+
             }
         } else{
             hasStarted = true;

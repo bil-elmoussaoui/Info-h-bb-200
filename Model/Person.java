@@ -104,6 +104,7 @@ abstract class Person{
 		}
 	}
 
+
     public void setCanMove(boolean canMove){
         this.canMove = canMove;
     }

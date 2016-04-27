@@ -48,6 +48,9 @@ public class Keyboard implements KeyListener{
                     game.playerCollect();
                 }
             break;
+            case KeyEvent.VK_F:
+                game.player.throwWeapon(game.player.weapon);
+            break;
         }
         if(game.player.isMoving){
             if(nextPositionX != game.player.getPositionX() || nextPositionY != game.player.getPositionY()) {

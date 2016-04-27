@@ -1,6 +1,7 @@
 package Model;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 /*
 TODO :
@@ -10,9 +11,9 @@ TODO :
 - implement useItem
  */
 
-class Inventory {
-    private int sizeMaxWeapon = 3;
-    private int sizeMaxItem = 5;
+public class Inventory {
+    public int sizeMaxWeapon = 5;
+    public int sizeMaxItem = 3;
     private ArrayList<Weapon> weaponsInventory = new ArrayList<>();
     private ArrayList<Item> itemsInventory = new ArrayList<>();
 
@@ -21,6 +22,7 @@ class Inventory {
             weaponsInventory.add(weapon);
 		}
 	}
+
 
     public boolean containsWeapon(Weapon weapon){
         return weaponsInventory.contains(weapon);
@@ -32,6 +34,27 @@ class Inventory {
             itemsInventory.add(item);
 		}
 	}
+
+    public Item getItem(int index){
+        return itemsInventory.get(index);
+    }
+
+    public Weapon getWeapon(int index){
+        return weaponsInventory.get(index);
+    }
+
+    public int countWeapons(){
+        return weaponsInventory.size();
+    }
+
+    public int countItems(){
+        return itemsInventory.size();
+    }
+
+    public Weapon randomWeapon(){
+        Random rand = new Random();
+        return weaponsInventory.get(rand.nextInt(countWeapons()));
+    }
 
 	public void removeWeapon(Weapon weapon){
         weaponsInventory.remove(weapon);

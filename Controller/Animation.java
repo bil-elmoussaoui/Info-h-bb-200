@@ -6,7 +6,7 @@ import View.MainWindow;
 import java.util.ArrayList;
 
 public class Animation {
-    private int monsterMovesTime = 1000;
+    private int monsterMovesTime = 700;
     private int animationRefresh = 100;
     private Game game;
     private Thread monstersThread;
@@ -40,6 +40,25 @@ public class Animation {
         };
         this.monstersThread.start();
 
+        Thread trapThread = new Thread(){
+            public void run(){
+                try{
+                    while (true) {
+                        Thread.sleep(1500);
+                        if (game.getTiles().size() > 0) {
+                            for (Tile tile : game.tiles) {
+                                if (tile instanceof Trap) {
+                                    game.trapDammage(tile);
+                                }
+                            }
+                        }
+                    }
+                }catch (Exception e){
+
+                }
+            }
+        };
+        trapThread.start();
 
        playerAttackThread = new Thread(){
             public void run(){
@@ -48,7 +67,7 @@ public class Animation {
                         Thread.sleep(animationRefresh);
                         if(game.player.isAttacking && !game.player.isMoving) {
                             game.player.setCanMove(false);
-                            while (game.player.weapon.counter.getCounter() <game.player.weapon.counter.getCounterMax()) {
+                            while (game.player.weapon.counter.getCounter() < game.player.weapon.counter.getCounterMax()) {
                                 game.player.weapon.counter.up();
                                 game.player.counter.up();
                                 game.refreshMap();
@@ -83,6 +102,13 @@ public class Animation {
                             for (Monster monster : game.monsters) {
                                 if(monster.isMoving) {
                                     monster.counter.up();
+                                }
+                            }
+                        }
+                        if (game.getTiles().size() > 0) {
+                            for (Tile tile : game.tiles) {
+                                if( tile instanceof Trap) {
+                                    ((Trap) tile).counter.up();
                                 }
                             }
                         }
