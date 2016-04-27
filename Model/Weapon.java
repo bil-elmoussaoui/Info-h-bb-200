@@ -3,16 +3,22 @@ package Model;
 import java.awt.image.BufferedImage;
 
 
-public class Weapon {
+public class Weapon extends Item {
 	private int damage;
 	private int level;
 	public String imgPath = "Images/sword.png";
+    public String staticImgPath = "Images/sword-static.png";
 	public BufferedImage img = null;
+    public BufferedImage staticImg = null;
 	private int direction = 1;
     public Counter counter;
 
-	public Weapon (int damage, int counterMax){
+	public Weapon (Integer positionX, Integer positionY, int damage, int counterMax){
+		super(positionX, positionY);
 		this.damage = damage;
+        setIsCollectable(true);
+        setIsBreakable(false);
+        setIsWalkable(true);
         counter = new Counter(counterMax);
 	}
 
@@ -40,13 +46,16 @@ public class Weapon {
 		this.direction = direction;
 	}
 
-
 	public int getDirection(){
 		return  this.direction;
 	}
 
-
 	public BufferedImage getImage(){
 		return img;
 	}
+
+    public BufferedImage getStaticImg(){
+        return staticImg;
+    }
+
 }

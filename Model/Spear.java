@@ -11,14 +11,22 @@ import java.io.IOException;
 public class Spear extends Weapon {
     public String imgPath = "Images/weapon-spear.png";
     public BufferedImage img = null;
+    public BufferedImage staticImg = null;
+    public String staticImgPath = "Images/sword_iron.png";
 
-    public Spear(int damage){
-        super(damage, 7);
+
+    public Spear(Integer positionX, Integer positionY, int damage){
+        super(positionX, positionY, damage, 7);
         try {
             img = ImageIO.read(new File(imgPath));
+            staticImg = ImageIO.read(new File(staticImgPath));
         }catch (IOException e){
             e.printStackTrace();
         }
+    }
+
+    public BufferedImage getSaticImg(){
+        return staticImg;
     }
 
     public BufferedImage getImage(){

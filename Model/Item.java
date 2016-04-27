@@ -6,16 +6,29 @@ public class Item {
     private boolean isBreakable = false;
     private boolean isCollectable = false;
     private boolean isWalkable = true;
+    private boolean isUsed = false;
 
-    public Item(int positionX, int positionY){
-        this.setPositionX(positionX);
-        this.setPositionY(positionY);
+
+    public Item(Integer positionX, Integer positionY){
+        if(positionX == null || positionY == null){
+            this.isUsed = true;
+        } else {
+            this.setPositionX(positionX);
+            this.setPositionY(positionY);
+        }
+    }
+
+    public void setIsUsed(boolean isUsed){
+        this.isUsed = isUsed;
+    }
+
+    public boolean getIsUsed(){
+        return this.isUsed;
     }
 
     public void setIsWalkable(boolean isWalkable){
         this.isWalkable = isWalkable;
         Game.freePositions[this.getPositionX()][this.getPositionY()] = isWalkable ? 0 : 1;
-
     }
 
     public boolean getIsWalkable(){

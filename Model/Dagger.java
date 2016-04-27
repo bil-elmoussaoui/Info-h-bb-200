@@ -9,13 +9,17 @@ import java.io.IOException;
  - implement sword draw function and animation
  */
 public class Dagger extends Weapon {
-    public String imgPath = "Images/weapon-dagger.png";
-    public BufferedImage img = null;
 
-    public Dagger(int damage){
-        super(damage, 5);
+    public BufferedImage img = null;
+    public String imgPath = "Images/weapon-dagger.png";
+    public BufferedImage staticImg = null;
+    public String staticImgPath = "Images/sword_iron.png";
+
+    public Dagger(Integer positionX, Integer positionY, int damage){
+        super(positionX, positionY, damage, 5);
         try {
             img = ImageIO.read(new File(imgPath));
+            staticImg = ImageIO.read(new File(staticImgPath));
         }catch (IOException e){
             e.printStackTrace();
         }
@@ -23,5 +27,9 @@ public class Dagger extends Weapon {
 
     public BufferedImage getImage(){
         return img.getSubimage(this.counter.getCounter()*64, (this.getDirection() - 1)*64, 64, 64);
+    }
+
+    public BufferedImage getSaticImg(){
+        return staticImg;
     }
 }

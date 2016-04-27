@@ -1,11 +1,8 @@
 package Model;
 
 import javax.imageio.ImageIO;
-import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.IOException;
-import java.nio.Buffer;
 
 /*
 TODO:
@@ -18,7 +15,7 @@ public class Heart extends Item {
     private int positionY;
     private int health = 1;
     private BufferedImage img;
-    private String imgPath = "Images/heart.png";
+    private String imgPath = "Images/health-potion.png";
 
     public Heart(int positionX, int positionY){
         super(positionX, positionY);

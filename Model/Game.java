@@ -4,7 +4,6 @@ import View.MainWindow;
 
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.Random;
 
 public class Game{
     public Player player = null;
@@ -80,7 +79,9 @@ public class Game{
     public void playerAttack(){
         int[] position = player.getAttackedPosition();
         int monstersSize = monsters.size();
-        int i = 0;
+        int itemsSize = items.size();
+        int i = 0, j = 0;
+
         while (i < monstersSize && monstersSize != 0) {
             Monster monster = monsters.get(i);
             int x = monster.getPositionX();
@@ -90,42 +91,37 @@ public class Game{
                 if (!monster.isAlive()) {
                     monsters.remove(monster);
                     monstersSize -= 1;
-                    map[x][y] = 0;
                     Game.freePositions[x][y] = 0;
                     this.refreshMap();
                 }
             }
             i += 1;
         }
-        int itemsSize = items.size();
-
         if(itemsSize > 0) {
-            int j = 0;
             while (j < itemsSize && itemsSize != 0) {
                 Item item  = items.get(j);
                 if(item.getIsBreakable()) {
                     int x = item.getPositionX();
                     int y = item.getPositionY();
                     if (position[0] == x && position[1] == y) {
+                        items.add(((WoodBox)item).content);
                         items.remove(item);
                         itemsSize -= 1;
-                        Random randomItem = new Random();
-                        switch (randomItem.nextInt(3)) {
-                            case 1:
-                                items.add(new Coin(x, y));
-                            break;
-                            case 2:
-                                items.add(new Heart(x, y));
-                            break;
-                            case 3:
-                                items.add(new Key(x, y));
-                            break;
-                        }
                         Game.freePositions[x][y] = 0;
                     }
                 }
                 j+=1;
             }
+        }
+    }
+
+    public void playerThrowWeapon(){
+        if(player.weapon != null) {
+            player.weapon.setPositionX(player.getPositionX());
+            player.weapon.setPositionY(player.getPositionY());
+            items.add(player.weapon);
+            this.player.throwWeapon(player.weapon);
+            refreshMap();
         }
     }
 
@@ -171,7 +167,7 @@ public class Game{
                     int x = item.getPositionX();
                     int y = item.getPositionY();
                     if (player.getPositionX() == x && player.getPositionY() == y) {
-                        if(player.inventory.countItems() < player.inventory.sizeMaxItem) {
+                        if (player.inventory.countItems() < player.inventory.sizeMaxItem) {
                             player.collect(item);
                             items.remove(item);
                             itemsSize -= 1;

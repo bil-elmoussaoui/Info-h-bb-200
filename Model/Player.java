@@ -22,19 +22,16 @@ public class Player extends Person {
     public Player(int positionX, int positionY){
         super(positionX, positionY, 7);
         this.inventory = new Inventory();
-        this.setWeapon(new Dagger(1));
+        this.setWeapon(new Dagger(null, null, 1));
+        this.setWeapon(new Bow(null, null, 1));
+        this.setWeapon(new Staff(null, null, 1));
+        this.setWeapon(new Spear(null, null, 1));
         try {
             img = ImageIO.read(new File(imgPath));
         } catch (IOException e) {
             e.printStackTrace();
         }
-        if(weapon instanceof Dagger){
-            attackingImgPath = "Images/player-attack-dagger.png";
-        } else if (weapon instanceof Spear || weapon instanceof Staff){
-            attackingImgPath = "Images/player-attack-spear.png";
-        } else if (weapon instanceof Bow){
-            attackingImgPath = "Images/player-attack-bow.png";
-        }
+
     }
 
     public Inventory getInventory(){
@@ -42,17 +39,33 @@ public class Player extends Person {
     }
 
     public void setWeapon(Weapon weapon){
-        if(!this.inventory.containsWeapon(weapon)){
-            this.inventory.addWeapon(weapon);
+        if(weapon != null) {
+            if (weapon instanceof Dagger) {
+                attackingImgPath = "Images/player-attack-dagger.png";
+            } else if (weapon instanceof Spear || weapon instanceof Staff) {
+                attackingImgPath = "Images/player-attack-spear.png";
+            } else if (weapon instanceof Bow) {
+                attackingImgPath = "Images/player-attack-bow.png";
+            }
+            if (!this.inventory.containsWeapon(weapon)) {
+                this.inventory.addWeapon(weapon);
+            }
+            this.weapon = weapon;
+            this.weapon.setDirection(direction);
+            this.weapon.counter.init();
         }
-        this.weapon = weapon;
+    }
+
+    public void setWeaponByIndex(int index){
+        if(inventory.countWeapons() >= index){
+            this.setWeapon(inventory.getWeapon(index - 1));
+        }
     }
 
     public void throwWeapon(Weapon weapon){
-        // need more enhancement! throwing the weapon so it can be collected later? use an other weapon or nothing
         if(this.inventory.containsWeapon(weapon)){
             this.inventory.removeWeapon(weapon);
-            if (this.inventory.countWeapons() > 1) {
+            if (this.inventory.countWeapons() > 0) {
                 this.setWeapon(this.inventory.randomWeapon());
             } else {
                 this.setWeapon(null);
@@ -132,6 +145,8 @@ public class Player extends Person {
             }
         } else if (item instanceof Key){
             this.addKey(((Key)item));
+        } else if(item instanceof Weapon){
+            setWeapon((Weapon)item);
         }
     }
 

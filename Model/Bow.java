@@ -14,15 +14,23 @@ import java.util.ArrayList;
 public class Bow extends Weapon {
     public String imgPath = "Images/weapon-bow.png";
     public BufferedImage img = null;
+    public BufferedImage staticImg = null;
+    public String staticImgPath = "Images/sword_iron.png";
+
     public ArrayList<Arrow> arrows = new ArrayList<>();
 
-    public Bow(int damage){
-        super(damage, 12);
+    public Bow(Integer positionX, Integer positionY, int damage){
+        super(positionX, positionY, damage, 12);
         try {
             img = ImageIO.read(new File(imgPath));
+            staticImg = ImageIO.read(new File(staticImgPath));
         }catch (IOException e){
             e.printStackTrace();
         }
+    }
+
+    public BufferedImage getSaticImg(){
+        return staticImg;
     }
 
     public BufferedImage getImage(){

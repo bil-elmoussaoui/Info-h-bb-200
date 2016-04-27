@@ -37,6 +37,21 @@ public class Keyboard implements KeyListener{
                 nextPositionY += 1;
                 game.player.isMoving = true;
             break;
+            case KeyEvent.VK_1:case 150:
+                game.player.setWeaponByIndex(1);
+            break;
+            case KeyEvent.VK_2:case 0:
+                game.player.setWeaponByIndex(2);
+            break;
+            case KeyEvent.VK_3:case 152:
+                game.player.setWeaponByIndex(3);
+            break;
+            case KeyEvent.VK_4:case 222:
+                game.player.setWeaponByIndex(4);
+            break;
+            case KeyEvent.VK_5:case 519:
+                game.player.setWeaponByIndex(5);
+            break;
             case KeyEvent.VK_SPACE:
                 if(!MainWindow.gamePaused) {
                     game.player.setAttackMode(true);
@@ -49,7 +64,7 @@ public class Keyboard implements KeyListener{
                 }
             break;
             case KeyEvent.VK_F:
-                game.player.throwWeapon(game.player.weapon);
+                game.playerThrowWeapon();
             break;
         }
         if(game.player.isMoving){

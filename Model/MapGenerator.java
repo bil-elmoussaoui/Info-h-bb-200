@@ -11,7 +11,7 @@ public class MapGenerator {
     private int minMonsters = 4;
     private int minItems = 3;
     private int maxItems = 5;
-
+    private int itteration = 0;
 
     public MapGenerator(Game game){
         this.game = game;
@@ -80,48 +80,58 @@ public class MapGenerator {
     }
     */
     public void devide(Rectangle square, boolean wasHorizental){
-        if(canBeDevided(square)) {
-            Random rand = new Random();
-            boolean isHorizental = this.getOrientation(square.width, square.height, wasHorizental);
-            //int[] randWall = randomWall(square, isHorizental);
-            int wallX = square.x + (isHorizental? 0 :rand.nextInt(square.width - 2));
-            int wallY = square.y + (isHorizental? rand.nextInt(square.height - 2) : 0);
-            int passageX = wallX + (isHorizental ? rand.nextInt(square.width) : 0);
-            ArrayList<Integer> passageXList = new ArrayList<>();
-            for(int i = -1; i < 1; i ++){ passageXList.add(passageX + i);}
-            int passageY = wallY + (isHorizental ? 0 : rand.nextInt(square.height));
-            ArrayList<Integer> passageYList = new ArrayList<>();
-            for(int i = -1; i < 1; i ++){ passageYList.add(passageY + i);}
-            int i = 0;
-            while(i < (isHorizental ? square.width : square.height)){
-                if(!passageXList.contains(wallX) || !passageYList.contains(wallY)) {
-                    generatedMap[wallX][wallY] = 1;
-                    game.walls.add(new Wall(wallX ,wallY));
-                }
-                wallX += isHorizental ? 1 : 0;
-                wallY += isHorizental ? 0 : 1;
-                i++;
-            }
-            devide(new Rectangle(square.x, square.y, isHorizental ? square.width : wallX - square.x + 1, isHorizental ? wallY - square.y + 1 : square.height), isHorizental);
-            devide(new Rectangle(isHorizental ? square.x : wallX + 1, isHorizental ? wallY + 1 : square.y, isHorizental ? square.width : square.x + square.width - wallX - 1, isHorizental ? square.y + square.height - wallY - 1 : square.height),isHorizental);
-
-        }
-    }
-
-    public boolean getOrientation(int width, int height, boolean wasHorizental){
-        boolean isHorizental;
         Random rand = new Random();
-        if(width < height){
-            isHorizental = true;
-        } else if(width > height){
-            isHorizental = false;
-        } else {
-            isHorizental = !wasHorizental;
+        boolean isHorizental = !wasHorizental;
+        if(canBeDevided(square, isHorizental)) {
+           boolean found = false;
+            int wall = 0;
+            while(!found){
+                if(isHorizental){
+                    wall = square.y +  rand.nextInt(square.height - 2);
+                    found = (Math.abs(square.x - wall) > 1 && Math.abs(wall - square.width) > 1);
+                } else {
+                    wall = square.x + rand.nextInt(square.width - 2);
+                    found = (Math.abs(square.y - wall) > 1 && Math.abs(wall - square.height) > 1);
+                }
+            }
+            /*
+            int passageX = wallX + (isHorizental ? rand.nextInt(square.width) : 0);
+            int passageY = wallY + (isHorizental ? 0 : rand.nextInt(square.height));
+             */
+            if(isHorizental){
+                int passage = square.x + rand.nextInt(square.width);
+                ArrayList<Integer> passageList = new ArrayList<>();
+                for(int i = -1; i < 1; i ++){ passageList.add(passage + i);}
+                int i = 0;
+                while(i < square.width){
+                    if(!passageList.contains(square.x + i)){
+                        generatedMap[square.x + i][wall] = 1;
+                        game.walls.add(new Wall(square.x + i, wall));
+                    }
+                    i++;
+                }
+                devide(new Rectangle(square.x, square.y, square.width, wall - square.y + 1), isHorizental);
+                devide(new Rectangle(square.x, wall + 1, square.width, square.y + square.height - wall - 1), isHorizental);
+            } else {
+                int passage = square.y + rand.nextInt(square.height);
+                ArrayList<Integer> passageList = new ArrayList<>();
+                for(int i = -1; i < 1; i ++){ passageList.add(passage + i);}
+                int i = 0;
+                while(i < square.height){
+                    if(!passageList.contains(square.y + i)){
+                        generatedMap[wall][square.y + i] = 1;
+                        game.walls.add(new Wall(wall, square.y + i));
+                    }
+                    i++;
+                }
+                devide(new Rectangle(square.x, square.y, wall - square.x + 1, square.height), isHorizental);
+                devide(new Rectangle(wall + 1, square.y, square.x + square.width - wall - 1, square.height),isHorizental);
+
+            }
         }
-        return isHorizental;
     }
 
-    public boolean canBeDevided(Rectangle square){
+    public boolean canBeDevided(Rectangle square, boolean isHorizental){
         int width = square.width - square.x;
         int height = square.height - square.y;
         return (width > 2 && height > 2);
@@ -157,6 +167,22 @@ public class MapGenerator {
                 break;
                 case 2:
                     game.items.add(new WoodBox(randomPosition[0], randomPosition[1]));
+                break;
+                case 3: // Weapons
+                    switch (0){ // rand.nextInt(4)
+                        case 0:
+                            game.items.add(new Dagger(randomPosition[0], randomPosition[1], 1));
+                        break;
+                        case 1:
+                            game.items.add(new Staff(randomPosition[0], randomPosition[1], 1));
+                        break;
+                        case 2:
+                            game.items.add(new Spear(randomPosition[0], randomPosition[1], 1));
+                        break;
+                        case 3:
+                            game.items.add(new Bow(randomPosition[0], randomPosition[1], 1));
+                        break;
+                    }
                 break;
             }
         }

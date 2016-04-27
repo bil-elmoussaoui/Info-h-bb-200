@@ -4,6 +4,7 @@
 .settings/
 .project
 out/
+out/production/
 
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/

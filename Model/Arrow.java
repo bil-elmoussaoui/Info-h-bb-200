@@ -15,8 +15,8 @@ public class Arrow extends Bow {
     private int positionX;
     private int positionY;
 
-    public Arrow (int positionX, int positionY, int damage){
-        super(damage);
+    public Arrow (Integer positionX, Integer positionY, int damage){
+        super(null, null, damage);
         counter = new Counter(12);
         try {
             img = ImageIO.read(new File(imgPath));

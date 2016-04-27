@@ -16,8 +16,6 @@ public class Tile {
     public Tile(int positionX, int positionY) {
         this.setPositionX(positionX);
         this.setPositionY(positionY);
-//        Game.freePositions[positionX][positionY] = 1;
-
         imgPath = "Images/tile.png";try {
         img = ImageIO.read(new File(imgPath));
         } catch (Exception e) {

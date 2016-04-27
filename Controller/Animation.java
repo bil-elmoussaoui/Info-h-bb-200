@@ -69,6 +69,12 @@ public class Animation {
                             game.player.setCanMove(false);
                             while (game.player.weapon.counter.getCounter() < game.player.weapon.counter.getCounterMax()) {
                                 game.player.weapon.counter.up();
+                                if(game.player.weapon instanceof Bow){
+                                    ArrayList<Arrow> arrows = ((Bow)game.player.weapon).arrows;
+                                    for(int i = 0; i < arrows.size(); i++){
+                                        arrows.get(i).counter.up();
+                                    }
+                                }
                                 game.player.counter.up();
                                 game.refreshMap();
                                 Thread.sleep(50);
@@ -95,9 +101,7 @@ public class Animation {
                             game.player.counter.up();
                         }
 
-                        if(game.player.weapon instanceof Bow){
-                            ArrayList<Arrow> arrows = new ArrayList<>();
-                        }
+
                         if (game.getMonsters().size() > 0) {
                             for (Monster monster : game.monsters) {
                                 if(monster.isMoving) {

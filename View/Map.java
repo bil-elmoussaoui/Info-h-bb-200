@@ -95,41 +95,53 @@ public class Map extends JPanel{
                                 g.drawImage(((WoodBox) item).getImage(), (item.getPositionX() - startPositionX) * Game.pixelX, (item.getPositionY() - startPositionY) * Game.pixelY, Game.pixelX, Game.pixelY, null);
                             } else if (item instanceof Heart) {
                                 g.drawImage(((Heart) item).getImage(), (item.getPositionX() - startPositionX) * Game.pixelX + 16, (item.getPositionY() - startPositionY) * Game.pixelY + 16 , 32 , 32, null);
+                            }else if (item instanceof Weapon) {
+                                if(item instanceof Dagger) {
+                                    g.drawImage(((Dagger) item).getSaticImg(), (item.getPositionX() - startPositionX) * Game.pixelX + 16, (item.getPositionY() - startPositionY) * Game.pixelY + 16, 32, 32, null);
+                                } else if(item instanceof Bow){
+                                    g.drawImage(((Bow) item).getSaticImg(), (item.getPositionX() - startPositionX) * Game.pixelX + 16, (item.getPositionY() - startPositionY) * Game.pixelY + 16 , 32 , 32, null);
+                                } else if(item instanceof Staff){
+                                    g.drawImage(((Staff) item).getSaticImg(), (item.getPositionX() - startPositionX) * Game.pixelX + 16, (item.getPositionY() - startPositionY) * Game.pixelY + 16 , 32 , 32, null);
+                                } else if(item instanceof Spear){
+                                    g.drawImage(((Spear) item).getSaticImg(), (item.getPositionX() - startPositionX) * Game.pixelX + 16, (item.getPositionY() - startPositionY) * Game.pixelY + 16 , 32 , 32, null);
+                                }
                             }
                         }
                     }
                 }
             }
             g.drawImage(game.player.getImage(), (game.player.getPositionX() - startPositionX) * Game.pixelX, (game.player.getPositionY() - startPositionY) * Game.pixelY, Game.pixelX, Game.pixelY, null);
-            g.setColor(Color.WHITE);
             g.setFont(new Font("TimesRoman", Font.BOLD, 22));
-
-            int startX = Game.screenX - 200;
-            int startY = 80;
-            try {
-                //Font customFont = Font.createFont(Font.TRUETYPE_FONT, new File("Fonts/ARCADE.TTF")).deriveFont(22f);
-                //g.setFont(new Font(customFont, Font.BOLD, 22));
-                BufferedImage heart = ImageIO.read(new File("Images/heart.png"));
-                BufferedImage coin = ImageIO.read(new File("Images/coin.png"));
-                for (int i = 0; i < game.player.getHealth(); i++) {
-                    g.drawImage(heart, startX + 32 * i + 5, startY, 32, 32, null);
-                }
-                g.drawImage(coin, startX + 12, startY + 40, 24, 24, null);
-                g.drawString(("x" + game.player.getCoins()), startX + 42, startY + 57);
-            } catch (Exception e) {
-            }
             g.setColor(Color.black);
             g.fillRect(0, (Game.shownSizeY)*Game.pixelY, Game.shownSizeX*Game.pixelX , Game.shownSizeY*Game.pixelX);
             try {
                 BufferedImage inventoryBg = ImageIO.read(new File("Images/inventory.png"));
                 BufferedImage keyImg = ImageIO.read(new File("Images/key.png"));
+                BufferedImage heart = ImageIO.read(new File("Images/heart.png"));
+                BufferedImage coin = ImageIO.read(new File("Images/coin.png"));
+                // show heart lifes!
+                for (int i = 0; i < game.player.getHealth(); i++) {
+                    g.drawImage(heart, 32 * i + 5, Game.shownSizeY * Game.pixelY, 32, 32, null);
+                }
+                // show coins counter
+                g.drawImage(coin, 12 , Game.shownSizeY * Game.pixelY + 32, 24, 24, null);
+                g.setColor(Color.WHITE);
+                g.drawString(("x" + game.player.getCoins()), 42 , Game.shownSizeY*Game.pixelY + 49);
+                // inventory!
                 for (int i = 0; i < game.player.inventory.sizeMaxWeapon; i++){
                     g.drawImage(inventoryBg, (Game.shownSizeX - 1 -  (game.player.inventory.sizeMaxWeapon + game.player.inventory.sizeMaxItem + 3 - i))*Game.pixelX, (Game.shownSizeY)*Game.pixelY, Game.pixelX, Game.pixelY, null);
+                    g.drawString(String.valueOf(i + 1), (Game.shownSizeX - 1 -  (game.player.inventory.sizeMaxWeapon + game.player.inventory.sizeMaxItem + 3 - i))*Game.pixelX + 5, (Game.shownSizeY + 1)*Game.pixelY - 5);
                 }
-                BufferedImage dagger = ImageIO.read(new File("Images/sword_iron.png"));
                 for (int i = 0; i < game.player.inventory.countWeapons(); i++){
-                    if(game.player.inventory.getWeapon(i) instanceof Dagger) {
-                        g.drawImage(dagger, (Game.shownSizeX - 1 -  (game.player.inventory.sizeMaxWeapon + game.player.inventory.sizeMaxItem + 3 - i))*Game.pixelX + 16, (Game.shownSizeY)*Game.pixelY + 16, 32, 32, null);
+                    Weapon weapon = game.player.inventory.getWeapon(i);
+                    if(weapon instanceof Dagger) {
+                        g.drawImage(((Dagger)weapon).getSaticImg(), (Game.shownSizeX - 1 -  (game.player.inventory.sizeMaxWeapon + game.player.inventory.sizeMaxItem + 3 - i))*Game.pixelX + 16, (Game.shownSizeY)*Game.pixelY + 16, 32, 32, null);
+                    } else if(weapon instanceof Bow){
+                        g.drawImage(((Bow)weapon).getSaticImg(), (Game.shownSizeX - 1 -  (game.player.inventory.sizeMaxWeapon + game.player.inventory.sizeMaxItem + 3 - i))*Game.pixelX + 16, (Game.shownSizeY)*Game.pixelY + 16, 32, 32, null);
+                    } else if(weapon instanceof Staff){
+                        g.drawImage(((Staff)weapon).getSaticImg(), (Game.shownSizeX - 1 -  (game.player.inventory.sizeMaxWeapon + game.player.inventory.sizeMaxItem + 3 - i))*Game.pixelX + 16, (Game.shownSizeY)*Game.pixelY + 16, 32, 32, null);
+                    } else if(weapon instanceof Spear){
+                        g.drawImage(((Spear)weapon).getSaticImg(), (Game.shownSizeX - 1 -  (game.player.inventory.sizeMaxWeapon + game.player.inventory.sizeMaxItem + 3 - i))*Game.pixelX + 16, (Game.shownSizeY)*Game.pixelY + 16, 32, 32, null);
                     }
                 }
                 for (int i = 0; i < game.player.inventory.sizeMaxItem; i++){
