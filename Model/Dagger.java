@@ -6,7 +6,7 @@ import java.io.File;
 import java.io.IOException;
 /*
  TODO :
- - implement sword draw function and animation
+- get a nice static image
  */
 public class Dagger extends Weapon {
 
@@ -17,6 +17,7 @@ public class Dagger extends Weapon {
 
     public Dagger(Integer positionX, Integer positionY, int damage){
         super(positionX, positionY, damage, 5);
+        setIsDistanceWeapon(false);
         try {
             img = ImageIO.read(new File(imgPath));
             staticImg = ImageIO.read(new File(staticImgPath));

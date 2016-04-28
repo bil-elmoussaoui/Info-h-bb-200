@@ -14,9 +14,8 @@ public class Game{
     public ArrayList<Tile> tiles = new ArrayList<>();
     private Inventory inventory;
     public MainWindow window;
+    public Door door;
     private int[][] map;
-
-
     // screen information
     public static int sizeY = 100;
     public static int sizeX = 100 ;
@@ -65,52 +64,42 @@ public class Game{
 
     public void refreshMap(){
         if(MainWindow.newGame){
-            tiles = new ArrayList<>();
-            monsters = new ArrayList<>();
-            items = new ArrayList<>();
-            walls = new ArrayList<>();
-            freePositions = new int[this.sizeX][this.sizeY];
-            map = new int[this.sizeX][this.sizeY];
-            this.generateMap();
+            MainWindow.newGame = false;
+            newGame();
         }
         window.draw(this.map, this);
     }
 
     public void playerAttack(){
-        int[] position = player.getAttackedPosition();
-        int monstersSize = monsters.size();
-        int itemsSize = items.size();
-        int i = 0, j = 0;
+        if(player.weapon != null && !player.weapon.getIsDistanceWeapon()) {
+            int[] position = player.getAttackedPosition();
 
-        while (i < monstersSize && monstersSize != 0) {
-            Monster monster = monsters.get(i);
-            int x = monster.getPositionX();
-            int y = monster.getPositionY();
-            if (position[0] == x && position[1] == y) {
-                player.attack(monster);
-                if (!monster.isAlive()) {
-                    monsters.remove(monster);
-                    monstersSize -= 1;
-                    Game.freePositions[x][y] = 0;
-                    this.refreshMap();
-                }
-            }
-            i += 1;
-        }
-        if(itemsSize > 0) {
-            while (j < itemsSize && itemsSize != 0) {
-                Item item  = items.get(j);
-                if(item.getIsBreakable()) {
-                    int x = item.getPositionX();
-                    int y = item.getPositionY();
-                    if (position[0] == x && position[1] == y) {
-                        items.add(((WoodBox)item).content);
-                        items.remove(item);
-                        itemsSize -= 1;
-                        Game.freePositions[x][y] = 0;
+            for (int i = 0; i < monsters.size(); i++) {
+                Monster monster = monsters.get(i);
+                if (position[0] == monster.getPositionX() && position[1] == monster.getPositionY()) {
+                    player.attack(monster);
+                    if (!monster.isAlive()) {
+                        monsters.remove(monster);
+                        Game.freePositions[position[0]][position[1]] = 0;
+                        refreshMap();
+                        break;
                     }
                 }
-                j+=1;
+            }
+
+            for (int j = 0; j < items.size(); j++) {
+                Item item = items.get(j);
+                if (item.getIsBreakable()) {
+                    if (position[0] == item.getPositionX() && position[1] == item.getPositionY()) {
+                        if (((WoodBox) item).content != null) {
+                            items.add(((WoodBox) item).content);
+                        }
+                        items.remove(item);
+                        freePositions[position[0]][position[1]] = 0;
+                        refreshMap();
+                        break;
+                    }
+                }
             }
         }
     }
@@ -120,64 +109,91 @@ public class Game{
             player.weapon.setPositionX(player.getPositionX());
             player.weapon.setPositionY(player.getPositionY());
             items.add(player.weapon);
-            this.player.throwWeapon(player.weapon);
+            player.throwWeapon(player.weapon);
             refreshMap();
         }
     }
 
-    public void trapDammage(Tile tile){
+    public void trapDamage(Tile tile){
         int[] position = new int[]{tile.getPositionX(),tile.getPositionY()};
-        int monstersSize = monsters.size();
-        int i = 0;
-        while (i < monstersSize && monstersSize != 0) {
+        for(int i = 0; i < monsters.size(); i ++) {
             Monster monster = monsters.get(i);
-            int x = monster.getPositionX();
-            int y = monster.getPositionY();
-            if (position[0] == x && position[1] == y) {
+            if (position[0] == monster.getPositionX() && position[1] == monster.getPositionY()) {
                 ((Trap)tile).attack(monster);
                 if (!monster.isAlive()) {
                     monsters.remove(monster);
-                    monstersSize -= 1;
-                    map[x][y] = 0;
-                    Game.freePositions[x][y] = 0;
+                    map[position[0]][position[1]] = 0;
+                    freePositions[position[0]][position[1]] = 0;
                     this.refreshMap();
+                    break;
                 }
             }
-            i += 1;
         }
         if (position[0] == player.getPositionX() && position[1] == player.getPositionY()) {
             ((Trap)tile).attack(player);
             if (!player.isAlive()) {
-                /*monsters.remove(monster);
-                monstersSize -= 1;
-                map[x][y] = 0;
-                Game.freePositions[x][y] = 0;
-                this.refreshMap();*/
+                // kill player?
             }
         }
     }
 
     public void playerCollect(){
-        int itemsSize = items.size();
-        if(itemsSize > 0){
-            int j = 0;
-            while (j < itemsSize && itemsSize != 0) {
-                Item item = items.get(j);
-                if(item.getIsCollectable()) {
-                    int x = item.getPositionX();
-                    int y = item.getPositionY();
-                    if (player.getPositionX() == x && player.getPositionY() == y) {
-                        if (player.inventory.countItems() < player.inventory.sizeMaxItem) {
+        for(int j = 0; j < items.size(); j ++){
+            Item item = items.get(j);
+            if (player.getPositionX() == item.getPositionX() && player.getPositionY() == item.getPositionY()) {
+                if (item.getIsCollectable()) {
+                    if(item instanceof Heart){
+                        if(player.inventory.countItems() < player.inventory.sizeMaxItem){
                             player.collect(item);
                             items.remove(item);
-                            itemsSize -= 1;
-                            freePositions[x][y] = 0;
+                            break;
                         }
+                    } else {
+                        player.collect(item);
+                        items.remove(item);
+                        break;
                     }
                 }
-                j+=1;
+            }
+
+        }
+    }
+
+    public void openDoor(){
+        int[] position = player.getAttackedPosition();
+        if(position[0] == door.getPositionX() && position[1] == door.getPositionY()){
+            if(player.hasKey && door != null) {
+                player.removeKey();
+                door.setIsOpen(true);
+                breakWall(position[0], position[1]);
+            }
+            try {
+                Thread.sleep(100);
+            }catch (Exception e){}
+            newGame();
+        }
+    }
+
+    public void breakWall(int positionX, int positionY){
+        for(int i = 0; i < walls.size(); i++){
+            Wall wall = walls.get(i);
+            if(positionX == wall.getPositionX() && wall.getPositionY() == positionY){
+                walls.remove(wall);
+                tiles.add(new Tile(positionX, positionY));
+                break;
             }
         }
     }
 
+    public void newGame() {
+        monsters.clear();
+        tiles.clear();
+        walls.clear();
+        items.clear();
+        freePositions = new int[this.sizeX][this.sizeY];
+        map = new int[this.sizeX][this.sizeY];
+        generateMap();
+        refreshMap();
+
+    }
 }

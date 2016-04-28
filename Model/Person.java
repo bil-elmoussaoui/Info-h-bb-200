@@ -18,21 +18,20 @@ abstract class Person{
 
 
     public Person (int positionX, int positionY, int counterMax){
-        this.setPositionX(positionX);
-        this.setPositionY(positionY);
+        setPositionX(positionX);
+        setPositionY(positionY);
         counter = new Counter(counterMax);
         Game.freePositions[positionX][positionY] = 1;
-        this.setHealth(5);
-        this.setArmor(0);
+        setHealth(5);
+        setArmor(0);
     }
 
-
     public int getPositionX(){
-        return this.positionX;
+        return positionX;
     }
 
     public int getPositionY(){
-        return  this.positionY;
+        return positionY;
     }
 
     public void setPositionX(int positionX){
@@ -150,8 +149,8 @@ abstract class Person{
     }
 
 	public boolean isPossibleToMove(int positionX, int positionY){
-		return Game.freePositions[positionX][positionY] == 0;
-	}
+        return (positionX >= 0 && positionY >= 0) && Game.freePositions[positionX][positionY] == 0;
+    }
 
 	public void move(int positionX , int positionY){
         int oldPositionX = this.getPositionX();

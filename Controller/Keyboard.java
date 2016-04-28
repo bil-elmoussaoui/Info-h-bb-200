@@ -37,6 +37,9 @@ public class Keyboard implements KeyListener{
                 nextPositionY += 1;
                 game.player.isMoving = true;
             break;
+            case KeyEvent.VK_O:
+                game.openDoor();
+            break;
             case KeyEvent.VK_1:case 150:
                 game.player.setWeaponByIndex(1);
             break;

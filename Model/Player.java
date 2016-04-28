@@ -7,7 +7,7 @@ import java.io.IOException;
 
 /*
 TODO :
-- use a real weapon
+- implement weapon damage & half heart damage
 */
 
 public class Player extends Person {
@@ -22,10 +22,7 @@ public class Player extends Person {
     public Player(int positionX, int positionY){
         super(positionX, positionY, 7);
         this.inventory = new Inventory();
-        this.setWeapon(new Dagger(null, null, 1));
         this.setWeapon(new Bow(null, null, 1));
-        this.setWeapon(new Staff(null, null, 1));
-        this.setWeapon(new Spear(null, null, 1));
         try {
             img = ImageIO.read(new File(imgPath));
         } catch (IOException e) {
@@ -35,7 +32,11 @@ public class Player extends Person {
     }
 
     public Inventory getInventory(){
-        return this.inventory;
+        return inventory;
+    }
+
+    public void removeKey(){
+        hasKey = false;
     }
 
     public void setWeapon(Weapon weapon){
@@ -52,6 +53,7 @@ public class Player extends Person {
             }
             this.weapon = weapon;
             this.weapon.setDirection(direction);
+            this.counter.setCounterMax(this.weapon.counter.getCounterMax());
             this.weapon.counter.init();
         }
     }
@@ -79,7 +81,6 @@ public class Player extends Person {
             img = ImageIO.read(new File(imgPath));
         } catch (Exception e){}
     }
-
 
     public void setAttackMode(boolean attackMode){
         this.isAttacking = attackMode;

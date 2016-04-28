@@ -1,3 +1,5 @@
+
+
 package Model;
 
 import java.awt.image.BufferedImage;
@@ -12,6 +14,7 @@ public class Weapon extends Item {
     public BufferedImage staticImg = null;
 	private int direction = 1;
     public Counter counter;
+	public boolean isDistanceWeapon;
 
 	public Weapon (Integer positionX, Integer positionY, int damage, int counterMax){
 		super(positionX, positionY);
@@ -48,6 +51,14 @@ public class Weapon extends Item {
 
 	public int getDirection(){
 		return  this.direction;
+	}
+
+	public void setIsDistanceWeapon(boolean isDistanceWeapon){
+		this.isDistanceWeapon = isDistanceWeapon;
+	}
+
+	public boolean getIsDistanceWeapon(){
+		return  this.isDistanceWeapon;
 	}
 
 	public BufferedImage getImage(){

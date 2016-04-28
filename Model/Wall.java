@@ -10,8 +10,8 @@ public class Wall extends Tile{
 
     public Wall(int positionX, int positionY){
         super(positionX, positionY);
-        this.setIsBreakable(false);
-        this.setIsWalkable(false);
+        setIsBreakable(false);
+        setIsWalkable(false);
         try {
             img = ImageIO.read(new File(imgPath));
         } catch (Exception e) {

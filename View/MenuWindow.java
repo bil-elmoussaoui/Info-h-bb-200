@@ -2,7 +2,6 @@ package View;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 class MenuWindow {
 	private MainWindow window;
@@ -20,12 +19,9 @@ class MenuWindow {
 		if(MainWindow.gamePaused){
             menuPanel.setLayout(new GridLayout(5, 0, 10, 10));
 			BButton Resume = new BButton("Resume");
-			Resume.addActionListener(new ActionListener() {
-				@Override
-				public void actionPerformed(ActionEvent actionEvent) {
+			Resume.addActionListener((ActionEvent e) -> {
                     window.showLevelWindow();
 					MainWindow.gamePaused = false;
-				}
 			});
             menuPanel.add(Resume);
             Play = new BButton("New Game");
@@ -34,41 +30,30 @@ class MenuWindow {
             Play = new BButton("Play");
         }
 
-		Play.addActionListener(new ActionListener(){
-			public void actionPerformed(ActionEvent e)
-            {
-                if(MainWindow.gamePaused){
-					MainWindow.newGame = true;
-                }
-				window.showLevelWindow();
-                MainWindow.gamePaused = false;
+		Play.addActionListener((ActionEvent e) -> {
+            if(MainWindow.gamePaused){
+                MainWindow.newGame = true;
             }
+            window.showLevelWindow();
+            MainWindow.gamePaused = false;
 		});
 		menuPanel.add(Play);
 		if(MainWindow.gamePaused) {
 			BButton Save = new BButton("Save");
-            Save.addActionListener(new ActionListener() {
-				@Override
-				public void actionPerformed(ActionEvent e) {
+            Save.addActionListener((ActionEvent e) -> {
 					window.showLoadWindow();
-				}
 			});
 			menuPanel.add(Save);
 		}
 		BButton Load = new BButton("Load");
-		Load.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
+		Load.addActionListener((ActionEvent e) -> {
 					window.showLoadWindow();
-			}
 		});
         menuPanel.add(Load);
 
         BButton Quit = new BButton("Exit");
-		Quit.addActionListener(new ActionListener(){
-			public void actionPerformed(ActionEvent e){
+		Quit.addActionListener((ActionEvent e) -> {
 				window.closeWindow();
-			}
 		});
 		menuPanel.add(Quit);
 

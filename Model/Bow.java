@@ -9,7 +9,7 @@ import java.util.ArrayList;
 
 /*
  TODO :
- - implement sword draw function and animation
+- get a nice static image
  */
 public class Bow extends Weapon {
     public String imgPath = "Images/weapon-bow.png";
@@ -21,6 +21,7 @@ public class Bow extends Weapon {
 
     public Bow(Integer positionX, Integer positionY, int damage){
         super(positionX, positionY, damage, 12);
+        setIsDistanceWeapon(true);
         try {
             img = ImageIO.read(new File(imgPath));
             staticImg = ImageIO.read(new File(staticImgPath));

@@ -7,11 +7,11 @@ import java.util.Random;
 public class MapGenerator {
     private int[][] generatedMap;
     private Game game;
-    private int maxMonster = 8;
-    private int minMonsters = 4;
+    private int maxMonster = 5;
+    private int minMonsters = 3;
     private int minItems = 3;
     private int maxItems = 5;
-    private int itteration = 0;
+    private ArrayList<int[]> borderPositions = new ArrayList<>();
 
     public MapGenerator(Game game){
         this.game = game;
@@ -22,82 +22,53 @@ public class MapGenerator {
         this.initPlayer();
         this.intiMonsters();
         this.intiItems();
+        this.initDoor();
         int[] inPosition = this.getRandomPosition();
         //int[] outPosition = this.getRandomPosition();
         game.tiles.add(new Trap(inPosition[0], inPosition[1]));
     }
 
-    public void initWalls(){
-        // draw outline walls
-        for(int i = 0; i < Game.sizeX; i++){
-            generatedMap[i][0] = 1;
-            game.walls.add(new Wall(i, 0));
-            generatedMap[i][Game.sizeY - 1] = 1;
-            game.walls.add(new Wall(i, Game.sizeY - 1));
-            for(int j = 0; j < Game.sizeY; j++){
-                game.tiles.add(new Tile(i,j));
-                generatedMap[0][j] = 1;
-                game.walls.add(new Wall(0, j));
-                generatedMap[Game.sizeX - 1][j] = 1;
-                game.walls.add(new Wall(Game.sizeX - 1, j));
-            }
-        }
-
+    public void initWalls() {
         devide(new Rectangle(1, 1, Game.sizeX - 1, Game.sizeY - 1), false);
-        int j = 0;
-        int tilesSize = game.tiles.size();
-        while (j < tilesSize && tilesSize != 0) {
-            Tile tile = game.tiles.get(j);
-            int x = tile.getPositionX();
-            int y = tile.getPositionY();
-            if(generatedMap[x][y] != 0) {
-                game.tiles.remove(tile);
-                tilesSize -= 1;
-            }
-            j+=1;
-        }
-    }
-    /*
-    public int[] randomWall(Rectangle square, boolean isHorizental){
-        Random rand = new Random();
-        boolean found = false;
-        int wallPosition = 0;
-        int wallRandom = 0;
-        int wallX, wallY;
-        boolean condition = false;
-        while(!found){
-            wallRandom = (isHorizental ? rand.nextInt(square.height - 2) : rand.nextInt(square.width - 2));
-            wallPosition = (isHorizental ? square.y +  wallRandom : square.x +  wallRandom);
-            condition = (isHorizental? Math.abs(square.height - wallPosition) > 2 && Math.abs(square.y - wallPosition) > 2 :
-                    Math.abs(square.x - wallPosition) > 2 && Math.abs(square.width - wallPosition) > 2);
-            if(condition){
-                found = true;
+        // draw outline walls
+        for (int i = 0; i < Game.sizeX; i++) {
+            game.walls.add(new Wall(i, 0));
+            generatedMap[i][0] = 1;
+            game.walls.add(new Wall(i, Game.sizeY - 1));
+            generatedMap[i][Game.sizeY - 1] = 1;
+            if(i != 0) borderPositions.add(new int[]{i, 0});
+            if(i != 0) borderPositions.add(new int[]{i, Game.sizeY - 1});
+            for (int j = 0; j < Game.sizeY; j++) {
+                if (Game.freePositions[i][j] == 0) {
+                    game.tiles.add(new Tile(i, j));
+                    generatedMap[0][j] = 1;
+                    game.walls.add(new Wall(0, j));
+                    generatedMap[Game.sizeX - 1][j] = 1;
+                    game.walls.add(new Wall(Game.sizeX - 1, j));
+                    if(j != 0) borderPositions.add(new int[]{0, j});
+                    if(j != 0) borderPositions.add(new int[]{Game.sizeX - 1, j});
+                }
             }
         }
-        wallX = square.x + (isHorizental ? 0 : wallRandom);
-        wallY = square.y + (isHorizental ? wallRandom: 0);
-        return new int[]{wallX, wallY};
     }
-    */
+
     public void devide(Rectangle square, boolean wasHorizental){
         Random rand = new Random();
+        int width = square.width - square.x;
+        int height = square.height - square.y;
         boolean isHorizental = !wasHorizental;
-        if(canBeDevided(square, isHorizental)) {
+        if((width > 3   && !isHorizental) || (height > 3 && isHorizental)) {
            boolean found = false;
             int wall = 0;
             while(!found){
                 if(isHorizental){
                     wall = square.y +  rand.nextInt(square.height - 2);
-                    found = (Math.abs(square.x - wall) > 1 && Math.abs(wall - square.width) > 1);
+                    found = (Math.abs(square.x - wall) >= 1 && Math.abs(wall - square.width) >= 1);
                 } else {
                     wall = square.x + rand.nextInt(square.width - 2);
-                    found = (Math.abs(square.y - wall) > 1 && Math.abs(wall - square.height) > 1);
+                    found = (Math.abs(square.y - wall) >= 1 && Math.abs(wall - square.height) >= 1);
                 }
             }
-            /*
-            int passageX = wallX + (isHorizental ? rand.nextInt(square.width) : 0);
-            int passageY = wallY + (isHorizental ? 0 : rand.nextInt(square.height));
-             */
             if(isHorizental){
                 int passage = square.x + rand.nextInt(square.width);
                 ArrayList<Integer> passageList = new ArrayList<>();
@@ -131,15 +102,14 @@ public class MapGenerator {
         }
     }
 
-    public boolean canBeDevided(Rectangle square, boolean isHorizental){
-        int width = square.width - square.x;
-        int height = square.height - square.y;
-        return (width > 2 && height > 2);
-    }
-
     public void initPlayer(){
         int[] randomPosition = this.getRandomPosition();
-        game.player = new Player(randomPosition[0], randomPosition[1]);
+        if(game.player != null) {
+            game.player.setPositionX(randomPosition[0]);
+            game.player.setPositionY(randomPosition[1]);
+        } else {
+            game.player = new Player(randomPosition[0], randomPosition[1]);
+        }
     }
 
     public void intiMonsters(){
@@ -186,6 +156,12 @@ public class MapGenerator {
                 break;
             }
         }
+    }
+
+    public void initDoor(){
+        Random rand = new Random();
+        int[] position = borderPositions.get(rand.nextInt(borderPositions.size()));
+        game.door = new Door(position[0], position[1]);
     }
 
     public int[] getRandomPosition(){

@@ -46,6 +46,8 @@ public class Map extends JPanel{
                 startPositionY = 0;
                 endPositionY = Game.sizeY;
             }
+            g.setColor(Color.black);
+            g.fillRect(0, (Game.shownSizeY)*Game.pixelY, Game.shownSizeX*Game.pixelX , Game.shownSizeY*Game.pixelX);
 
             ArrayList<Tile> tiles = game.getTiles();
             if (tiles.size() > 0) {
@@ -62,16 +64,7 @@ public class Map extends JPanel{
                     }
                 }
             }
-            ArrayList<Monster> monsters = game.getMonsters();
-            if (monsters.size() > 0) {
-                for (Monster monster : monsters) {
-                    if (startPositionX <= monster.getPositionX() && monster.getPositionX() <= endPositionX) {
-                        if (startPositionY <= monster.getPositionY() && monster.getPositionY() <= endPositionY) {
-                            g.drawImage(monster.getImage(), (monster.getPositionX() - startPositionX) * Game.pixelX, (monster.getPositionY() - startPositionY) * Game.pixelY, Game.pixelX, Game.pixelY, null);
-                        }
-                    }
-                }
-            }
+
             ArrayList<Wall> walls = game.getWalls();
             if (walls.size() > 0) {
                 for (Wall wall : walls) {
@@ -110,10 +103,22 @@ public class Map extends JPanel{
                     }
                 }
             }
+
+            ArrayList<Monster> monsters = game.getMonsters();
+            if (monsters.size() > 0) {
+                for (Monster monster : monsters) {
+                    if (startPositionX <= monster.getPositionX() && monster.getPositionX() <= endPositionX) {
+                        if (startPositionY <= monster.getPositionY() && monster.getPositionY() <= endPositionY) {
+                            g.drawImage(monster.getImage(), (monster.getPositionX() - startPositionX) * Game.pixelX, (monster.getPositionY() - startPositionY) * Game.pixelY, Game.pixelX, Game.pixelY, null);
+                        }
+                    }
+                }
+            }
             g.drawImage(game.player.getImage(), (game.player.getPositionX() - startPositionX) * Game.pixelX, (game.player.getPositionY() - startPositionY) * Game.pixelY, Game.pixelX, Game.pixelY, null);
+            if(!game.door.getIsOpen()) {
+                g.drawImage(game.door.getImage(), (game.door.getPositionX() - startPositionX) * Game.pixelX, (game.door.getPositionY() - startPositionY) * Game.pixelY, Game.pixelX, Game.pixelY, null);
+            }
             g.setFont(new Font("TimesRoman", Font.BOLD, 22));
-            g.setColor(Color.black);
-            g.fillRect(0, (Game.shownSizeY)*Game.pixelY, Game.shownSizeX*Game.pixelX , Game.shownSizeY*Game.pixelX);
             try {
                 BufferedImage inventoryBg = ImageIO.read(new File("Images/inventory.png"));
                 BufferedImage keyImg = ImageIO.read(new File("Images/key.png"));

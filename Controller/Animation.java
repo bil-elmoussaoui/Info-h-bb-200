@@ -48,7 +48,7 @@ public class Animation {
                         if (game.getTiles().size() > 0) {
                             for (Tile tile : game.tiles) {
                                 if (tile instanceof Trap) {
-                                    game.trapDammage(tile);
+                                    game.trapDamage(tile);
                                 }
                             }
                         }

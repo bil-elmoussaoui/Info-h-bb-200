@@ -9,7 +9,6 @@ import java.util.Random;
 /*
 TODO:
 - Implement box opening animation
-- Implement random box item in the WoodBox class instead of the Game class!
  */
 
 public class WoodBox extends Item{
@@ -20,9 +19,9 @@ public class WoodBox extends Item{
 
     public WoodBox(int positionX, int positionY){
         super(positionX, positionY);
-        setIsCollectable(false);
-        setIsBreakable(true);
-        setIsWalkable(false);
+        this.setIsBreakable(true);
+        this.setIsWalkable(false);
+        Game.freePositions[positionX][positionY] = 1;
         Random randomItem = new Random();
         switch (randomItem.nextInt(4)) {
             case 0:
@@ -31,10 +30,7 @@ public class WoodBox extends Item{
             case 1:
                 content = new Heart(positionX, positionY);
             break;
-            case 2:
-                content = new Key(positionX, positionY);
-            break;
-            case 3: // Weapons
+            case 2: // Weapons
                 switch (0){ // rand.nextInt(4)
                     case 0:
                         content = new Dagger(positionX, positionY, 1);
@@ -49,6 +45,9 @@ public class WoodBox extends Item{
                         content = new Bow(positionX, positionY, 1);
                     break;
                 }
+            break;
+            case 3:
+                content = null;
             break;
         }
         try {

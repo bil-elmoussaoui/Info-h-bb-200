@@ -2,12 +2,14 @@ package View;
 
 import Model.Game;
 
-import java.awt.*;
-import java.awt.event.*;
 import javax.swing.*;
+import java.awt.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.awt.event.WindowEvent;
 
 public class MainWindow {
-	public static GraphicsDevice device;
+	public GraphicsDevice device;
 	public static boolean gamePaused = false;
 	public static boolean newGame = false;
 	private JFrame mainWindow;
@@ -19,7 +21,7 @@ public class MainWindow {
 	}
 
 	public static void main(String args[]){
-        MainWindow mainWindow = new MainWindow();
+        new MainWindow();
     }
 
 	public void initialize(){
@@ -87,10 +89,8 @@ public class MainWindow {
         levelMap.setMapMatrix(map);
 	}
 
-
     public void setKeyListener(KeyListener keyboard){
         mainWindow.addKeyListener(keyboard);
     }
 
-
-    }
+}

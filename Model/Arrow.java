@@ -6,7 +6,7 @@ import java.io.File;
 import java.io.IOException;
 /*
  TODO :
- - implement sword draw function and animation
+ - implement arrow animation
  */
 public class Arrow extends Bow {
     public String imgPath = "Images/weapon-arrow.png";
