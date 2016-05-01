@@ -18,6 +18,8 @@ public class WoodBox extends Item{
 
     public WoodBox(int positionX, int positionY){
         super(positionX, positionY);
+        setIsCollectable(false);
+        setIsBreakable(true);
         Random randomItem = new Random();
         switch (randomItem.nextInt(4)) {
             case 0:
