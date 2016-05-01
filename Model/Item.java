@@ -3,15 +3,15 @@ package Model;
 public class Item {
     private int positionX;
     private int positionY;
-    private boolean isBreakable = false;
-    private boolean isCollectable = false;
-    private boolean isWalkable = true;
-    private boolean isUsed = false;
+    private boolean isBreakable;
+    private boolean isCollectable;
+    private boolean isWalkable;
+    private boolean isUsed;
 
 
     public Item(Integer positionX, Integer positionY){
         if(positionX == null || positionY == null){
-            this.isUsed = true;
+            isUsed = true;
         } else {
             this.setPositionX(positionX);
             this.setPositionY(positionY);
@@ -28,11 +28,11 @@ public class Item {
 
     public void setIsWalkable(boolean isWalkable){
         this.isWalkable = isWalkable;
-        Game.freePositions[this.getPositionX()][this.getPositionY()] = isWalkable ? 0 : 1;
+        Game.freePositions[getPositionX()][getPositionY()] = isWalkable ? 0 : 1;
     }
 
     public boolean getIsWalkable(){
-        return this.isWalkable;
+        return isWalkable;
     }
 
     public void setIsBreakable(boolean isBreakable){
@@ -44,19 +44,19 @@ public class Item {
     }
 
     public boolean getIsBreakable(){
-        return this.isBreakable;
+        return isBreakable;
     }
 
     public boolean getIsCollectable(){
-        return this.isCollectable;
+        return isCollectable;
     }
 
     public int getPositionX(){
-        return this.positionX;
+        return positionX;
     }
 
     public int getPositionY(){
-        return  this.positionY;
+        return  positionY;
     }
 
     public void setPositionX(int positionX){

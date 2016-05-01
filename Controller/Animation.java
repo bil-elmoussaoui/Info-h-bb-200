@@ -6,7 +6,7 @@ import View.MainWindow;
 import java.util.ArrayList;
 
 public class Animation {
-    private int monsterMovesTime = 700;
+    private int monsterMovesTime = 1500;
     private int animationRefresh = 100;
     private Game game;
     private Thread monstersThread;
@@ -23,17 +23,36 @@ public class Animation {
                         Thread.sleep(monsterMovesTime);
                         if (game.getMonsters().size() > 0) {
                             for (Monster monster : game.monsters) {
-                                int[] position = monster.getRandomPosition();
-                                if (position != null && !MainWindow.gamePaused) {
-                                    if (monster.getCanMove()) {
+                                if (!MainWindow.gamePaused && monster.getCanMove()) {
+                                    int[] playerPosition = new int[]{game.player.getPositionX(), game.player.getPositionY()};
+                                    if (monster.FOV.getFOV().contains(playerPosition)) {
                                         monster.isMoving = true;
-                                        monster.move(position[0], position[1]);
+                                        if (playerPosition[0] == monster.getPositionX()) {
+                                            if ((playerPosition[0] - monster.getPositionX()) > 0) {
+                                                monster.setPositionX(monster.getPositionX() + 1);
+                                            } else {
+                                                monster.setPositionX(monster.getPositionX() - 1);
+                                            }
+                                        } else {
+                                            if ((playerPosition[1] - monster.getPositionY()) > 0) {
+                                                monster.setPositionY(monster.getPositionY() + 1);
+                                            } else {
+                                                monster.setPositionY(monster.getPositionY() - 1);
+                                            }
+                                        }
+                                    }
+                                    if(!monster.isMoving) {
+                                        int[] position = monster.getRandomPosition();
+                                        if (position != null) {
+                                            monster.isMoving = true;
+                                            monster.move(position[0], position[1]);
+                                            monster.FOV.updateFOV(position[0], position[1], monster.direction);
+                                        }
                                     }
                                     monster.isMoving = false;
                                 }
                             }
                         }
-                        game.refreshMap();
                     }
                 }catch(Exception e){}
             }
@@ -44,7 +63,7 @@ public class Animation {
             public void run(){
                 try{
                     while (true) {
-                        Thread.sleep(1500);
+                        Thread.sleep(500);
                         if (game.getTiles().size() > 0) {
                             for (Tile tile : game.tiles) {
                                 if (tile instanceof Trap) {
@@ -92,6 +111,33 @@ public class Animation {
         };
         playerAttackThread.start();
 
+        Thread trapAnimationThread = new Thread(){
+            public void run(){
+                try {
+                    while(true) {
+                        Thread.sleep(animationRefresh);
+                        if (game.getTiles().size() > 0) {
+                            for (Tile tile : game.tiles) {
+                                if( tile instanceof Trap) {
+                                    Trap trap = (Trap)tile;
+                                    if(trap.counter.getCounter() == trap.counter.getCounterMax()) {
+                                        int[] position = game.mapGenerator.getRandomPosition();
+                                        trap.setPositionX(position[0]);
+                                        trap.setPositionY(position[1]);
+                                        trap.animationStopped = true;
+                                        Thread.sleep(4000);
+                                    }
+                                    trap.animationStopped = false;
+                                    ((Trap) tile).counter.up();
+                                }
+                            }
+                        }
+                    }
+                }catch (Exception e){}
+            }
+        };
+        trapAnimationThread.start();
+
         animationThread = new Thread(){
             public void run() {
                 try {
@@ -101,7 +147,6 @@ public class Animation {
                             game.player.counter.up();
                         }
 
-
                         if (game.getMonsters().size() > 0) {
                             for (Monster monster : game.monsters) {
                                 if(monster.isMoving) {
@@ -109,13 +154,7 @@ public class Animation {
                                 }
                             }
                         }
-                        if (game.getTiles().size() > 0) {
-                            for (Tile tile : game.tiles) {
-                                if( tile instanceof Trap) {
-                                    ((Trap) tile).counter.up();
-                                }
-                            }
-                        }
+
                         if (game.getItems().size() > 0) {
                             for (Item item : game.items) {
                                 if (item instanceof Coin) {

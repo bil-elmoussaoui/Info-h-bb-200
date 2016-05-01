@@ -23,12 +23,10 @@ public class Inventory {
 		}
 	}
 
-
     public boolean containsWeapon(Weapon weapon){
         return weaponsInventory.contains(weapon);
     }
 
-	
     public void addItem(Item item){
 		if (itemsInventory.size() < sizeMaxItem){
             itemsInventory.add(item);

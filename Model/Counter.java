@@ -10,26 +10,26 @@ public class Counter {
     }
 
     public int getCounter(){
-        return this.counter;
+        return counter;
     }
 
     public int getCounterMax(){
-        return this.counterMax;
+        return counterMax;
     }
 
     public void setCounter(int counter){
-        if(counter > this.getCounterMax()){
+        if(counter > getCounterMax()){
             counter = 0;
         }
         this.counter = counter;
     }
 
     public void up(){
-        this.setCounter(this.counter + 1);
+        setCounter(counter + 1);
     }
 
     public void init(){
-        this.setCounter(0);
+        setCounter(0);
     }
 
     public void setCounterMax(int counterMax){

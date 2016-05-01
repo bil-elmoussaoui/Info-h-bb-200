@@ -5,17 +5,16 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 
 public class Coin extends Item{
-    public int value = 10;
-    public boolean animated = true;
+    private int value;
     private BufferedImage img;
     private String imgPath = "Images/coin_gold.png";
     public Counter counter;
 
     public Coin(int positionX, int positionY){
         super(positionX, positionY);
-        this.setIsCollectable(true);
-        this.setIsBreakable(false);
-        this.setIsWalkable(true);
+        setIsCollectable(true);
+        setIsBreakable(false);
+        setIsWalkable(true);
         counter = new Counter(7);
         value = (int) Math.floor(Math.random()*10) + 1;
         try {
@@ -26,7 +25,7 @@ public class Coin extends Item{
     }
 
     public int getValue(){
-        return this.value;
+        return value;
     }
 
     public void setImage(BufferedImage img){

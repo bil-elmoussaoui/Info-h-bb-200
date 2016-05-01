@@ -14,8 +14,9 @@ public class Portal extends Tile{
 
     public Portal(int positionX, int positionY, int outPositionX, int outPositionY){
         super(positionX, positionY);
-        this.setIsBreakable(false);
-        this.setIsWalkable(true);
+        setIsBreakable(false);
+        setIsWalkable(true);
+        setIsDangerous(false);
         this.outPositionX = outPositionX;
         this.outPositionY = outPositionY;
         try {

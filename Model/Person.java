@@ -5,7 +5,7 @@ import java.util.Random;
 
 abstract class Person{
     private int health;
-	private int armor;
+	private boolean hasArmor;
 	public Weapon weapon;
     public int direction  = 1;
     public int positionX;
@@ -15,6 +15,7 @@ abstract class Person{
     public boolean isAttacking = false;
     private boolean canMove = true;
     public Counter counter;
+    public int healthMax = 5;
 
 
     public Person (int positionX, int positionY, int counterMax){
@@ -23,7 +24,7 @@ abstract class Person{
         counter = new Counter(counterMax);
         Game.freePositions[positionX][positionY] = 1;
         setHealth(5);
-        setArmor(0);
+        setHasArmor(true);
     }
 
     public int getPositionX(){
@@ -64,32 +65,23 @@ abstract class Person{
 
 	public void setHealth(int health){
 		try{
-			if (health >= 0 & health < 5){
+			if (health >= 0 & health <= healthMax){
 				this.health = health;
 			} else {
 				throw new Exception ("Pb sur les vies");
 			}
 		}catch (Exception pbVies){
-			this.health = 5;
+			this.health = healthMax;
 		}
 	}
 
-	public int getArmor(){
-		return armor;
-	}
+    public void setHasArmor(boolean hasArmor){
+        this.hasArmor = hasArmor;
+    }
 
-	public void setArmor(int armor) {
-		try{
-		if (armor > 0 & armor < 3){
-			this.armor = armor;
-		}
-		else {
-			throw new Exception ("Pb sur l'armure");
-		}
-		}catch (Exception e){
-			this.armor = 3;
-		}
-	}
+    public boolean getHasArmor(){
+        return  hasArmor;
+    }
 
 	public Weapon getWeapon(){
 		return weapon;
@@ -103,19 +95,18 @@ abstract class Person{
 		}
 	}
 
-
     public void setCanMove(boolean canMove){
         this.canMove = canMove;
     }
 
     public boolean getCanMove(){
-        return this.canMove;
+        return canMove;
     }
 
     public int[] getRandomPosition(){
         int[] position = null;
         Random randomGenerator = new Random();
-        ArrayList<int[]> accessiblePositions = this.getAccessiblePositions();
+        ArrayList<int[]> accessiblePositions = getAccessiblePositions();
         if(accessiblePositions.size() > 0) {
             int index = randomGenerator.nextInt(accessiblePositions.size());
             position = accessiblePositions.get(index);
@@ -149,12 +140,13 @@ abstract class Person{
     }
 
 	public boolean isPossibleToMove(int positionX, int positionY){
-        return (positionX >= 0 && positionY >= 0) && Game.freePositions[positionX][positionY] == 0;
+        return ((positionX >= 0 && positionY >= 0) && (positionX < Game.sizeX && positionY < Game.sizeY)
+                && Game.freePositions[positionX][positionY] == 0);
     }
 
 	public void move(int positionX , int positionY){
-        int oldPositionX = this.getPositionX();
-        int oldPositionY = this.getPositionY();
+        int oldPositionX = getPositionX();
+        int oldPositionY = getPositionY();
         if(oldPositionY - positionY == 0) {
             if ((oldPositionX - positionX) > 0) {
                 direction = 2; // left
@@ -169,12 +161,12 @@ abstract class Person{
             }
         }
         if(this.weapon != null) {
-            this.weapon.setDirection(direction);
+            weapon.setDirection(direction);
         }
 		if(isPossibleToMove(positionX, positionY)){
             Game.freePositions[positionX][positionY] = 1;
-            this.setPositionX(positionX);
-            this.setPositionY(positionY);
+            setPositionX(positionX);
+            setPositionY(positionY);
             Game.freePositions[oldPositionX][oldPositionY] = 0;
         }
     }

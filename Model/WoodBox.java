@@ -12,16 +12,15 @@ TODO:
  */
 
 public class WoodBox extends Item{
-    public boolean breakable = true;
-    public BufferedImage img;
-    public String imgPath = "Images/Wood_Box.png";
+    private BufferedImage img;
+    private String imgPath = "Images/Wood_Box.png";
     public Item content;
 
     public WoodBox(int positionX, int positionY){
         super(positionX, positionY);
-        this.setIsBreakable(true);
-        this.setIsWalkable(false);
-        Game.freePositions[positionX][positionY] = 1;
+        setIsBreakable(true);
+        setIsWalkable(false);
+        setIsCollectable(false);
         Random randomItem = new Random();
         switch (randomItem.nextInt(4)) {
             case 0:
@@ -31,7 +30,7 @@ public class WoodBox extends Item{
                 content = new Heart(positionX, positionY);
             break;
             case 2: // Weapons
-                switch (0){ // rand.nextInt(4)
+                switch (randomItem.nextInt(4)){
                     case 0:
                         content = new Dagger(positionX, positionY, 1);
                     break;

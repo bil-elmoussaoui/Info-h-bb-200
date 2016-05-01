@@ -14,6 +14,7 @@ public class Game{
     public ArrayList<Tile> tiles = new ArrayList<>();
     private Inventory inventory;
     public MainWindow window;
+    public MapGenerator mapGenerator;
     public Door door;
     private int[][] map;
     // screen information
@@ -42,7 +43,7 @@ public class Game{
     }
 
     public ArrayList<Monster> getMonsters(){
-        return this.monsters;
+        return monsters;
     }
 
     public ArrayList<Item> getItems() {
@@ -58,8 +59,8 @@ public class Game{
     }
 
     public void generateMap(){
-        MapGenerator mapGenerator = new MapGenerator(this);
-        this.map = mapGenerator.getGeneratedMap();
+        mapGenerator = new MapGenerator(this);
+        map = mapGenerator.getGeneratedMap();
     }
 
     public void refreshMap(){
@@ -67,7 +68,7 @@ public class Game{
             MainWindow.newGame = false;
             newGame();
         }
-        window.draw(this.map, this);
+        window.draw(map, this);
     }
 
     public void playerAttack(){
@@ -147,6 +148,8 @@ public class Game{
                             player.collect(item);
                             items.remove(item);
                             break;
+                        } else if(player.getHealth() < player.healthMax){
+                            player.setHealth(player.getHealth() + ((Heart)item).getHealth());
                         }
                     } else {
                         player.collect(item);

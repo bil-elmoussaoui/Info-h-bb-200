@@ -70,15 +70,7 @@ public class Keyboard implements KeyListener{
                 game.playerThrowWeapon();
             break;
         }
-        if(game.player.isMoving){
-            if(nextPositionX != game.player.getPositionX() || nextPositionY != game.player.getPositionY()) {
-                if(!MainWindow.gamePaused) {
-                    game.player.setAttackMode(false);
-                    game.player.move(nextPositionX, nextPositionY);
-                    game.refreshMap();
-                }
-            }
-        }
+
     }
 
     @Override
@@ -86,7 +78,14 @@ public class Keyboard implements KeyListener{
 
     @Override
     public void keyReleased(KeyEvent e) {
-        game.player.isMoving = false;
+        if(nextPositionX != game.player.getPositionX() || nextPositionY != game.player.getPositionY()) {
+            if(!MainWindow.gamePaused) {
+                game.player.setAttackMode(false);
+                game.player.move(nextPositionX, nextPositionY);
+                game.refreshMap();
+                game.player.isMoving = false;
+            }
+        }
         game.player.counter.init();
     }
 }

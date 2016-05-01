@@ -50,14 +50,15 @@ public class Map extends JPanel{
             g.fillRect(0, (Game.shownSizeY)*Game.pixelY, Game.shownSizeX*Game.pixelX , Game.shownSizeY*Game.pixelX);
 
             ArrayList<Tile> tiles = game.getTiles();
-            if (tiles.size() > 0) {
-                for (Tile tile : tiles) {
-                    if (startPositionX <= tile.getPositionX() && tile.getPositionX() <= endPositionX) {
-                        if (startPositionY <= tile.getPositionY() && tile.getPositionY() <= endPositionY) {
-                            if (tile instanceof Portal) {
-                                g.drawImage(((Portal) tile).getInImage(), (tile.getPositionX() - startPositionX) * Game.pixelX, (tile.getPositionY() - startPositionY) * Game.pixelY, Game.pixelX, Game.pixelY, null);
-                                g.drawImage(((Portal) tile).getOutImage(), (tile.getPositionX() - startPositionX) * Game.pixelX, (((Portal) tile).getOutPositionY() - startPositionY) * Game.pixelY, Game.pixelX, Game.pixelY, null);
-                            } else {
+            for(int i = 0; i < tiles.size(); i++){
+                Tile tile = tiles.get(i);
+                if (startPositionX <= tile.getPositionX() && tile.getPositionX() <= endPositionX) {
+                    if (startPositionY <= tile.getPositionY() && tile.getPositionY() <= endPositionY) {
+                        if (tile instanceof Portal) {
+                            g.drawImage(((Portal) tile).getInImage(), (tile.getPositionX() - startPositionX) * Game.pixelX, (tile.getPositionY() - startPositionY) * Game.pixelY, Game.pixelX, Game.pixelY, null);
+                            g.drawImage(((Portal) tile).getOutImage(), (tile.getPositionX() - startPositionX) * Game.pixelX, (((Portal) tile).getOutPositionY() - startPositionY) * Game.pixelY, Game.pixelX, Game.pixelY, null);
+                        } else {
+                            if(!(tile instanceof Trap) || (tile instanceof Trap && !((Trap)tile).animationStopped)) {
                                 g.drawImage(tile.getImage(), (tile.getPositionX() - startPositionX) * Game.pixelX, (tile.getPositionY() - startPositionY) * Game.pixelY, Game.pixelX, Game.pixelY, null);
                             }
                         }
@@ -65,59 +66,59 @@ public class Map extends JPanel{
                 }
             }
 
-            ArrayList<Wall> walls = game.getWalls();
-            if (walls.size() > 0) {
-                for (Wall wall : walls) {
-                    if (startPositionX <= wall.getPositionX() && wall.getPositionX() <= endPositionX) {
-                        if (startPositionY <= wall.getPositionY() && wall.getPositionY() <= endPositionY) {
-                            g.drawImage(wall.getImage(), (wall.getPositionX() - startPositionX) * Game.pixelX, (wall.getPositionY() - startPositionY) * Game.pixelY, Game.pixelX, Game.pixelY, null);
-                        }
+            for(int i = 0; i < game.getWalls().size(); i ++){
+                Wall wall = game.getWalls().get(i);
+                if (startPositionX <= wall.getPositionX() && wall.getPositionX() <= endPositionX) {
+                    if (startPositionY <= wall.getPositionY() && wall.getPositionY() <= endPositionY) {
+                        g.drawImage(wall.getImage(), (wall.getPositionX() - startPositionX) * Game.pixelX, (wall.getPositionY() - startPositionY) * Game.pixelY, Game.pixelX, Game.pixelY, null);
                     }
                 }
             }
-            ArrayList<Item> items = game.getItems();
-            if (items.size() > 0) {
-                for (Item item : items) {
-                    if (startPositionX <= item.getPositionX() && item.getPositionX() <= endPositionX) {
-                        if (startPositionY <= item.getPositionY() && item.getPositionY() <= endPositionY) {
-                            if (item instanceof Coin) {
-                                g.drawImage(((Coin) item).getImage(), (item.getPositionX() - startPositionX) * Game.pixelX + 16, (item.getPositionY() - startPositionY) * Game.pixelY + 16, 32 , 32, null);
-                            } else if (item instanceof Key) {
-                                g.drawImage(((Key) item).getImage(), (item.getPositionX() - startPositionX) * Game.pixelX + 16, (item.getPositionY() - startPositionY) * Game.pixelY + 16, 32, 32, null);
-                            } else if (item instanceof WoodBox) {
-                                g.drawImage(((WoodBox) item).getImage(), (item.getPositionX() - startPositionX) * Game.pixelX, (item.getPositionY() - startPositionY) * Game.pixelY, Game.pixelX, Game.pixelY, null);
-                            } else if (item instanceof Heart) {
-                                g.drawImage(((Heart) item).getImage(), (item.getPositionX() - startPositionX) * Game.pixelX + 16, (item.getPositionY() - startPositionY) * Game.pixelY + 16 , 32 , 32, null);
-                            }else if (item instanceof Weapon) {
-                                if(item instanceof Dagger) {
-                                    g.drawImage(((Dagger) item).getSaticImg(), (item.getPositionX() - startPositionX) * Game.pixelX + 16, (item.getPositionY() - startPositionY) * Game.pixelY + 16, 32, 32, null);
-                                } else if(item instanceof Bow){
-                                    g.drawImage(((Bow) item).getSaticImg(), (item.getPositionX() - startPositionX) * Game.pixelX + 16, (item.getPositionY() - startPositionY) * Game.pixelY + 16 , 32 , 32, null);
-                                } else if(item instanceof Staff){
-                                    g.drawImage(((Staff) item).getSaticImg(), (item.getPositionX() - startPositionX) * Game.pixelX + 16, (item.getPositionY() - startPositionY) * Game.pixelY + 16 , 32 , 32, null);
-                                } else if(item instanceof Spear){
-                                    g.drawImage(((Spear) item).getSaticImg(), (item.getPositionX() - startPositionX) * Game.pixelX + 16, (item.getPositionY() - startPositionY) * Game.pixelY + 16 , 32 , 32, null);
-                                }
+
+            for(int i = 0; i < game.getItems().size(); i++){
+                Item item = game.getItems().get(i);
+                if (startPositionX <= item.getPositionX() && item.getPositionX() <= endPositionX) {
+                    if (startPositionY <= item.getPositionY() && item.getPositionY() <= endPositionY) {
+                        if (item instanceof Coin) {
+                            g.drawImage(((Coin) item).getImage(), (item.getPositionX() - startPositionX) * Game.pixelX + 16, (item.getPositionY() - startPositionY) * Game.pixelY + 16, 32 , 32, null);
+                        } else if (item instanceof Key) {
+                            g.drawImage(((Key) item).getImage(), (item.getPositionX() - startPositionX) * Game.pixelX + 16, (item.getPositionY() - startPositionY) * Game.pixelY + 16, 32, 32, null);
+                        } else if (item instanceof WoodBox) {
+                            g.drawImage(((WoodBox) item).getImage(), (item.getPositionX() - startPositionX) * Game.pixelX, (item.getPositionY() - startPositionY) * Game.pixelY, Game.pixelX, Game.pixelY, null);
+                        } else if (item instanceof Heart) {
+                            g.drawImage(((Heart) item).getImage(), (item.getPositionX() - startPositionX) * Game.pixelX + 16, (item.getPositionY() - startPositionY) * Game.pixelY + 16 , 32 , 32, null);
+                        }else if (item instanceof Weapon) {
+                            if(item instanceof Dagger) {
+                                g.drawImage(((Dagger) item).getSaticImg(), (item.getPositionX() - startPositionX) * Game.pixelX + 16, (item.getPositionY() - startPositionY) * Game.pixelY + 16, 32, 32, null);
+                            } else if(item instanceof Bow){
+                                g.drawImage(((Bow) item).getSaticImg(), (item.getPositionX() - startPositionX) * Game.pixelX + 16, (item.getPositionY() - startPositionY) * Game.pixelY + 16 , 32 , 32, null);
+                            } else if(item instanceof Staff){
+                                g.drawImage(((Staff) item).getSaticImg(), (item.getPositionX() - startPositionX) * Game.pixelX + 16, (item.getPositionY() - startPositionY) * Game.pixelY + 16 , 32 , 32, null);
+                            } else if(item instanceof Spear){
+                                g.drawImage(((Spear) item).getSaticImg(), (item.getPositionX() - startPositionX) * Game.pixelX + 16, (item.getPositionY() - startPositionY) * Game.pixelY + 16 , 32 , 32, null);
                             }
                         }
                     }
                 }
             }
 
-            ArrayList<Monster> monsters = game.getMonsters();
-            if (monsters.size() > 0) {
-                for (Monster monster : monsters) {
-                    if (startPositionX <= monster.getPositionX() && monster.getPositionX() <= endPositionX) {
-                        if (startPositionY <= monster.getPositionY() && monster.getPositionY() <= endPositionY) {
-                            g.drawImage(monster.getImage(), (monster.getPositionX() - startPositionX) * Game.pixelX, (monster.getPositionY() - startPositionY) * Game.pixelY, Game.pixelX, Game.pixelY, null);
-                        }
+
+            for(int i = 0; i < game.getMonsters().size(); i++){
+                Monster monster = game.getMonsters().get(i);
+                if (startPositionX <= monster.getPositionX() && monster.getPositionX() <= endPositionX) {
+                    if (startPositionY <= monster.getPositionY() && monster.getPositionY() <= endPositionY) {
+                        g.drawImage(monster.getImage(), (monster.getPositionX() - startPositionX) * Game.pixelX, (monster.getPositionY() - startPositionY) * Game.pixelY, Game.pixelX, Game.pixelY, null);
                     }
                 }
             }
+
             g.drawImage(game.player.getImage(), (game.player.getPositionX() - startPositionX) * Game.pixelX, (game.player.getPositionY() - startPositionY) * Game.pixelY, Game.pixelX, Game.pixelY, null);
-            if(!game.door.getIsOpen()) {
-                g.drawImage(game.door.getImage(), (game.door.getPositionX() - startPositionX) * Game.pixelX, (game.door.getPositionY() - startPositionY) * Game.pixelY, Game.pixelX, Game.pixelY, null);
+            if(game.door != null) {
+                if (!game.door.getIsOpen()) {
+                    g.drawImage(game.door.getImage(), (game.door.getPositionX() - startPositionX) * Game.pixelX, (game.door.getPositionY() - startPositionY) * Game.pixelY, Game.pixelX, Game.pixelY, null);
+                }
             }
+
             g.setFont(new Font("TimesRoman", Font.BOLD, 22));
             try {
                 BufferedImage inventoryBg = ImageIO.read(new File("Images/inventory.png"));
@@ -149,6 +150,7 @@ public class Map extends JPanel{
                         g.drawImage(((Spear)weapon).getSaticImg(), (Game.shownSizeX - 1 -  (game.player.inventory.sizeMaxWeapon + game.player.inventory.sizeMaxItem + 3 - i))*Game.pixelX + 16, (Game.shownSizeY)*Game.pixelY + 16, 32, 32, null);
                     }
                 }
+                // potions
                 for (int i = 0; i < game.player.inventory.sizeMaxItem; i++){
                     g.drawImage(inventoryBg, (Game.shownSizeX - 1 -  (game.player.inventory.sizeMaxItem  + 2 -i))*Game.pixelX, (Game.shownSizeY)*Game.pixelY, Game.pixelX, Game.pixelY, null);
                 }
@@ -157,7 +159,7 @@ public class Map extends JPanel{
                         g.drawImage(((Heart)game.player.inventory.getItem(i)).getImage() , (Game.shownSizeX - 1 -  (game.player.inventory.sizeMaxItem  + 2 -i))*Game.pixelX + 16, (Game.shownSizeY) * Game.pixelY  + 16, 32, 32, null);
                     }
                 }
-
+                // key case
                 g.drawImage(inventoryBg, (Game.shownSizeX - 2)*Game.pixelX, (Game.shownSizeY)*Game.pixelY, Game.pixelX, Game.pixelY, null);
                 if(game.player.hasKey){
                     g.drawImage(keyImg, (Game.shownSizeX - 2)*Game.pixelX + 16, (Game.shownSizeY)*Game.pixelY + 16, 32, 32, null);

@@ -14,8 +14,8 @@ public class Tile {
     private boolean isDangerous = false;
 
     public Tile(int positionX, int positionY) {
-        this.setPositionX(positionX);
-        this.setPositionY(positionY);
+        setPositionX(positionX);
+        setPositionY(positionY);
         imgPath = "Images/tile.png";try {
         img = ImageIO.read(new File(imgPath));
         } catch (Exception e) {
@@ -29,7 +29,7 @@ public class Tile {
     }
 
     public boolean getIsWalkable(){
-        return this.isWalkable;
+        return isWalkable;
     }
 
     public void setIsBreakable(boolean isBreakable){
@@ -41,19 +41,19 @@ public class Tile {
     }
 
     public boolean getIsDangerous(){
-        return this.isDangerous;
+        return isDangerous;
     }
 
     public boolean getIsBreakable(){
-        return this.isBreakable;
+        return isBreakable;
     }
 
     public int getPositionX(){
-        return this.positionX;
+        return positionX;
     }
 
     public int getPositionY(){
-        return  this.positionY;
+        return  positionY;
     }
 
     public void setPositionX(int positionX){
@@ -81,8 +81,7 @@ public class Tile {
     }
 
     public BufferedImage getImage(){
-
-        return this.img;
+        return img;
     }
 
 }

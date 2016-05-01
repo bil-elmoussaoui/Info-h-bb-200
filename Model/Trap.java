@@ -4,21 +4,16 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 
-/**
- * Created by bilal la keh on 27/04/16.
- */
+
 public class Trap extends Tile{
-    private int x = 0;
-    private int y = 0;
-    private int PositionX;
-    private int PositionY;
     public Counter counter;
     public BufferedImage img = null;
     private int damage;
+    public boolean animationStopped = true;
     public String imgPath = "Images/tornado.png";
 
-    public Trap(int PositionX, int PositionY){
-        super(PositionX, PositionY);
+    public Trap(int positionX, int positionY){
+        super(positionX, positionY);
         setIsDangerous(true);
         counter = new Counter(15);
         try {
@@ -29,16 +24,15 @@ public class Trap extends Tile{
 
     }
 
-    public void attack(Person person){
-        person.setHealth(person.getHealth()-1);
+    public void attack(Person person) {
+        if (person.getHasArmor()) {
+            person.setHasArmor(false);
+        } else {
+            person.setHealth(person.getHealth() - 1);
+        }
     }
 
-
-
     public BufferedImage getImage() {
-        /*if(counter.getCounter() %3 == 0){
-            y += 1;
-        }*/
         BufferedImage tournadoImage;
         if(counter.getCounter() <= 3) {
             tournadoImage = img.getSubimage(counter.getCounter() * 128, 0, 128, 128);
@@ -51,4 +45,5 @@ public class Trap extends Tile{
         }
         return tournadoImage;
     }
+
 }
