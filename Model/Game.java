@@ -12,7 +12,6 @@ public class Game{
     public ArrayList<Wall> walls = new ArrayList<>();
     public ArrayList<Item> items = new ArrayList<>();
     public ArrayList<Tile> tiles = new ArrayList<>();
-    private Inventory inventory;
     public MainWindow window;
     public MapGenerator mapGenerator;
     public Door door;
@@ -74,7 +73,6 @@ public class Game{
     public void playerAttack(){
         if(player.weapon != null && !player.weapon.getIsDistanceWeapon()) {
             int[] position = player.getAttackedPosition();
-
             for (int i = 0; i < monsters.size(); i++) {
                 Monster monster = monsters.get(i);
                 if (position[0] == monster.getPositionX() && position[1] == monster.getPositionY()) {
@@ -164,27 +162,14 @@ public class Game{
 
     public void openDoor(){
         int[] position = player.getAttackedPosition();
-        if(position[0] == door.getPositionX() && position[1] == door.getPositionY()){
-            if(player.hasKey && door != null) {
+        if(player.hasKey && door != null){
+            if(position[0] == door.getPositionX() && position[1] == door.getPositionY()){
                 player.removeKey();
                 door.setIsOpen(true);
-                breakWall(position[0], position[1]);
+                mapGenerator.breakWall(position[0], position[1]);
             }
-            try {
-                Thread.sleep(100);
-            }catch (Exception e){}
+            try {Thread.sleep(100);}catch (Exception e){}
             newGame();
-        }
-    }
-
-    public void breakWall(int positionX, int positionY){
-        for(int i = 0; i < walls.size(); i++){
-            Wall wall = walls.get(i);
-            if(positionX == wall.getPositionX() && wall.getPositionY() == positionY){
-                walls.remove(wall);
-                tiles.add(new Tile(positionX, positionY));
-                break;
-            }
         }
     }
 
@@ -193,6 +178,7 @@ public class Game{
         tiles.clear();
         walls.clear();
         items.clear();
+        player.removeKey();
         freePositions = new int[this.sizeX][this.sizeY];
         map = new int[this.sizeX][this.sizeY];
         generateMap();

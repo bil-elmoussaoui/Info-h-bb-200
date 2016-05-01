@@ -18,9 +18,6 @@ public class WoodBox extends Item{
 
     public WoodBox(int positionX, int positionY){
         super(positionX, positionY);
-        setIsBreakable(true);
-        setIsWalkable(false);
-        setIsCollectable(false);
         Random randomItem = new Random();
         switch (randomItem.nextInt(4)) {
             case 0:
@@ -49,6 +46,7 @@ public class WoodBox extends Item{
                 content = null;
             break;
         }
+        setIsWalkable(false);
         try {
             img = ImageIO.read(new File(imgPath));
         } catch (IOException e) {

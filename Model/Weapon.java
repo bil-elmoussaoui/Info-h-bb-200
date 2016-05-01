@@ -38,11 +38,11 @@ public class Weapon extends Item {
 	}
 
 	public int getDamage(){
-        return  this.damage;
+        return  damage;
     }
 
 	public int getLevel(){
-		return this.level;
+		return level;
 	}
 
 	public void setDirection(int direction){

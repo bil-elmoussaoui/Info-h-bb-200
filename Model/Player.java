@@ -35,10 +35,6 @@ public class Player extends Person {
 
     }
 
-    public Inventory getInventory(){
-        return inventory;
-    }
-
     public void removeKey(){
         hasKey = false;
     }
@@ -52,30 +48,34 @@ public class Player extends Person {
             } else if (weapon instanceof Bow) {
                 attackingImgPath = "Images/player-attack-bow.png";
             }
-            if (!this.inventory.containsWeapon(weapon)) {
-                this.inventory.addWeapon(weapon);
+            if (!inventory.containsWeapon(weapon)) {
+                inventory.addWeapon(weapon);
             }
             this.weapon = weapon;
             this.weapon.setDirection(direction);
-            this.counter.setCounterMax(this.weapon.counter.getCounterMax());
+            setImage(attackingImgPath);
+            counter.setCounterMax(this.weapon.counter.getCounterMax());
             this.weapon.counter.init();
+            counter.init();
+        } else {
+            this.weapon = null;
         }
     }
 
     public void setWeaponByIndex(int index){
         if(inventory.countWeapons() >= index){
-            this.setWeapon(inventory.getWeapon(index - 1));
+            setWeapon(inventory.getWeapon(index - 1));
         }
     }
 
     public void throwWeapon(Weapon weapon){
-        if(this.inventory.containsWeapon(weapon)){
-            this.inventory.removeWeapon(weapon);
-            if (this.inventory.countWeapons() > 0) {
-                this.setWeapon(this.inventory.randomWeapon());
+        if(inventory.containsWeapon(weapon)){
+            inventory.removeWeapon(weapon);
+            if (inventory.countWeapons() > 0) {
+                setWeapon(inventory.randomWeapon());
             } else {
-                this.setWeapon(null);
-                this.setAttackMode(false);
+                setWeapon(null);
+                setAttackMode(false);
             }
         }
     }
@@ -89,19 +89,18 @@ public class Player extends Person {
     public void setAttackMode(boolean attackMode){
         this.isAttacking = attackMode;
         try {
-            if(attackMode && this.weapon != null) {
-                if(this.weapon instanceof Spear || this.weapon instanceof Staff) {
-                        shieldImg = ImageIO.read(new File(attackingShieldImgPath));
+            if(attackMode && weapon != null) {
+                if(weapon instanceof Spear || weapon instanceof Staff) {
+                    shieldImg = ImageIO.read(new File(attackingShieldImgPath));
                 }
-                this.setImage(attackingImgPath);
+                setImage(attackingImgPath);
                 counter.setCounterMax(weapon.counter.getCounterMax());
             } else {
-                this.setImage(imgPath);
+                setImage(imgPath);
                 shieldImg = ImageIO.read(new File(shieldImgPath));
                 counter.setCounterMax(7);
             }
         } catch (Exception e){}
-
     }
 
     public BufferedImage getImage(){
@@ -112,13 +111,13 @@ public class Player extends Person {
             g2.drawImage(playerImage, null, null);
             Composite newComposite = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1);
             g2.setComposite(newComposite);
-            g2.drawImage(this.weapon.getImage(), null, null);
+            g2.drawImage(weapon.getImage(), null, null);
             g2.dispose();
             playerImage = buffer;
         }
         if(getHasArmor()){
             BufferedImage shieldSubImage;
-            if(!weapon.getIsDistanceWeapon()) {
+            if(weapon != null && !weapon.getIsDistanceWeapon()) {
                 shieldSubImage = shieldImg.getSubimage(counter.getCounter() * 64, (direction - 1) * 64, 64, 64);
             } else {
                 shieldSubImage = shieldImg.getSubimage(0, (direction - 1) * 64, 64, 64);
@@ -136,11 +135,11 @@ public class Player extends Person {
     }
 
     public int getCoins(){
-        return this.coins;
+        return coins;
     }
 
     public int getExp(){
-        return this.exp;
+        return exp;
     }
 
     public void addExp(int exp){
@@ -157,21 +156,21 @@ public class Player extends Person {
         }
     }
 
-    public void addKey(Key key){
+    public void addKey(){
         hasKey = true;
     }
 
     public void collect(Item item){
         if(item instanceof Coin){
-            this.addCoins(((Coin)item));
+            addCoins(((Coin)item));
         } else if (item instanceof Heart){
-            if(this.getHealth() < 5) {
-                this.setHealth(this.getHealth() + 1);
+            if(getHealth() < 5) {
+                setHealth(getHealth() + 1);
             } else {
-                this.inventory.addItem(item);
+                inventory.addItem(item);
             }
         } else if (item instanceof Key){
-            this.addKey(((Key)item));
+            addKey();
         } else if(item instanceof Weapon){
             setWeapon((Weapon)item);
         }
