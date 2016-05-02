@@ -6,38 +6,45 @@ import View.MainWindow;
 import java.util.ArrayList;
 
 public class Animation {
-    private int monsterMovesTime = 1200;
+    private int monsterMovesTime = 500;
+    private int monsterAttackTime = 500;
     private int animationRefresh = 100;
     private Game game;
 
     public Animation(Game game){
         this.game = game;
-        Thread monstersThread = new Thread(){
-            public void run(){
+        Thread monstersThread = new Thread() {
+            public void run() {
                 try {
                     while (true) {
                         Thread.sleep(monsterMovesTime);
-                        for(int i = 0; i < game.monsters.size(); i++){
+                        for (int i = 0; i < game.monsters.size(); i++) {
                             Monster monster = game.monsters.get(i);
                             if (!MainWindow.gamePaused && monster.getCanMove()) {
                                 int[] playerPosition = new int[]{game.player.getPositionX(), game.player.getPositionY()};
-                                if (monster.FOV.getFOV().contains(playerPosition)) {
-                                    monster.isMoving = true;
-                                    if (playerPosition[0] == monster.getPositionX()) {
-                                        if ((playerPosition[0] - monster.getPositionX()) > 0) {
-                                            monster.setPositionX(monster.getPositionX() + 1);
-                                        } else {
-                                            monster.setPositionX(monster.getPositionX() - 1);
+                                for (int k = 0; k < monster.FOV.getFOV().size(); k++) {
+                                    if (monster.FOV.getFOV().get(k)[0] == playerPosition[0] && monster.FOV.getFOV().get(k)[1] == playerPosition[1]) {
+                                        monster.isMoving = true;
+                                        if (playerPosition[0] == monster.getPositionX()) {
+                                            if ((playerPosition[1] - monster.getPositionY()) > 0) {
+                                                monster.move(monster.getPositionX(), monster.getPositionY() + 1);
+                                            } else {
+                                                monster.move(monster.getPositionX(), monster.getPositionY() - 1);
+                                            }
+
+                                        } else if (playerPosition[1] == monster.getPositionY()) {
+                                            if ((playerPosition[0] - monster.getPositionX()) > 0) {
+                                                monster.move(monster.getPositionX() + 1, monster.getPositionY());
+                                            } else {
+                                                monster.move(monster.getPositionX() - 1, monster.getPositionY());
+                                            }
                                         }
-                                    } else {
-                                        if ((playerPosition[1] - monster.getPositionY()) > 0) {
-                                            monster.setPositionY(monster.getPositionY() + 1);
-                                        } else {
-                                            monster.setPositionY(monster.getPositionY() - 1);
-                                        }
+
                                     }
+
+
                                 }
-                                if(!monster.isMoving) {
+                                if (!monster.isMoving) {
                                     int[] position = monster.getRandomPosition();
                                     if (position != null) {
                                         monster.isMoving = true;
@@ -49,8 +56,10 @@ public class Animation {
                             }
                         }
                     }
-                }catch(Exception e){}
+                } catch (Exception e) {
+                }
             }
+
         };
         monstersThread.start();
 
@@ -112,7 +121,57 @@ public class Animation {
         };
         playerAttackThread.start();
 
-        Thread trapAnimationThread = new Thread(){
+
+        // 1 bas, 2 gauche 3 haut 4 droite
+     Thread monsterAttackThread = new Thread(){
+            public void run(){
+                try {
+                    while(true) {
+                        Thread.sleep(monsterAttackTime);
+                        for (int i = 0; i < game.monsters.size(); i++) {
+                            Monster monster = game.monsters.get(i);
+                            int[] playerPosition = new int[]{game.player.getPositionX(), game.player.getPositionY()};
+                            int[] monsterAttackPosition = monster.getAttackedPosition();
+                            if (playerPosition[0] == monsterAttackPosition[0] && playerPosition[1] == monsterAttackPosition[1]) {
+                                monster.attack(game.player);
+                                monster.isAttacking = true;
+                            }
+                            if (monster.isAttacking && !monster.isMoving) {
+                                monster.setCanMove(false);
+                                while (monster.weapon.counter.getCounter() < monster.weapon.counter.getCounterMax()) {
+                                    monster.weapon.counter.up();
+                                    if (monster.weapon instanceof Bow) {
+                                        ArrayList<Arrow> arrows = ((Bow) monster.weapon).arrows;
+                                        for (int p = 0; p < arrows.size(); p++) {
+                                            Arrow arrow = arrows.get(p);
+                                            if (!arrow.beenThrown) {
+                                                if (arrow.counter.isMax()) {
+                                                    ((Bow) monster.weapon).arrows.get(p).beenThrown = true;
+                                                } else {
+                                                    ((Bow) monster.weapon).arrows.get(p).counter.up();
+                                                }
+                                            }
+                                        }
+                                    }
+                                    monster.counter.up();
+                                    game.refreshMap();
+                                    Thread.sleep(50);
+                                }
+                                monster.setCanMove(true);
+                                //monster.setAttackMode(false);
+                                monster.weapon.counter.init();
+                                monster.counter.init();
+                                game.refreshMap();
+                            }
+                        }
+                    }
+
+                }catch (Exception e){}
+            }
+        };
+        monsterAttackThread .start();
+
+    Thread trapAnimationThread = new Thread(){
             public void run(){
                 try {
                     while(true) {
@@ -138,6 +197,23 @@ public class Animation {
             }
         };
         trapAnimationThread.start();
+
+        Thread playerDeathThread = new Thread(){
+            public void run() {
+                try {
+                    while (true) {
+                        Thread.sleep(animationRefresh);
+                        if (!game.player.isAlive()) {
+                            MainWindow.gamePaused = false;
+                            game.window.showMenuWindow();
+                        }
+                    }
+                } catch (Exception e) {
+                }
+            }
+
+        };
+        playerDeathThread.start();
 
         Thread animationThread = new Thread(){
             public void run() {

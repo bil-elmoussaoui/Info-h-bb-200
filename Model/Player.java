@@ -176,17 +176,7 @@ public class Player extends Person {
         }
     }
 
-    public int[] getAttackedPosition(){
-        int attackedX = this.getPositionX();
-        int attackedY = this.getPositionY();
-        switch(direction){
-            case 2: attackedX -= 1; break; // left
-            case 4: attackedX += 1; break; // right
-            case 1: attackedY -= 1; break; // bottom
-            case 3: attackedY += 1; break;  // top
-        }
-        return new int[]{attackedX, attackedY};
-    }
+
 
     public void attack(Monster monster){
         // fix shit here!
@@ -198,4 +188,5 @@ public class Player extends Person {
             }
         }
     }
+
 }

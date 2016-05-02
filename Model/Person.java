@@ -1,5 +1,7 @@
 package Model;
 
+import View.MainWindow;
+
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -14,7 +16,7 @@ abstract class Person{
     public boolean isAttacking = false;
     private boolean canMove = true;
     public Counter counter;
-    public double healthMax = 5;
+    public static double healthMax = 5;
 
 
     public Person (int positionX, int positionY, int counterMax){
@@ -69,8 +71,11 @@ abstract class Person{
 			} else {
 				throw new Exception ("Pb sur les vies");
 			}
+            if(this instanceof Player && this.health == 0){
+                Game.enVie = false;
+            }
 		}catch (Exception pbVies){
-			this.health = healthMax;
+			this.health = 0;
 		}
 	}
 
@@ -145,6 +150,18 @@ abstract class Person{
                 && Game.freePositions[positionX][positionY] == 0);
     }
 
+    public int[] getAttackedPosition(){
+        int attackedX = this.getPositionX();
+        int attackedY = this.getPositionY();
+        switch(direction){
+            case 2: attackedX -= 1; break; // left
+            case 4: attackedX += 1; break; // right
+            case 1: attackedY -= 1; break; // bottom
+            case 3: attackedY += 1; break;  // top
+        }
+        return new int[]{attackedX, attackedY};
+    }
+
 	public void move(int positionX , int positionY){
         int oldPositionX = getPositionX();
         int oldPositionY = getPositionY();
@@ -173,6 +190,6 @@ abstract class Person{
     }
 
     public boolean isAlive(){
-        return (getHealth() > 0);
+        return !(getHealth() == 0);
     }
 }

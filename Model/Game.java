@@ -16,11 +16,12 @@ public class Game implements Serializable{
     public ArrayList<Tile> tiles = new ArrayList<>();
     public transient MainWindow window;
     public MapGenerator mapGenerator;
+    public static boolean enVie = true;
     public Door door;
     private int[][] map;
     // screen information
-    public static int sizeY = 100;
-    public static int sizeX = 100 ;
+    public static int sizeY = 25;
+    public static int sizeX = 75 ;
     public static int shownSizeX;
     public static int shownSizeY;
     public static int screenX;
@@ -35,7 +36,7 @@ public class Game implements Serializable{
         screenY = (int)screenSize.getHeight();
         shownSizeX = (int)Math.floor(screenX/pixelX) + 1;
         shownSizeY = (int)Math.floor(screenY/pixelY) - 1;
-        sizeX = shownSizeX;
+        //sizeX = shownSizeX;
         sizeY = shownSizeY;
         freePositions = new int[this.sizeX][this.sizeY];
         map = new int[this.sizeX][this.sizeY];
@@ -175,11 +176,17 @@ public class Game implements Serializable{
     }
 
     public void newGame() {
+        System.out.println(enVie);
         monsters.clear();
         tiles.clear();
         walls.clear();
         items.clear();
-        player.removeKey();
+        if(Game.enVie) {
+            player.removeKey();
+        } else {
+            player = null;
+            Game.enVie = true;
+        }
         freePositions = new int[this.sizeX][this.sizeY];
         map = new int[this.sizeX][this.sizeY];
         generateMap();

@@ -44,6 +44,7 @@ public class Monster extends Person{
     }
 
 
+
     public BufferedImage getImage() {
         BufferedImage playerImage = img.getSubimage(counter.getCounter()*64, (direction - 1)*64, 64, 64);
         BufferedImage shieldSubImage = shieldImg.getSubimage(counter.getCounter()*64, (direction - 1)*64, 64, 64);
@@ -69,5 +70,37 @@ public class Monster extends Person{
         }
         return playerImage;
     }
+
+    public void attack(Player player){
+        if(weapon != null) {
+            if(player.getHasArmor()){
+                player.setArmor(player.getArmor() - weapon.getDamage());
+            } else {
+                player.setHealth(player.getHealth() - weapon.getDamage());
+            }
+        }
+    }
+
+
+    // 1 bas, 2 gauche 3 haut 4 droite
+
+    /*public int[] getMonsterAttackPosition() {
+        int attackPositionX = this.getPositionX();
+        int attackPositionY = this.getPositionY();
+        switch (direction) {
+            case (4):
+                attackPositionX = attackPositionX + 1;
+                break;
+            case (2):
+                attackPositionX = attackPositionX - 1;
+                break;
+            case (1):
+                attackPositionY = attackPositionY + 1;
+                break;
+            case (3):
+                attackPositionY = attackPositionY - 1;
+                break;
+        }
+    }*/
 
 }
