@@ -6,7 +6,7 @@ import View.MainWindow;
 import java.util.ArrayList;
 
 public class Animation {
-    private int monsterMovesTime = 1500;
+    private int monsterMovesTime = 1200;
     private int animationRefresh = 100;
     private Game game;
 
@@ -85,7 +85,14 @@ public class Animation {
                                 if(game.player.weapon instanceof Bow){
                                     ArrayList<Arrow> arrows = ((Bow)game.player.weapon).arrows;
                                     for(int i = 0; i < arrows.size(); i++){
-                                        arrows.get(i).counter.up();
+                                        Arrow arrow = arrows.get(i);
+                                        if(!arrow.beenThrown) {
+                                            if (arrow.counter.isMax()) {
+                                                ((Bow) game.player.weapon).arrows.get(i).beenThrown = true;
+                                            } else {
+                                                ((Bow) game.player.weapon).arrows.get(i).counter.up();
+                                            }
+                                        }
                                     }
                                 }
                                 game.player.counter.up();
@@ -114,7 +121,7 @@ public class Animation {
                             for (Tile tile : game.tiles) {
                                 if( tile instanceof Trap) {
                                     Trap trap = (Trap)tile;
-                                    if(trap.counter.getCounter() == trap.counter.getCounterMax()) {
+                                    if(trap.counter.isMax()) {
                                         int[] position = game.mapGenerator.getRandomPosition();
                                         trap.setPositionX(position[0]);
                                         trap.setPositionY(position[1]);
@@ -152,6 +159,20 @@ public class Animation {
                             Item item = game.getItems().get(i);
                             if (item instanceof Coin) {
                                 ((Coin) item).counter.up();
+                            } else if (item instanceof WoodBox){
+                                if(((WoodBox) item).getIsBeingBroken()) {
+                                    if (((WoodBox) item).counter.isMax()) {
+                                        int x = item.getPositionX();
+                                        int y = item.getPositionY();
+                                        if (((WoodBox) item).content != null) {
+                                            game.items.add(((WoodBox) item).content);
+                                        }
+                                        game.items.remove(item);
+                                        Game.freePositions[x][y] = 0;
+                                    } else {
+                                        ((WoodBox) item).counter.up();
+                                    }
+                                }
                             }
                         }
                         game.refreshMap();

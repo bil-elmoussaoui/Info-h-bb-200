@@ -43,6 +43,10 @@ public class Counter {
         }
     }
 
+    public boolean isMax(){
+        return (getCounter() == getCounterMax());
+    }
+
 }
 
 

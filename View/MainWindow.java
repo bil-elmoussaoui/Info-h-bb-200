@@ -12,6 +12,7 @@ public class MainWindow {
 	public GraphicsDevice device;
 	public static boolean gamePaused = false;
 	public static boolean newGame = false;
+	public static boolean gameStarted = false;
 	private JFrame mainWindow;
     private Map levelMap = new Map();
 
@@ -20,9 +21,11 @@ public class MainWindow {
 		initialize();
 	}
 
+
 	public static void main(String args[]){
         new MainWindow();
     }
+
 
 	public void initialize(){
 		mainWindow = new JFrame();
@@ -59,6 +62,7 @@ public class MainWindow {
 	}
 
     public void showLevelWindow(){
+		if(!MainWindow.gameStarted) MainWindow.gameStarted = true;
         LevelWindow Window = new LevelWindow(levelMap);
         mainWindow.getContentPane().removeAll();
         mainWindow.getContentPane().add(Window.getJPanel());
@@ -74,13 +78,15 @@ public class MainWindow {
 		MenuWindow Window = new MenuWindow(this);
 		mainWindow.getContentPane().removeAll();
 		mainWindow.getContentPane().add(Window.getJPanel());
+		mainWindow.requestFocusInWindow();
 		mainWindow.revalidate();
 	}
 
 	public void showLoadWindow(){
-		LoadWindow Window = new LoadWindow();
+		LoadWindow Window = new LoadWindow(this);
 		mainWindow.getContentPane().removeAll();
 		mainWindow.getContentPane().add(Window.getJPanel());
+		mainWindow.requestFocusInWindow();
 		mainWindow.revalidate();
 	}
 

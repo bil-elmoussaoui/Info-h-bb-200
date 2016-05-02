@@ -12,10 +12,9 @@ public class Arrow extends Bow {
     public String imgPath = "Images/weapon-arrow.png";
     public BufferedImage img = null;
     public Counter counter;
-    private int positionX;
-    private int positionY;
+    public boolean beenThrown = false;
 
-    public Arrow (Integer positionX, Integer positionY, int damage){
+    public Arrow (int damage){
         super(null, null, damage);
         counter = new Counter(12);
         try {
@@ -26,6 +25,6 @@ public class Arrow extends Bow {
     }
 
     public BufferedImage getImage(){
-        return img.getSubimage(counter.getCounter() *64, (this.getDirection() - 1)*64, 64, 64);
+        return img.getSubimage(counter.getCounter() *64, (getDirection() - 1)*64, 64, 64);
     }
 }

@@ -8,7 +8,7 @@ import java.io.File;
 public class Trap extends Tile{
     public Counter counter;
     public BufferedImage img = null;
-    private int damage;
+    private double damage;
     public boolean animationStopped = true;
     public String imgPath = "Images/tornado.png";
 
@@ -26,9 +26,9 @@ public class Trap extends Tile{
 
     public void attack(Person person) {
         if (person.getHasArmor()) {
-            person.setHasArmor(false);
+            person.setArmor(person.getArmor() - damage);
         } else {
-            person.setHealth(person.getHealth() - 1);
+            person.setHealth(person.getHealth() - damage);
         }
     }
 

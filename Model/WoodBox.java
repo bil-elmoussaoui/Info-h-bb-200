@@ -6,21 +6,20 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Random;
 
-/*
-TODO:
-- Implement box opening animation
- */
-
 public class WoodBox extends Item{
     private BufferedImage img;
     private String imgPath = "Images/Wood_Box.png";
     public Item content;
+    public Counter counter;
+    private boolean isBeingBroken;
 
     public WoodBox(int positionX, int positionY){
         super(positionX, positionY);
         setIsCollectable(false);
         setIsBreakable(true);
+        setIsBeingBroken(false);
         Random randomItem = new Random();
+        counter = new Counter(7);
         switch (randomItem.nextInt(4)) {
             case 0:
                 content = new Coin(positionX, positionY);
@@ -56,7 +55,15 @@ public class WoodBox extends Item{
         }
     }
 
+    public void setIsBeingBroken(boolean isBeingBroken){
+        this.isBeingBroken = isBeingBroken;
+    }
+
+    public boolean getIsBeingBroken(){
+        return isBeingBroken;
+    }
+
     public BufferedImage getImage() {
-        return img;
+        return img.getSubimage(counter.getCounter() * 60, 0, 60, 60);
     }
 }

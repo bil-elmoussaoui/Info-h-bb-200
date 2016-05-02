@@ -5,10 +5,7 @@ import java.util.Random;
 
 /*
 TODO :
-- implement inventoryWindow and a keylistenner! (Controller)
-- handle exception
-- implement useWeapon
-- implement useItem
+- handle exceptions
  */
 
 public class Inventory {
@@ -61,12 +58,4 @@ public class Inventory {
 	public void removeItem(Item item){
         itemsInventory.remove(item);
 	}
-
-    public void useItem(Item item){
-
-    }
-
-    public void useWeapon(Weapon weapon){
-
-    }
 }

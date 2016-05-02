@@ -45,43 +45,29 @@ public class FieldOfView {
     }
 
     public void createFov() {
-        int t;
+        int t = ((int) Math.floor(view / 2));
         switch (direction) {
-            case (4):// 1 bas, 2 gauche 3 haut 4 droite
+            case 4: case 2: // 2 gauche, 4 droite
                 for (int i = 1; i <= view; i++) {
-                    addToFov(positionX + i, positionY);
+                    if(direction == 4) {
+                        addToFov(positionX + i, positionY);
+                    } else {
+                        addToFov(positionX - i, positionY);
+                    }
                 }
-                t = ((int) Math.floor(view / 2));
                 for (int i = 1; i <= t; i++) {
                     addToFov(positionX, positionY - i);
                     addToFov(positionX, positionY + i);
                 }
             break;
-            case (2):
+            case 3: case 1: // 1 bas, 3 haut
                 for (int i = 1; i <= view; i++) {
-                    addToFov(positionX - i, positionY);
+                    if(direction == 3) {
+                        addToFov(positionX, positionY - i);
+                    } else {
+                        addToFov(positionX, positionY + i);
+                    }
                 }
-                t = ((int) Math.floor((view) / 2));
-                for (int i = 1; i <= t; i++) {
-                    addToFov(positionX, positionY - i);
-                    addToFov(positionX, positionY + i);
-                }
-            break;
-            case (3):
-                for (int i = 1; i <= view; i++) {
-                    addToFov(positionX, positionY - i);
-                }
-                t = ((int) Math.floor((view) / 2));
-                for (int i = 1; i <= t; i++) {
-                    addToFov(positionX - i, positionY);
-                    addToFov(positionX + i, positionY);
-                }
-            break;
-            case (1):
-                for (int i = 1; i <= view; i++) {
-                    addToFov(positionX, positionY + i);
-                }
-                t = ((int) Math.floor((view) / 2));
                 for (int i = 1; i <= t; i++) {
                     addToFov(positionX - i, positionY);
                     addToFov(positionX + i, positionY);

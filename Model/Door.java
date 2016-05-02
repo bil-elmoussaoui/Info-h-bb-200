@@ -12,6 +12,8 @@ public class Door extends Tile {
 
     public Door(int positionX, int positionY){
         super(positionX, positionY);
+        setIsWalkable(false);
+        setIsBreakable(false);
         try{
             img = ImageIO.read(new File(imgPath));
         }catch (Exception e){

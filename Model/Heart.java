@@ -12,7 +12,7 @@ TODO:
  */
 
 public class Heart extends Item {
-    private int health = 1;
+    private double health ;
     private BufferedImage img;
     private String imgPath = "Images/health-potion.png";
 
@@ -20,6 +20,7 @@ public class Heart extends Item {
         super(positionX, positionY);
         setIsCollectable(true);
         setIsBreakable(false);
+        setHealth(Math.round(Math.random()));
         setIsWalkable(true);
         try {
             img = ImageIO.read(new File(imgPath));
@@ -27,8 +28,12 @@ public class Heart extends Item {
         }
     }
 
-    public int getHealth(){
+    public double getHealth(){
         return health;
+    }
+
+    public void setHealth(double health){
+        this.health = health;
     }
 
     public BufferedImage getImage() {

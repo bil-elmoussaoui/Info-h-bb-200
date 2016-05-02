@@ -35,16 +35,22 @@ public class Bow extends Weapon {
     }
 
     public BufferedImage getImage(){
-        BufferedImage buffer = img.getSubimage(this.counter.getCounter() *64, (this.getDirection() - 1)*64, 64, 64);
-        Arrow arrow = new Arrow(0, 0, 1);
-        arrows.add(arrow);
-        BufferedImage bufferArrow = new BufferedImage(Game.pixelX, Game.pixelY, BufferedImage.TYPE_INT_ARGB);
-        Graphics2D g2Arrow = bufferArrow.createGraphics();
-        g2Arrow.drawImage(buffer, null, null);
-        Composite newComposite = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1);
-        g2Arrow.setComposite(newComposite);
-        g2Arrow.drawImage(arrow.getImage(), null, null);
-        g2Arrow.dispose();
+        BufferedImage buffer = img.getSubimage(counter.getCounter() *64, (getDirection() - 1)*64, 64, 64);
+        BufferedImage bufferArrow = null;
+        if(arrows.size() > 0) {
+            Arrow arrow = arrows.get(arrows.size() - 1);
+            if(!arrow.beenThrown) {
+                bufferArrow = new BufferedImage(Game.pixelX, Game.pixelY, BufferedImage.TYPE_INT_ARGB);
+                Graphics2D g2Arrow = bufferArrow.createGraphics();
+                g2Arrow.drawImage(buffer, null, null);
+                Composite newComposite = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1);
+                g2Arrow.setComposite(newComposite);
+                g2Arrow.drawImage(arrow.getImage(), null, null);
+                g2Arrow.dispose();
+            }
+        }  else {
+            bufferArrow = buffer;
+        }
         return bufferArrow;
     }
 }

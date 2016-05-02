@@ -9,13 +9,15 @@ public class Tile {
     private int positionY;
     private BufferedImage img;
     private String imgPath;
-    private boolean isWalkable = true;
-    private boolean isBreakable = false;
-    private boolean isDangerous = false;
+    private boolean isWalkable;
+    private boolean isBreakable;
+    private boolean isDangerous;
 
     public Tile(int positionX, int positionY) {
         setPositionX(positionX);
         setPositionY(positionY);
+        setIsBreakable(false);
+        setIsWalkable(true);
         imgPath = "Images/tile.png";try {
         img = ImageIO.read(new File(imgPath));
         } catch (Exception e) {

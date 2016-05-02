@@ -13,6 +13,7 @@ public class MapGenerator {
     private int maxItems = 5;
     // used to get a random door position
     public ArrayList<int[]> borderPositions = new ArrayList<>();
+    public ArrayList<int[]> wallsToBreak = new ArrayList<>();
 
     public MapGenerator(Game game){
         this.game = game;
@@ -30,13 +31,18 @@ public class MapGenerator {
     }
 
     public void createWall(int x, int y){
-        game.walls.add(new Wall(x, y));
-        generatedMap[x][y] = 1;
-        Game.freePositions[x][y] = 1;
+        if(x >= 0 && x < Game.sizeX && y >= 0 && y < Game.sizeY) {
+            if(Game.freePositions[x][y] == 0) {
+                game.walls.add(new Wall(x, y));
+                generatedMap[x][y] = 1;
+                //Game.freePositions[x][y] = 1;
+            }
+        }
     }
 
     public void initWalls() {
         divide(new Rectangle(1, 1, Game.sizeX - 1, Game.sizeY - 1), false);
+        breakUnneededWalls();
         // draw outline walls
         for (int i = 0; i < Game.sizeX; i++) {
             createWall(i, 0);
@@ -44,7 +50,7 @@ public class MapGenerator {
             if(i != 0) borderPositions.add(new int[]{i, 0});
             if(i != 0) borderPositions.add(new int[]{i, Game.sizeY - 1});
             for (int j = 0; j < Game.sizeY; j++) {
-                createWall(0,j);
+                createWall(0, j);
                 createWall(Game.sizeX - 1, j);
                 if(j != 0) borderPositions.add(new int[]{0, j});
                 if(j != 0) borderPositions.add(new int[]{Game.sizeX - 1, j});
@@ -60,10 +66,11 @@ public class MapGenerator {
         int width = square.width - square.x;
         int height = square.height - square.y;
         boolean isHorizontal = !wasHorizontal;
-        if((width > 3   && !isHorizontal) || (height > 3 && isHorizontal)) {
+        if((width >= 3  && !isHorizontal) || (height >= 3 && isHorizontal)) {
            boolean found = false;
             int wall = 0;
-            while(!found){
+            int itter = 0;
+            while(!found && itter < 4){
                 if(isHorizontal){
                     wall = square.y +  rand.nextInt(square.height - 2);
                     found = (Math.abs(square.x - wall) >= 1 && Math.abs(wall - square.width) >= 1);
@@ -71,34 +78,60 @@ public class MapGenerator {
                     wall = square.x + rand.nextInt(square.width - 2);
                     found = (Math.abs(square.y - wall) >= 1 && Math.abs(wall - square.height) >= 1);
                 }
+                itter += 1;
             }
-            if(isHorizontal){
-                int passage = square.x + rand.nextInt(square.width);
-                ArrayList<Integer> passageList = new ArrayList<>();
-                for(int i = -1; i < 1; i ++){ passageList.add(passage + i);}
-                int i = 0;
-                while(i < square.width){
-                    if(!passageList.contains(square.x + i)){
-                        createWall(square.x + i, wall);
+            if(found) {
+                if (isHorizontal) {
+                    int passage = square.x + rand.nextInt(square.width);
+                    ArrayList<Integer> passageList = new ArrayList<>();
+                    for (int i = -1; i < 1; i++) {
+                        passageList.add(passage + i);
                     }
-                    i++;
-                }
-                divide(new Rectangle(square.x, square.y, square.width, wall - square.y + 1), isHorizontal);
-                divide(new Rectangle(square.x, wall + 1, square.width, square.y + square.height - wall - 1), isHorizontal);
-            } else {
-                int passage = square.y + rand.nextInt(square.height);
-                ArrayList<Integer> passageList = new ArrayList<>();
-                for(int i = -1; i < 1; i ++){ passageList.add(passage + i);}
-                int i = 0;
-                while(i < square.height){
-                    if(!passageList.contains(square.y + i)){
-                        createWall(wall, square.y + i);
+                    int i = 0;
+                    while (i < square.width) {
+                        if (!passageList.contains(square.x + i)) {
+                            createWall(square.x + i, wall);
+                        } else {
+                            wallsToBreak.add(new int[]{square.x + i, wall, 0});
+                        }
+                        i++;
                     }
-                    i++;
+                    divide(new Rectangle(square.x, square.y, square.width, wall - square.y + 1), isHorizontal);
+                    divide(new Rectangle(square.x, wall + 1, square.width, square.y + square.height - wall - 1), isHorizontal);
+                } else {
+                    int passage = square.y + rand.nextInt(square.height);
+                    ArrayList<Integer> passageList = new ArrayList<>();
+                    for (int i = -1; i < 1; i++) {
+                        passageList.add(passage + i);
+                    }
+                    int i = 0;
+                    while (i < square.height) {
+                        if (!passageList.contains(square.y + i)) {
+                            createWall(wall, square.y + i);
+                        } else {
+                            wallsToBreak.add(new int[]{wall, square.y + i, 1});
+                        }
+                        i++;
+                    }
+                    divide(new Rectangle(square.x, square.y, wall - square.x + 1, square.height), isHorizontal);
+                    divide(new Rectangle(wall + 1, square.y, square.x + square.width - wall - 1, square.height), isHorizontal);
                 }
-                divide(new Rectangle(square.x, square.y, wall - square.x + 1, square.height), isHorizontal);
-                divide(new Rectangle(wall + 1, square.y, square.x + square.width - wall - 1, square.height),isHorizontal);
+            }
+        }
+    }
 
+    public void breakUnneededWalls(){
+        for(int[] wallPosition : wallsToBreak) {
+            breakWall(wallPosition[0], wallPosition[1]);
+            for (int k = -1; k <= 1; k++) {
+                if (k != 0) {
+                    // horizental wall
+                    if(wallPosition[2] == 0){
+                        breakWall(wallPosition[0], wallPosition[1] + k);
+                    } else {
+                        breakWall(wallPosition[0] + k, wallPosition[1]);
+                    }
+                }
             }
         }
     }
@@ -187,7 +220,7 @@ public class MapGenerator {
         while(!foundPosition){
             positionX = rand.nextInt(Game.sizeX);
             positionY = rand.nextInt(game.sizeY);
-            if(Game.freePositions[positionX][positionY] == 0){
+            if(Game.freePositions[positionX][positionY] == 0 && generatedMap[positionX][positionY] != 1){
                 foundPosition = true;
             }
         }
@@ -195,12 +228,17 @@ public class MapGenerator {
     }
 
     public void breakWall(int positionX, int positionY){
-        for(int i = 0; i < game.walls.size(); i++){
-            Wall wall = game.walls.get(i);
-            if(positionX == wall.getPositionX() && wall.getPositionY() == positionY){
-                game.walls.remove(wall);
-                game.tiles.add(new Tile(positionX, positionY));
-                break;
+        if(positionX >= 0 && positionX < Game.sizeX && positionY >= 0 && positionY < Game.sizeY) {
+            if(Game.freePositions[positionX][positionY] == 1) {
+                for (int i = 0; i < game.walls.size(); i++) {
+                    Wall wall = game.walls.get(i);
+                    if (positionX == wall.getPositionX() && wall.getPositionY() == positionY) {
+                        game.walls.remove(wall);
+                        game.tiles.add(new Tile(positionX, positionY));
+                        Game.freePositions[positionX][positionY] = 0;
+                        break;
+                    }
+                }
             }
         }
     }

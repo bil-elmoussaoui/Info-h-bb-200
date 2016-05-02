@@ -3,16 +3,18 @@ package Model;
 import View.MainWindow;
 
 import java.awt.*;
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Game{
+public class Game implements Serializable{
+    private static final long serialVersionUID = 1L;
     public Player player = null;
     public static int[][] freePositions;
     public ArrayList<Monster> monsters = new ArrayList<>();
     public ArrayList<Wall> walls = new ArrayList<>();
     public ArrayList<Item> items = new ArrayList<>();
     public ArrayList<Tile> tiles = new ArrayList<>();
-    public MainWindow window;
+    public transient MainWindow window;
     public MapGenerator mapGenerator;
     public Door door;
     private int[][] map;
@@ -26,7 +28,7 @@ public class Game{
     public static int pixelX = 64;
     public static int pixelY = 64;
 
-    public Game(MainWindow window) throws Exception {
+    public Game(MainWindow window) {
         this.window = window;
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         screenX = (int)screenSize.getWidth();
@@ -90,15 +92,14 @@ public class Game{
                 Item item = items.get(j);
                 if (item.getIsBreakable()) {
                     if (position[0] == item.getPositionX() && position[1] == item.getPositionY()) {
-                        if (((WoodBox) item).content != null) {
-                            items.add(((WoodBox) item).content);
-                        }
-                        items.remove(item);
-                        freePositions[position[0]][position[1]] = 0;
-                        refreshMap();
+                        ((WoodBox)item).setIsBeingBroken(true);
                         break;
                     }
                 }
+            }
+        } else {
+            if(player.weapon instanceof Bow){
+                ((Bow) player.weapon).arrows.add(new Arrow(1));
             }
         }
     }
@@ -185,4 +186,6 @@ public class Game{
         refreshMap();
 
     }
+
+
 }

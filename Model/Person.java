@@ -4,18 +4,17 @@ import java.util.ArrayList;
 import java.util.Random;
 
 abstract class Person{
-    private int health;
-	private boolean hasArmor;
+    private double health;
+	private double armor;
 	public Weapon weapon;
     public int direction  = 1;
     public int positionX;
     public int positionY;
-    public ArrayList<Weapon> weapons = new ArrayList<>();
     public boolean isMoving = false;
     public boolean isAttacking = false;
     private boolean canMove = true;
     public Counter counter;
-    public int healthMax = 5;
+    public double healthMax = 5;
 
 
     public Person (int positionX, int positionY, int counterMax){
@@ -24,7 +23,7 @@ abstract class Person{
         counter = new Counter(counterMax);
         Game.freePositions[positionX][positionY] = 1;
         setHealth(5);
-        setHasArmor(true);
+        setArmor(3);
     }
 
     public int getPositionX(){
@@ -59,11 +58,11 @@ abstract class Person{
         }
     }
 
-    public int getHealth(){
+    public double getHealth(){
 		return health;
 	}
 
-	public void setHealth(int health){
+	public void setHealth(double health){
 		try{
 			if (health >= 0 & health <= healthMax){
 				this.health = health;
@@ -75,13 +74,15 @@ abstract class Person{
 		}
 	}
 
-    public void setHasArmor(boolean hasArmor){
-        this.hasArmor = hasArmor;
+    public void setArmor(double armor){
+        this.armor = armor;
     }
 
     public boolean getHasArmor(){
-        return  hasArmor;
+        return  armor > 0;
     }
+
+    public double getArmor(){return armor;}
 
 	public Weapon getWeapon(){
 		return weapon;

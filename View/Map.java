@@ -15,9 +15,9 @@ public class Map extends JPanel{
     private Game game;
 
     public Map(){
-        this.requestFocusInWindow();
-        this.setFocusable(true);
-        this.requestFocus();
+        requestFocusInWindow();
+        setFocusable(true);
+        requestFocus();
     }
 
     public void setGame(Game game){
@@ -84,7 +84,7 @@ public class Map extends JPanel{
                         } else if (item instanceof Key) {
                             g.drawImage(((Key) item).getImage(), (item.getPositionX() - startPositionX) * Game.pixelX + 16, (item.getPositionY() - startPositionY) * Game.pixelY + 16, 32, 32, null);
                         } else if (item instanceof WoodBox) {
-                            g.drawImage(((WoodBox) item).getImage(), (item.getPositionX() - startPositionX) * Game.pixelX, (item.getPositionY() - startPositionY) * Game.pixelY, Game.pixelX, Game.pixelY, null);
+                            g.drawImage(((WoodBox) item).getImage(), (item.getPositionX() - startPositionX) * Game.pixelX + 2, (item.getPositionY() - startPositionY) * Game.pixelY + 2, 60, 60, null);
                         } else if (item instanceof Heart) {
                             g.drawImage(((Heart) item).getImage(), (item.getPositionX() - startPositionX) * Game.pixelX + 16, (item.getPositionY() - startPositionY) * Game.pixelY + 16 , 32 , 32, null);
                         }else if (item instanceof Weapon) {
@@ -176,7 +176,7 @@ public class Map extends JPanel{
 
     public void setMapMatrix(int[][] map){
         this.map = map;
-        this.repaint();
+        repaint();
     }
 
 

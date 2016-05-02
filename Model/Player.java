@@ -25,7 +25,7 @@ public class Player extends Person {
     public Player(int positionX, int positionY){
         super(positionX, positionY, 7);
         inventory = new Inventory();
-        setWeapon(new Spear(null, null, 1));
+        setWeapon(new Bow(null, null, 1));
         try {
             img = ImageIO.read(new File(imgPath));
             shieldImg = ImageIO.read(new File(shieldImgPath));
@@ -189,11 +189,12 @@ public class Player extends Person {
     }
 
     public void attack(Monster monster){
+        // fix shit here!
         if(weapon != null) {
             if(monster.getHasArmor()){
-                monster.setHasArmor(false);
+                monster.setArmor(monster.getArmor() - weapon.getDamage());
             } else {
-                monster.setHealth(monster.getHealth() - 1);
+                monster.setHealth(monster.getHealth() - weapon.getDamage());
             }
         }
     }
