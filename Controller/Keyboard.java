@@ -10,7 +10,7 @@ public class Keyboard implements KeyListener{
     private Game game;
     private int nextPositionX;
     private int nextPositionY;
-
+    private boolean speedMoves = false;
     public Keyboard(Game game){
         this.game = game;
     }
@@ -57,8 +57,8 @@ public class Keyboard implements KeyListener{
             break;
             case KeyEvent.VK_SPACE:
                 if(!MainWindow.gamePaused) {
-                    game.player.setAttackMode(true);
                     game.playerAttack();
+                    game.player.setAttackMode(true);
                 }
             break;
             case KeyEvent.VK_E:
@@ -69,7 +69,11 @@ public class Keyboard implements KeyListener{
             case KeyEvent.VK_F:
                 game.playerThrowWeapon();
             break;
+            case KeyEvent.VK_SHIFT:
+                speedMoves = true;
+            break;
         }
+
 
     }
 
@@ -81,7 +85,13 @@ public class Keyboard implements KeyListener{
         if(nextPositionX != game.player.getPositionX() || nextPositionY != game.player.getPositionY()) {
             if(!MainWindow.gamePaused) {
                 game.player.setAttackMode(false);
-                game.player.move(nextPositionX, nextPositionY);
+                if(speedMoves && game.player.speed != 0){
+                    game.player.move(nextPositionX, nextPositionY);
+                    game.refreshMap();
+                    game.player.lowerSpeed();
+                } else {
+                    game.player.move(nextPositionX, nextPositionY);
+                }
                 game.refreshMap();
                 game.player.isMoving = false;
             }

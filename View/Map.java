@@ -89,19 +89,29 @@ public class Map extends JPanel{
                             g.drawImage(((Heart) item).getImage(), (item.getPositionX() - startPositionX) * Game.pixelX + 16, (item.getPositionY() - startPositionY) * Game.pixelY + 16 , 32 , 32, null);
                         }else if (item instanceof Weapon) {
                             if(item instanceof Dagger) {
-                                g.drawImage(((Dagger) item).getSaticImg(), (item.getPositionX() - startPositionX) * Game.pixelX + 16, (item.getPositionY() - startPositionY) * Game.pixelY + 16, 32, 32, null);
+                                g.drawImage(((Dagger) item).getStaticImg(), (item.getPositionX() - startPositionX) * Game.pixelX + 16, (item.getPositionY() - startPositionY) * Game.pixelY + 16, 32, 32, null);
                             } else if(item instanceof Bow){
-                                g.drawImage(((Bow) item).getSaticImg(), (item.getPositionX() - startPositionX) * Game.pixelX + 16, (item.getPositionY() - startPositionY) * Game.pixelY + 16 , 32 , 32, null);
+                                g.drawImage(((Bow) item).getStaticImg(), (item.getPositionX() - startPositionX) * Game.pixelX + 16, (item.getPositionY() - startPositionY) * Game.pixelY + 16 , 32 , 32, null);
                             } else if(item instanceof Staff){
-                                g.drawImage(((Staff) item).getSaticImg(), (item.getPositionX() - startPositionX) * Game.pixelX + 16, (item.getPositionY() - startPositionY) * Game.pixelY + 16 , 32 , 32, null);
+                                g.drawImage(((Staff) item).getStaticImg(), (item.getPositionX() - startPositionX) * Game.pixelX + 16, (item.getPositionY() - startPositionY) * Game.pixelY + 16 , 32 , 32, null);
                             } else if(item instanceof Spear){
-                                g.drawImage(((Spear) item).getSaticImg(), (item.getPositionX() - startPositionX) * Game.pixelX + 16, (item.getPositionY() - startPositionY) * Game.pixelY + 16 , 32 , 32, null);
+                                g.drawImage(((Spear) item).getStaticImg(), (item.getPositionX() - startPositionX) * Game.pixelX + 16, (item.getPositionY() - startPositionY) * Game.pixelY + 16 , 32 , 32, null);
                             }
                         }
                     }
                 }
             }
-
+            g.setColor(Color.white);
+            for(int i = 0; i < game.thrownWeapons.size(); i++){
+                Weapon weapon = game.thrownWeapons.get(i);
+                if (startPositionX <= weapon.getPositionX() && weapon.getPositionX() <= endPositionX) {
+                    if (startPositionY <= weapon.getPositionY() && weapon.getPositionY() <= endPositionY) {
+                        if(weapon instanceof Arrow){
+                            g.drawImage(weapon.getImage(), (weapon.getPositionX() - startPositionX) * Game.pixelX, (weapon.getPositionY() - startPositionY) * Game.pixelY, Game.pixelX, Game.pixelY, null);
+                        }
+                    }
+                }
+            }
 
             for(int i = 0; i < game.getMonsters().size(); i++){
                 Monster monster = game.getMonsters().get(i);
@@ -129,6 +139,9 @@ public class Map extends JPanel{
                 for (int i = 0; i < game.player.getHealth(); i++) {
                     g.drawImage(heart, 32 * i + 5, Game.shownSizeY * Game.pixelY, 32, 32, null);
                 }
+                g.setColor(Color.BLUE);
+                g.drawRect(5*Game.pixelX, Game.shownSizeY * Game.pixelY + 10, 100, 20);
+                g.fillRect(5*Game.pixelX, Game.shownSizeY * Game.pixelY + 10, 10*game.player.getSpeed(), 20);
                 // show coins counter
                 g.drawImage(coin, 12 , Game.shownSizeY * Game.pixelY + 32, 24, 24, null);
                 g.setColor(Color.WHITE);
@@ -141,13 +154,13 @@ public class Map extends JPanel{
                 for (int i = 0; i < game.player.inventory.countWeapons(); i++){
                     Weapon weapon = game.player.inventory.getWeapon(i);
                     if(weapon instanceof Dagger) {
-                        g.drawImage(((Dagger)weapon).getSaticImg(), (Game.shownSizeX - 1 -  (game.player.inventory.sizeMaxWeapon + game.player.inventory.sizeMaxItem + 3 - i))*Game.pixelX + 16, (Game.shownSizeY)*Game.pixelY + 16, 32, 32, null);
+                        g.drawImage(((Dagger)weapon).getStaticImg(), (Game.shownSizeX - 1 -  (game.player.inventory.sizeMaxWeapon + game.player.inventory.sizeMaxItem + 3 - i))*Game.pixelX + 16, (Game.shownSizeY)*Game.pixelY + 16, 32, 32, null);
                     } else if(weapon instanceof Bow){
-                        g.drawImage(((Bow)weapon).getSaticImg(), (Game.shownSizeX - 1 -  (game.player.inventory.sizeMaxWeapon + game.player.inventory.sizeMaxItem + 3 - i))*Game.pixelX + 16, (Game.shownSizeY)*Game.pixelY + 16, 32, 32, null);
+                        g.drawImage(((Bow)weapon).getStaticImg(), (Game.shownSizeX - 1 -  (game.player.inventory.sizeMaxWeapon + game.player.inventory.sizeMaxItem + 3 - i))*Game.pixelX + 16, (Game.shownSizeY)*Game.pixelY + 16, 32, 32, null);
                     } else if(weapon instanceof Staff){
-                        g.drawImage(((Staff)weapon).getSaticImg(), (Game.shownSizeX - 1 -  (game.player.inventory.sizeMaxWeapon + game.player.inventory.sizeMaxItem + 3 - i))*Game.pixelX + 16, (Game.shownSizeY)*Game.pixelY + 16, 32, 32, null);
+                        g.drawImage(((Staff)weapon).getStaticImg(), (Game.shownSizeX - 1 -  (game.player.inventory.sizeMaxWeapon + game.player.inventory.sizeMaxItem + 3 - i))*Game.pixelX + 16, (Game.shownSizeY)*Game.pixelY + 16, 32, 32, null);
                     } else if(weapon instanceof Spear){
-                        g.drawImage(((Spear)weapon).getSaticImg(), (Game.shownSizeX - 1 -  (game.player.inventory.sizeMaxWeapon + game.player.inventory.sizeMaxItem + 3 - i))*Game.pixelX + 16, (Game.shownSizeY)*Game.pixelY + 16, 32, 32, null);
+                        g.drawImage(((Spear)weapon).getStaticImg(), (Game.shownSizeX - 1 -  (game.player.inventory.sizeMaxWeapon + game.player.inventory.sizeMaxItem + 3 - i))*Game.pixelX + 16, (Game.shownSizeY)*Game.pixelY + 16, 32, 32, null);
                     }
                 }
                 // potions

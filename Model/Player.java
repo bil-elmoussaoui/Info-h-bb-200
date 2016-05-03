@@ -1,7 +1,5 @@
 package Model;
 import javax.imageio.ImageIO;
-import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
@@ -14,18 +12,15 @@ public class Player extends Person {
 	public int coins;
     public int exp;
     public boolean hasKey = false;
-    private BufferedImage img;
-    private BufferedImage shieldImg;
-    public String imgPath = "Images/player.png";
-    public String attackingImgPath;
-    public String shieldImgPath = "Images/shield-walking.png";
     public Inventory inventory;
-    public String attackingShieldImgPath = "Images/shield-attacking.png";
+    public int speed = 10;
+    public int speedMax = 10;
 
     public Player(int positionX, int positionY){
         super(positionX, positionY, 7);
         inventory = new Inventory();
-        setWeapon(new Bow(null, null, 1));
+        imgPath = "Images/player.png";
+        setWeapon(new Spear(null, null, 1));
         try {
             img = ImageIO.read(new File(imgPath));
             shieldImg = ImageIO.read(new File(shieldImgPath));
@@ -37,6 +32,28 @@ public class Player extends Person {
 
     public void removeKey(){
         hasKey = false;
+    }
+
+    public int getSpeed(){
+        return speed;
+    }
+
+    public void setSpeed(int speed){
+        if(speed < 0){
+            this.speed = 0;
+        } else if(speed > speedMax){
+            this.speed = speedMax;
+        }else {
+            this.speed = speed;
+        }
+    }
+
+    public void lowerSpeed(){
+        setSpeed(getSpeed() - 1);
+    }
+
+    public void higherSpeed(){
+        setSpeed(getSpeed() + 1);
     }
 
     public void setWeapon(Weapon weapon){
@@ -78,60 +95,6 @@ public class Player extends Person {
                 setAttackMode(false);
             }
         }
-    }
-
-    public void setImage(String imgPath){
-        try {
-            img = ImageIO.read(new File(imgPath));
-        } catch (Exception e){}
-    }
-
-    public void setAttackMode(boolean attackMode){
-        this.isAttacking = attackMode;
-        try {
-            if(attackMode && weapon != null) {
-                if(weapon instanceof Spear || weapon instanceof Staff) {
-                    shieldImg = ImageIO.read(new File(attackingShieldImgPath));
-                }
-                setImage(attackingImgPath);
-                counter.setCounterMax(weapon.counter.getCounterMax());
-            } else {
-                setImage(imgPath);
-                shieldImg = ImageIO.read(new File(shieldImgPath));
-                counter.setCounterMax(7);
-            }
-        } catch (Exception e){}
-    }
-
-    public BufferedImage getImage(){
-        BufferedImage playerImage = img.getSubimage(counter.getCounter()*64, (direction - 1)*64, 64, 64);
-        if(weapon != null) {
-            BufferedImage buffer = new BufferedImage(Game.pixelX, Game.pixelY, BufferedImage.TYPE_INT_ARGB);
-            Graphics2D g2 = buffer.createGraphics();
-            g2.drawImage(playerImage, null, null);
-            Composite newComposite = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1);
-            g2.setComposite(newComposite);
-            g2.drawImage(weapon.getImage(), null, null);
-            g2.dispose();
-            playerImage = buffer;
-        }
-        if(getHasArmor()){
-            BufferedImage shieldSubImage;
-            if(weapon != null && !weapon.getIsDistanceWeapon()) {
-                shieldSubImage = shieldImg.getSubimage(counter.getCounter() * 64, (direction - 1) * 64, 64, 64);
-            } else {
-                shieldSubImage = shieldImg.getSubimage(0, (direction - 1) * 64, 64, 64);
-            }
-            BufferedImage buffer = new BufferedImage(Game.pixelX, Game.pixelY, BufferedImage.TYPE_INT_ARGB);
-            Graphics2D g2 = buffer.createGraphics();
-            g2.drawImage(playerImage, null, null);
-            Composite newComposite = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1);
-            g2.setComposite(newComposite);
-            g2.drawImage(shieldSubImage, null, null);
-            g2.dispose();
-            playerImage = buffer;
-        }
-        return playerImage;
     }
 
     public int getCoins(){
@@ -176,26 +139,4 @@ public class Player extends Person {
         }
     }
 
-    public int[] getAttackedPosition(){
-        int attackedX = this.getPositionX();
-        int attackedY = this.getPositionY();
-        switch(direction){
-            case 2: attackedX -= 1; break; // left
-            case 4: attackedX += 1; break; // right
-            case 1: attackedY -= 1; break; // bottom
-            case 3: attackedY += 1; break;  // top
-        }
-        return new int[]{attackedX, attackedY};
-    }
-
-    public void attack(Monster monster){
-        // fix shit here!
-        if(weapon != null) {
-            if(monster.getHasArmor()){
-                monster.setArmor(monster.getArmor() - weapon.getDamage());
-            } else {
-                monster.setHealth(monster.getHealth() - weapon.getDamage());
-            }
-        }
-    }
 }

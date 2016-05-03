@@ -1,7 +1,6 @@
 package Model;
 
 import View.MainWindow;
-
 import java.awt.*;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -14,13 +13,14 @@ public class Game implements Serializable{
     public ArrayList<Wall> walls = new ArrayList<>();
     public ArrayList<Item> items = new ArrayList<>();
     public ArrayList<Tile> tiles = new ArrayList<>();
+    public ArrayList<Weapon> thrownWeapons = new ArrayList<>();
     public transient MainWindow window;
     public MapGenerator mapGenerator;
     public Door door;
     private int[][] map;
     // screen information
-    public static int sizeY = 100;
-    public static int sizeX = 100 ;
+    public static int sizeY = 25;
+    public static int sizeX = 75 ;
     public static int shownSizeX;
     public static int shownSizeY;
     public static int screenX;
@@ -35,7 +35,6 @@ public class Game implements Serializable{
         screenY = (int)screenSize.getHeight();
         shownSizeX = (int)Math.floor(screenX/pixelX) + 1;
         shownSizeY = (int)Math.floor(screenY/pixelY) - 1;
-        sizeX = shownSizeX;
         sizeY = shownSizeY;
         freePositions = new int[this.sizeX][this.sizeY];
         map = new int[this.sizeX][this.sizeY];
@@ -75,31 +74,28 @@ public class Game implements Serializable{
     public void playerAttack(){
         if(player.weapon != null && !player.weapon.getIsDistanceWeapon()) {
             int[] position = player.getAttackedPosition();
-            for (int i = 0; i < monsters.size(); i++) {
-                Monster monster = monsters.get(i);
-                if (position[0] == monster.getPositionX() && position[1] == monster.getPositionY()) {
-                    player.attack(monster);
-                    if (!monster.isAlive()) {
-                        monsters.remove(monster);
-                        Game.freePositions[position[0]][position[1]] = 0;
-                        refreshMap();
-                        break;
-                    }
+            Monster monster = getMonster(position[0], position[1]);
+            Item item = getItem(position[0], position[1]);
+
+            if(monster != null){
+                player.attack(monster);
+                if (!monster.isAlive()) {
+                    monsters.remove(monster);
+                    Game.freePositions[position[0]][position[1]] = 0;
+                    refreshMap();
                 }
             }
 
-            for (int j = 0; j < items.size(); j++) {
-                Item item = items.get(j);
-                if (item.getIsBreakable()) {
-                    if (position[0] == item.getPositionX() && position[1] == item.getPositionY()) {
-                        ((WoodBox)item).setIsBeingBroken(true);
-                        break;
-                    }
+            if(item != null){
+                if(item.getIsBreakable()){
+                    ((WoodBox)item).setIsBeingBroken(true);
                 }
             }
-        } else {
+        } else if(player.weapon.getIsDistanceWeapon()) {
             if(player.weapon instanceof Bow){
-                ((Bow) player.weapon).arrows.add(new Arrow(1));
+                Arrow arrow = new Arrow(1);
+                arrow.setDirection(player.direction);
+                ((Bow) player.weapon).arrow = arrow;
             }
         }
     }
@@ -138,26 +134,21 @@ public class Game implements Serializable{
     }
 
     public void playerCollect(){
-        for(int j = 0; j < items.size(); j ++){
-            Item item = items.get(j);
-            if (player.getPositionX() == item.getPositionX() && player.getPositionY() == item.getPositionY()) {
-                if (item.getIsCollectable()) {
-                    if(item instanceof Heart){
-                        if(player.inventory.countItems() < player.inventory.sizeMaxItem){
-                            player.collect(item);
-                            items.remove(item);
-                            break;
-                        } else if(player.getHealth() < player.healthMax){
-                            player.setHealth(player.getHealth() + ((Heart)item).getHealth());
-                        }
-                    } else {
+        Item item = getItem(player.getPositionX(), player.getPositionY());
+        if(item != null){
+            if (item.getIsCollectable()) {
+                if(item instanceof Heart){
+                    if(player.inventory.countItems() < player.inventory.sizeMaxItem){
                         player.collect(item);
                         items.remove(item);
-                        break;
+                    } else if(player.getHealth() < player.healthMax){
+                        player.setHealth(player.getHealth() + ((Heart)item).getHealth());
                     }
+                } else {
+                    player.collect(item);
+                    items.remove(item);
                 }
             }
-
         }
     }
 
@@ -179,6 +170,7 @@ public class Game implements Serializable{
         tiles.clear();
         walls.clear();
         items.clear();
+        thrownWeapons.clear();
         player.removeKey();
         freePositions = new int[this.sizeX][this.sizeY];
         map = new int[this.sizeX][this.sizeY];
@@ -187,5 +179,34 @@ public class Game implements Serializable{
 
     }
 
+    public Wall getWall(int positionX, int positionY){
+        Wall wall = null;
+        for(int i = 0; i < walls.size(); i ++){
+            if(positionX == walls.get(i).getPositionX() && walls.get(i).getPositionY() == positionY){
+                wall = walls.get(i);
+            }
+        }
+        return wall;
+    }
+
+    public Monster getMonster(int positionX , int positionY){
+        Monster monster = null;
+        for(int i = 0; i < monsters.size(); i ++){
+            if(positionX == monsters.get(i).getPositionX() && monsters.get(i).getPositionY() == positionY){
+                monster = monsters.get(i);
+            }
+        }
+        return monster;
+    }
+
+    public Item getItem(int positionX, int positionY){
+        Item item = null;
+        for(int i = 0; i < items.size(); i ++){
+            if(positionX == items.get(i).getPositionX() && items.get(i).getPositionY() == positionY){
+                item = items.get(i);
+            }
+        }
+        return item;
+    }
 
 }

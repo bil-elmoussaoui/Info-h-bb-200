@@ -30,7 +30,7 @@ public class Dagger extends Weapon {
         return img.getSubimage(this.counter.getCounter()*64, (this.getDirection() - 1)*64, 64, 64);
     }
 
-    public BufferedImage getSaticImg(){
+    public BufferedImage getStaticImg(){
         return staticImg;
     }
 }

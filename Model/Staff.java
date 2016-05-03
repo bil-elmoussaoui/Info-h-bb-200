@@ -25,7 +25,7 @@ public class Staff extends Weapon {
         }
     }
 
-    public BufferedImage getSaticImg(){
+    public BufferedImage getStaticImg(){
         return staticImg;
     }
 

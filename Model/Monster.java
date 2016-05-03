@@ -1,35 +1,42 @@
 package Model;
 
 import javax.imageio.ImageIO;
-import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.Random;
 
-public class Monster extends Person{
-    private BufferedImage img;
-    private String imgPath = "Images/monster.png";
-    public String attackingImgPath;
+public class Monster extends Person {
     public FieldOfView FOV;
-    private BufferedImage shieldImg;
-    public String shieldImgPath = "Images/shield-walking.png";
-    public String attackingShieldImgPath = "Images/shield-attacking.png";
-
 
     public Monster(int positionX, int positionY) {
         super(positionX, positionY, 8);
         FOV = new FieldOfView(positionX, positionY, direction);
-        setWeapon(new Dagger(null, null, 1));
+        imgPath = "Images/monster.png";
+        Random rand = new Random();
+        switch (rand.nextInt(4)){
+            case 0:
+                setWeapon(new Dagger(null, null, 1));
+            break;
+            case 1:
+                setWeapon(new Spear(null, null , 1));
+            break;
+            case 2:
+                setWeapon(new Staff(null, null, 1));
+            break;
+            case 3:
+                setWeapon(new Bow(null, null, 1));
+            break;
+        }
         try {
             img = ImageIO.read(new File(imgPath));
             shieldImg = ImageIO.read(new File(shieldImgPath));
         } catch (IOException e) {
             e.printStackTrace();
         }
-	}
+    }
 
-    public void setWeapon(Weapon weapon){
-        if(weapon != null) {
+    public void setWeapon(Weapon weapon) {
+        if (weapon != null) {
             if (weapon instanceof Dagger) {
                 attackingImgPath = "Images/player-attack-dagger.png";
             } else if (weapon instanceof Spear || weapon instanceof Staff) {
@@ -37,37 +44,15 @@ public class Monster extends Person{
             } else if (weapon instanceof Bow) {
                 attackingImgPath = "Images/player-attack-bow.png";
             }
+
             this.weapon = weapon;
             this.weapon.setDirection(direction);
+            setImage(attackingImgPath);
+            counter.setCounterMax(this.weapon.counter.getCounterMax());
             this.weapon.counter.init();
+            counter.init();
+        } else {
+            this.weapon = null;
         }
     }
-
-
-    public BufferedImage getImage() {
-        BufferedImage playerImage = img.getSubimage(counter.getCounter()*64, (direction - 1)*64, 64, 64);
-        BufferedImage shieldSubImage = shieldImg.getSubimage(counter.getCounter()*64, (direction - 1)*64, 64, 64);
-        if(weapon != null) {
-            BufferedImage buffer = new BufferedImage(Game.pixelX, Game.pixelY, BufferedImage.TYPE_INT_ARGB);
-            Graphics2D g2 = buffer.createGraphics();
-            g2.drawImage(playerImage, null, null);
-            Composite newComposite = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1);
-            g2.setComposite(newComposite);
-            g2.drawImage(weapon.getImage(), null, null);
-            g2.dispose();
-            playerImage = buffer;
-        }
-        if(getHasArmor() && !isAttacking){
-            BufferedImage buffer = new BufferedImage(Game.pixelX, Game.pixelY, BufferedImage.TYPE_INT_ARGB);
-            Graphics2D g2 = buffer.createGraphics();
-            g2.drawImage(playerImage, null, null);
-            Composite newComposite = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1);
-            g2.setComposite(newComposite);
-            g2.drawImage(shieldSubImage, null, null);
-            g2.dispose();
-            playerImage = buffer;
-        }
-        return playerImage;
-    }
-
 }

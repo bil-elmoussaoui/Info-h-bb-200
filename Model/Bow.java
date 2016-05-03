@@ -5,7 +5,6 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 
 /*
  TODO :
@@ -17,7 +16,7 @@ public class Bow extends Weapon {
     public BufferedImage staticImg = null;
     public String staticImgPath = "Images/sword_iron.png";
 
-    public ArrayList<Arrow> arrows = new ArrayList<>();
+    public Arrow arrow;
 
     public Bow(Integer positionX, Integer positionY, int damage){
         super(positionX, positionY, damage, 12);
@@ -30,15 +29,14 @@ public class Bow extends Weapon {
         }
     }
 
-    public BufferedImage getSaticImg(){
+    public BufferedImage getStaticImg(){
         return staticImg;
     }
 
     public BufferedImage getImage(){
         BufferedImage buffer = img.getSubimage(counter.getCounter() *64, (getDirection() - 1)*64, 64, 64);
         BufferedImage bufferArrow = null;
-        if(arrows.size() > 0) {
-            Arrow arrow = arrows.get(arrows.size() - 1);
+        if(arrow != null){
             if(!arrow.beenThrown) {
                 bufferArrow = new BufferedImage(Game.pixelX, Game.pixelY, BufferedImage.TYPE_INT_ARGB);
                 Graphics2D g2Arrow = bufferArrow.createGraphics();

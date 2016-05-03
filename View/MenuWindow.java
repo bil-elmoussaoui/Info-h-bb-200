@@ -18,7 +18,7 @@ class MenuWindow {
     }
 
 	public JPanel getJPanel(){
-		JPanel gi = new JPanel(){
+		JPanel menuWindow = new JPanel(){
 			@Override
             public void paintComponent(Graphics g){
                 try{
