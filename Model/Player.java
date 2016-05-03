@@ -21,6 +21,10 @@ public class Player extends Person {
         inventory = new Inventory();
         imgPath = "Images/player.png";
         setWeapon(new Bow(null, null, 1));
+        setWeapon(new Dagger(null, null, 1));
+        setWeapon(new Spear(null, null, 1));
+        setWeapon(new Staff(null, null, 1));
+
         try {
             img = ImageIO.read(new File(imgPath));
             shieldImg = ImageIO.read(new File(shieldImgPath));
@@ -72,6 +76,7 @@ public class Player extends Person {
             this.weapon.setDirection(direction);
             setImage(attackingImgPath);
             counter.setCounterMax(this.weapon.counter.getCounterMax());
+            setAttackMode(false);
             this.weapon.counter.init();
             counter.init();
         } else {

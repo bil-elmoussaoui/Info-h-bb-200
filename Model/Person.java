@@ -161,8 +161,8 @@ abstract class Person {
 
 
     public int[] getAttackedPosition(){
-        int attackedX = this.getPositionX();
-        int attackedY = this.getPositionY();
+        int attackedX = getPositionX();
+        int attackedY = getPositionY();
         switch(direction){
             case 2: attackedX -= 1; break; // left
             case 4: attackedX += 1; break; // right
@@ -204,7 +204,7 @@ abstract class Person {
     }
 
     public void attack(Person person) {
-        if (weapon != null) {
+        if (weapon != null && person != this) {
             if (person.getHasArmor()) {
                 person.setArmor(person.getArmor() - weapon.getDamage());
             } else {
@@ -212,7 +212,6 @@ abstract class Person {
             }
         }
     }
-
 
     public void setImage(String imgPath){
         try {

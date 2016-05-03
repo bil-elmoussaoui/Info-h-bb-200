@@ -45,7 +45,6 @@ public class Animation {
                                             } else {
                                                 monster.move(monster.getPositionX(), monster.getPositionY() - 1);
                                             }
-
                                         } else if (playerPosition[1] == monster.getPositionY()) {
                                             if ((playerPosition[0] - monster.getPositionX()) > 0) {
                                                 monster.move(monster.getPositionX() + 1, monster.getPositionY());
@@ -53,10 +52,7 @@ public class Animation {
                                                 monster.move(monster.getPositionX() - 1, monster.getPositionY());
                                             }
                                         }
-
                                     }
-
-
                                 }
                                 if (!monster.isMoving) {
                                     int[] position = monster.getRandomPosition();
@@ -163,9 +159,13 @@ public class Animation {
                             Monster monster = game.monsters.get(i);
                             int[] playerPosition = new int[]{game.player.getPositionX(), game.player.getPositionY()};
                             int[] monsterAttackPosition = monster.getAttackedPosition();
-                            if (playerPosition[0] == monsterAttackPosition[0] && playerPosition[1] == monsterAttackPosition[1]) {
-                                monster.attack(game.player);
-                                monster.isAttacking = true;
+                            if(monster.weapon.getIsDistanceWeapon()){
+                                // lancer des fléches !
+                            } else {
+                                if (playerPosition[0] == monsterAttackPosition[0] && playerPosition[1] == monsterAttackPosition[1]) {
+                                    monster.attack(game.player);
+                                    monster.isAttacking = true;
+                                }
                             }
                             if (monster.isAttacking && !monster.isMoving) {
                                 monster.setCanMove(false);
@@ -201,7 +201,7 @@ public class Animation {
                 }catch (Exception e){}
             }
         };
-        monsterAttackThread .start();
+        monsterAttackThread.start();
 
         Thread playerAttackThread = new Thread(){
             public void run(){
