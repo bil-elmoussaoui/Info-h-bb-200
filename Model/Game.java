@@ -16,6 +16,7 @@ public class Game implements Serializable{
     public ArrayList<Weapon> thrownWeapons = new ArrayList<>();
     public transient MainWindow window;
     public MapGenerator mapGenerator;
+    public static boolean enVie = true;
     public Door door;
     private int[][] map;
     // screen information
@@ -166,12 +167,19 @@ public class Game implements Serializable{
     }
 
     public void newGame() {
+        System.out.println(enVie);
         monsters.clear();
         tiles.clear();
         walls.clear();
         items.clear();
         thrownWeapons.clear();
         player.removeKey();
+        if(Game.enVie) {
+            player.removeKey();
+        } else {
+            player = null;
+            Game.enVie = true;
+        }
         freePositions = new int[this.sizeX][this.sizeY];
         map = new int[this.sizeX][this.sizeY];
         generateMap();

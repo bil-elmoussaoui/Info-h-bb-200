@@ -4,6 +4,7 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import View.MainWindow;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -24,7 +25,7 @@ abstract class Person {
     public String shieldImgPath = "Images/shield-walking.png";
     public String attackingShieldImgPath = "Images/shield-attacking.png";
     public Counter counter;
-    public double healthMax = 5;
+    public static double healthMax = 5;
 
 
     public Person(int positionX, int positionY, int counterMax) {
@@ -79,17 +80,20 @@ abstract class Person {
         return health;
     }
 
-    public void setHealth(double health) {
-        try {
-            if (health >= 0 & health <= healthMax) {
-                this.health = health;
-            } else {
-                throw new Exception("Pb sur les vies");
+	public void setHealth(double health){
+		try{
+			if (health >= 0 & health <= healthMax){
+				this.health = health;
+			} else {
+				throw new Exception ("Pb sur les vies");
+			}
+            if(this instanceof Player && this.health == 0){
+                Game.enVie = false;
             }
-        } catch (Exception pbVies) {
-            this.health = healthMax;
-        }
-    }
+		}catch (Exception pbVies){
+			this.health = 0;
+		}
+	}
 
     public void setArmor(double armor) {
         this.armor = armor;
@@ -156,7 +160,20 @@ abstract class Person {
                 && Game.freePositions[positionX][positionY] == 0);
     }
 
-    public void move(int positionX, int positionY) {
+
+    public int[] getAttackedPosition(){
+        int attackedX = this.getPositionX();
+        int attackedY = this.getPositionY();
+        switch(direction){
+            case 2: attackedX -= 1; break; // left
+            case 4: attackedX += 1; break; // right
+            case 1: attackedY -= 1; break; // bottom
+            case 3: attackedY += 1; break;  // top
+        }
+        return new int[]{attackedX, attackedY};
+    }
+
+	public void move(int positionX , int positionY){
         int oldPositionX = getPositionX();
         int oldPositionY = getPositionY();
         if (oldPositionY - positionY == 0) {
@@ -184,7 +201,7 @@ abstract class Person {
     }
 
     public boolean isAlive() {
-        return (getHealth() > 0);
+        return !(getHealth() == 0);
     }
 
     public void attack(Person person) {
@@ -197,17 +214,6 @@ abstract class Person {
         }
     }
 
-    public int[] getAttackedPosition(){
-        int attackedX = this.getPositionX();
-        int attackedY = this.getPositionY();
-        switch(direction){
-            case 2: attackedX -= 1; break; // left
-            case 4: attackedX += 1; break; // right
-            case 1: attackedY -= 1; break; // bottom
-            case 3: attackedY += 1; break;  // top
-        }
-        return new int[]{attackedX, attackedY};
-    }
 
     public void setImage(String imgPath){
         try {

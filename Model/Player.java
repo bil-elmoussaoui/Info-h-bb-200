@@ -20,7 +20,7 @@ public class Player extends Person {
         super(positionX, positionY, 7);
         inventory = new Inventory();
         imgPath = "Images/player.png";
-        setWeapon(new Spear(null, null, 1));
+        setWeapon(new Bow(null, null, 1));
         try {
             img = ImageIO.read(new File(imgPath));
             shieldImg = ImageIO.read(new File(shieldImgPath));

@@ -4,14 +4,13 @@ import Model.*;
 import View.MainWindow;
 
 public class Animation {
-    private int monsterMovesTime = 1200;
+    private int monsterMovesTime = 500;
     private int animationRefresh = 100;
     private int monsterAttackTime = 500;
     private Game game;
 
     public Animation(Game game){
         this.game = game;
-
 
         Thread regeneratingThread = new Thread(){
             public void run(){
@@ -244,7 +243,9 @@ public class Animation {
         };
         playerAttackThread.start();
 
-        Thread trapAnimationThread = new Thread(){
+
+
+    Thread trapAnimationThread = new Thread(){
             public void run(){
                 try {
                     while(true) {
@@ -270,6 +271,23 @@ public class Animation {
             }
         };
         trapAnimationThread.start();
+
+        Thread playerDeathThread = new Thread(){
+            public void run() {
+                try {
+                    while (true) {
+                        Thread.sleep(animationRefresh);
+                        if (!game.player.isAlive()) {
+                            MainWindow.gamePaused = false;
+                            game.window.showMenuWindow();
+                        }
+                    }
+                } catch (Exception e) {
+                }
+            }
+
+        };
+        playerDeathThread.start();
 
         Thread animationThread = new Thread(){
             public void run() {

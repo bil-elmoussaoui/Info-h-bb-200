@@ -20,7 +20,7 @@ public class FieldOfView {
         this.positionY = positionY;
         this.direction = direction;
         Random rand = new Random();
-        this.view = rand.nextInt(2) + 1;
+        this.view = 6;
         this.createFov();
     }
 

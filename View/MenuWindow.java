@@ -11,7 +11,6 @@ import java.io.File;
 
 class MenuWindow {
 	private MainWindow window;
-    private Game game;
 
 	public MenuWindow(MainWindow window){
 		this.window = window;
@@ -31,7 +30,12 @@ class MenuWindow {
                 }catch (Exception e){}
             }
 		};
-        menuWindow.setBorder(BorderFactory.createEmptyBorder(260, 400, 220, 350));
+        if(Game.enVie) {
+            menuWindow.setBorder(BorderFactory.createEmptyBorder(260, 400, 220, 350));
+        } else {
+            menuWindow.setBorder(BorderFactory.createEmptyBorder(20, 400, 220, 350));
+        }
+
         JPanel menuPanel = new JPanel();
         menuPanel.setOpaque(false);
         BButton Play;
@@ -51,7 +55,7 @@ class MenuWindow {
         }
 
 		Play.addActionListener((ActionEvent e) -> {
-            if(MainWindow.gamePaused){
+            if(MainWindow.gamePaused || !Game.enVie){
                 MainWindow.newGame = true;
             }
             window.showLevelWindow();
@@ -77,6 +81,14 @@ class MenuWindow {
 		});
 		menuPanel.add(Quit);
 
+
+        if(!Game.enVie){
+            MainWindow.gamePaused = true;
+            JLabel gameOver = new JLabel();
+            gameOver.setIcon(new ImageIcon("Images/death.jpg"));
+            gameOver.setPreferredSize(new Dimension(500, 500));
+            menuWindow.add(gameOver);
+        }
         menuWindow.add(menuPanel);
 		return menuWindow;
 	}

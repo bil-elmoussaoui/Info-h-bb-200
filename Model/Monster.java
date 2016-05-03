@@ -55,4 +55,5 @@ public class Monster extends Person {
             this.weapon = null;
         }
     }
+
 }
