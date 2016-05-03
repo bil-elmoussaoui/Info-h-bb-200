@@ -28,8 +28,8 @@ public class Map extends JPanel{
         if(hasStarted) {
             int startPositionX = game.player.getPositionX() - (int) Math.floor(Game.shownSizeX / 2) - 1;
             int endPositionX = game.player.getPositionX() + (int) Math.floor(Game.shownSizeX / 2);
-            int startPositionY = game.player.getPositionY() - (int) Math.floor((Game.shownSizeY-1) / 2);
-            int endPositionY = game.player.getPositionY() + (int) Math.floor((Game.shownSizeY-1) / 2);
+            int startPositionY = game.player.getPositionY() - (int) Math.floor((Game.shownSizeY) / 2);
+            int endPositionY = game.player.getPositionY() + (int) Math.floor((Game.shownSizeY) / 2);
             if (endPositionX > Game.sizeX || endPositionX - startPositionX < Game.shownSizeX) {
                 startPositionX = Game.sizeX - Game.shownSizeX;
                 endPositionX = Game.sizeX;

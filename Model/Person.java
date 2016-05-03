@@ -4,7 +4,6 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import View.MainWindow;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -25,7 +24,7 @@ abstract class Person {
     public String shieldImgPath = "Images/shield-walking.png";
     public String attackingShieldImgPath = "Images/shield-attacking.png";
     public Counter counter;
-    public static double healthMax = 5;
+    public double healthMax = 5;
 
 
     public Person(int positionX, int positionY, int counterMax) {
