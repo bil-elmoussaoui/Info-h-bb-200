@@ -31,7 +31,11 @@ public class Inventory {
 	}
 
     public Item getItem(int index){
-        return itemsInventory.get(index);
+        if(countItems() - 1 >= index) {
+            return itemsInventory.get(index);
+        } else {
+            return null;
+        }
     }
 
     public Weapon getWeapon(int index){

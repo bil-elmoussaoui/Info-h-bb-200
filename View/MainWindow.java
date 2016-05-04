@@ -43,6 +43,7 @@ public class MainWindow {
 						showMenuWindow();
 					} else {
 						MainWindow.gamePaused = false;
+                        Game.playerIsShopping = false;
 						showLevelWindow();
 					}
                 }
@@ -84,6 +85,14 @@ public class MainWindow {
 
 	public void showLoadWindow(){
 		LoadWindow Window = new LoadWindow(this);
+		mainWindow.getContentPane().removeAll();
+		mainWindow.getContentPane().add(Window.getJPanel());
+		mainWindow.requestFocusInWindow();
+		mainWindow.revalidate();
+	}
+
+	public void showBuyWindow(Game game){
+		BuyWindow Window = new BuyWindow(game);
 		mainWindow.getContentPane().removeAll();
 		mainWindow.getContentPane().add(Window.getJPanel());
 		mainWindow.requestFocusInWindow();

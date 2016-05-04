@@ -18,9 +18,11 @@ class LoadWindow {
     public LoadWindow(MainWindow window){
         this.window = window;
         File folder = new File("Data/");
-        for (File fileEntry : folder.listFiles()) {
-            if (!fileEntry.isDirectory()) {
-                filesList.add(fileEntry.getName());
+        if(folder.exists()) {
+            for (File fileEntry : folder.listFiles()) {
+                if (!fileEntry.isDirectory()) {
+                    filesList.add(fileEntry.getName());
+                }
             }
         }
     }

@@ -11,6 +11,8 @@ public class MapGenerator {
     private int minMonsters = 3;
     private int minItems = 3;
     private int maxItems = 5;
+    private int minTraps = 4;
+    private int maxTraps = 8;
     // used to get a random door position
     public ArrayList<int[]> borderPositions = new ArrayList<>();
     public ArrayList<int[]> wallsToBreak = new ArrayList<>();
@@ -24,10 +26,9 @@ public class MapGenerator {
         initPlayer();
         intiMonsters();
         intiItems();
+        initTraps();
         initDoor();
-        int[] inPosition = this.getRandomPosition();
-        //int[] outPosition = this.getRandomPosition();
-        game.tiles.add(new Trap(inPosition[0], inPosition[1]));
+        initSalesman();
     }
 
     public void createWall(int x, int y){
@@ -36,6 +37,22 @@ public class MapGenerator {
                 game.walls.add(new Wall(x, y));
                 generatedMap[x][y] = 1;
                 //Game.freePositions[x][y] = 1;
+            }
+        }
+    }
+
+    public void initTraps(){
+        Random rand = new Random();
+        int nbTraps = rand.nextInt(maxTraps - minTraps) + minTraps;
+        for(int i = 0 ; i < nbTraps; i ++ ){
+            int[] randomPosition = getRandomPosition();
+            switch (rand.nextInt(2)){
+                case 0:
+                    game.tiles.add(new Tornado(randomPosition[0], randomPosition[1]));
+                break;
+                case 1 :
+                    game.tiles.add(new Spikes(randomPosition[0], randomPosition[1]));
+                break;
             }
         }
     }
@@ -210,6 +227,16 @@ public class MapGenerator {
             }
         }
         game.door = new Door(position[0], position[1]);
+    }
+
+    public void initSalesman(){
+        int[] randomPosition = getRandomPosition();
+        if(game.salesman != null) {
+            game.salesman.setPositionX(randomPosition[0]);
+            game.salesman.setPositionY(randomPosition[1]);
+        } else {
+            game.salesman = new Salesman(randomPosition[0], randomPosition[1]);
+        }
     }
 
     public int[] getRandomPosition(){

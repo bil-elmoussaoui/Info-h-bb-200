@@ -1,6 +1,7 @@
 package Model;
 
 import View.MainWindow;
+
 import java.awt.*;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -9,14 +10,17 @@ public class Game implements Serializable{
     private static final long serialVersionUID = 1L;
     public Player player = null;
     public static int[][] freePositions;
+    public Salesman salesman = null;
     public ArrayList<Monster> monsters = new ArrayList<>();
     public ArrayList<Wall> walls = new ArrayList<>();
     public ArrayList<Item> items = new ArrayList<>();
     public ArrayList<Tile> tiles = new ArrayList<>();
     public ArrayList<Weapon> thrownWeapons = new ArrayList<>();
+    public ArrayList<Spell> thrownSpells = new ArrayList<>();
     public transient MainWindow window;
     public MapGenerator mapGenerator;
     public static boolean enVie = true;
+    public static boolean playerIsShopping = false;
     public Door door;
     private int[][] map;
     // screen information
@@ -72,31 +76,46 @@ public class Game implements Serializable{
         window.draw(map, this);
     }
 
+    public void drawShop(){
+        window.showBuyWindow(this);
+    }
+
     public void playerAttack(){
-        if(player.weapon != null && !player.weapon.getIsDistanceWeapon()) {
-            int[] position = player.getAttackedPosition();
-            Monster monster = getMonster(position[0], position[1]);
-            Item item = getItem(position[0], position[1]);
+        if(player.weapon != null) {
+            if (!player.weapon.getIsDistanceWeapon()) {
+                int[] position = player.getAttackedPosition();
+                Monster monster = getMonster(position[0], position[1]);
+                Item item = getItem(position[0], position[1]);
 
-            if(monster != null){
-                player.attack(monster);
-                if (!monster.isAlive()) {
-                    monsters.remove(monster);
-                    Game.freePositions[position[0]][position[1]] = 0;
-                    refreshMap();
+                if (monster != null) {
+                    player.attack(monster);
+                    if (!monster.isAlive()) {
+                        monsters.remove(monster);
+                        Game.freePositions[position[0]][position[1]] = 0;
+                        refreshMap();
+                    }
                 }
-            }
 
-            if(item != null){
-                if(item.getIsBreakable()){
-                    ((WoodBox)item).setIsBeingBroken(true);
+                if (item != null) {
+                    if (item.getIsBreakable()) {
+                        ((WoodBox) item).setIsBeingBroken(true);
+                    }
                 }
-            }
-        } else if(player.weapon.getIsDistanceWeapon()) {
-            if(player.weapon instanceof Bow){
-                Arrow arrow = new Arrow(1);
-                arrow.setDirection(player.direction);
-                ((Bow) player.weapon).arrow = arrow;
+            } else if (player.weapon.getIsDistanceWeapon()) {
+                if (player.weapon instanceof Bow) {
+                    if (((Bow) player.weapon).arrowsCount > 0) {
+                        Arrow arrow = new Arrow(1);
+                        arrow.setDirection(player.direction);
+                        ((Bow) player.weapon).arrow = arrow;
+                        ((Bow) player.weapon).addArrows(-1);
+                    } else {
+                        player.isAttacking = false;
+                        player.isMoving = false;
+                        player.isSpelling = false;
+                        player.weapon.counter.init();
+                        player.counter.init();
+                    }
+                }
             }
         }
     }
@@ -128,9 +147,6 @@ public class Game implements Serializable{
         }
         if (position[0] == player.getPositionX() && position[1] == player.getPositionY()) {
             ((Trap)tile).attack(player);
-            if (!player.isAlive()) {
-                // kill player?
-            }
         }
     }
 
@@ -167,7 +183,6 @@ public class Game implements Serializable{
     }
 
     public void newGame() {
-        System.out.println(enVie);
         monsters.clear();
         tiles.clear();
         walls.clear();
@@ -216,5 +231,46 @@ public class Game implements Serializable{
         }
         return item;
     }
+
+    public void doSpell(){
+        int positionX = player.getPositionX();
+        int positionY = player.getPositionY();
+        switch(player.direction){
+            case 1: positionY -= 1; break;
+            case 2: positionX -= 1; break;
+            case 3: positionY += 1; break;
+            case 4: positionX += 1; break;
+        }
+        player.doSpell();
+        player.spell = new Icetacle(positionX, positionY, player.direction);
+        //player.removeSpell();
+    }
+
+
+    public void playerBuy(){
+        switch(salesman.carteAchat[salesman.getSelectorX()][salesman.getSelectorY()][0]){
+            case(5):
+                if(player.getCoins() >= salesman.carteAchat[salesman.getSelectorX()][salesman.getSelectorY()][1]){
+                    player.inventory.addItem(new Heart(null,null));
+                    player.setCoins(player.getCoins() - salesman.carteAchat[salesman.getSelectorX()][salesman.getSelectorY()][1]);
+                }
+            case(1):
+                if(player.getCoins() >= salesman.carteAchat[salesman.getSelectorX()][salesman.getSelectorY()][1]){
+                    player.inventory.addItem(new Heart(null,null));
+                }
+            case(2):
+                if(player.getCoins() >= salesman.carteAchat[salesman.getSelectorX()][salesman.getSelectorY()][1]){
+                    player.inventory.addItem(new Heart(null,null));
+                }
+            case(3):
+                if(player.getCoins() >= salesman.carteAchat[salesman.getSelectorX()][salesman.getSelectorY()][1]){
+                    player.inventory.addItem(new Heart(null,null));
+                }
+
+        }
+
+
+    }
+
 
 }

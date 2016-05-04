@@ -13,7 +13,7 @@ public class Monster extends Person {
         FOV = new FieldOfView(positionX, positionY, direction);
         imgPath = "Images/monster.png";
         Random rand = new Random();
-        switch (rand.nextInt(4)){
+        switch (rand.nextInt(3)){
             case 0:
                 setWeapon(new Dagger(null, null, 1));
             break;
@@ -22,9 +22,6 @@ public class Monster extends Person {
             break;
             case 2:
                 setWeapon(new Staff(null, null, 1));
-            break;
-            case 3:
-                setWeapon(new Bow(null, null, 1));
             break;
         }
         try {

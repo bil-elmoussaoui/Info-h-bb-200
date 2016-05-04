@@ -17,6 +17,7 @@ abstract class Person {
     public boolean isMoving = false;
     public boolean isAttacking = false;
     private boolean canMove = true;
+    private boolean canAttack = true;
     public BufferedImage img;
     public BufferedImage shieldImg;
     public String imgPath = "Images/player.png";
@@ -118,6 +119,15 @@ abstract class Person {
         return canMove;
     }
 
+    public void setCanAttack(boolean canAttack) {
+        this.canAttack = canAttack;
+        if(!this.canAttack) setAttackMode(false);
+    }
+
+    public boolean getCanAttack() {
+        return canAttack;
+    }
+
     public int[] getRandomPosition() {
         int[] position = null;
         Random randomGenerator = new Random();
@@ -158,7 +168,6 @@ abstract class Person {
         return ((positionX >= 0 && positionY >= 0) && (positionX < Game.sizeX && positionY < Game.sizeY)
                 && Game.freePositions[positionX][positionY] == 0);
     }
-
 
     public int[] getAttackedPosition(){
         int attackedX = getPositionX();
@@ -205,10 +214,17 @@ abstract class Person {
 
     public void attack(Person person) {
         if (weapon != null && person != this) {
-            if (person.getHasArmor()) {
-                person.setArmor(person.getArmor() - weapon.getDamage());
+            double armorDiff = person.getArmor() - weapon.getDamage();
+            if(armorDiff > 0){
+                person.setArmor(armorDiff);
             } else {
-                person.setHealth(person.getHealth() - weapon.getDamage());
+                person.setArmor(0);
+                double healthDiff = person.getHealth() - Math.abs(armorDiff);
+                if(healthDiff > 0){
+                    person.setHealth(healthDiff);
+                } else {
+                    person.setHealth(0);
+                }
             }
         }
     }

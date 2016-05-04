@@ -15,7 +15,7 @@ public class Bow extends Weapon {
     public BufferedImage img = null;
     public BufferedImage staticImg = null;
     public String staticImgPath = "Images/sword_iron.png";
-
+    public int arrowsCount = 1;
     public Arrow arrow;
 
     public Bow(Integer positionX, Integer positionY, int damage){
@@ -29,6 +29,19 @@ public class Bow extends Weapon {
         }
     }
 
+
+    public void addArrows(int arrows){
+        this.arrowsCount += arrows;
+        if(this.arrowsCount < 0){
+            this.arrowsCount = 0;
+        }
+    }
+
+    public int getArrowsCount(){
+        return arrowsCount;
+    }
+
+
     public BufferedImage getStaticImg(){
         return staticImg;
     }
@@ -36,7 +49,7 @@ public class Bow extends Weapon {
     public BufferedImage getImage(){
         BufferedImage buffer = img.getSubimage(counter.getCounter() *64, (getDirection() - 1)*64, 64, 64);
         BufferedImage bufferArrow = null;
-        if(arrow != null){
+        if(arrow != null && arrowsCount > 0){
             if(!arrow.beenThrown) {
                 bufferArrow = new BufferedImage(Game.pixelX, Game.pixelY, BufferedImage.TYPE_INT_ARGB);
                 Graphics2D g2Arrow = bufferArrow.createGraphics();

@@ -101,7 +101,6 @@ public class Map extends JPanel{
                     }
                 }
             }
-            g.setColor(Color.white);
             for(int i = 0; i < game.thrownWeapons.size(); i++){
                 Weapon weapon = game.thrownWeapons.get(i);
                 if (startPositionX <= weapon.getPositionX() && weapon.getPositionX() <= endPositionX) {
@@ -113,6 +112,8 @@ public class Map extends JPanel{
                 }
             }
 
+
+
             for(int i = 0; i < game.getMonsters().size(); i++){
                 Monster monster = game.getMonsters().get(i);
                 if (startPositionX <= monster.getPositionX() && monster.getPositionX() <= endPositionX) {
@@ -122,7 +123,19 @@ public class Map extends JPanel{
                 }
             }
 
-            g.drawImage(game.player.getImage(), (game.player.getPositionX() - startPositionX) * Game.pixelX, (game.player.getPositionY() - startPositionY) * Game.pixelY, Game.pixelX, Game.pixelY, null);
+
+
+            if(game.player != null) {
+                g.drawImage(game.player.getImage(), (game.player.getPositionX() - startPositionX) * Game.pixelX, (game.player.getPositionY() - startPositionY) * Game.pixelY, Game.pixelX, Game.pixelY, null);
+            }
+            for(int i = 0; i < game.thrownSpells.size(); i++){
+                Spell spell = game.thrownSpells.get(i);
+                if (startPositionX <= spell.getPositionX() && spell.getPositionX() <= endPositionX) {
+                    if (startPositionY <= spell.getPositionY() && spell.getPositionY() <= endPositionY) {
+                        g.drawImage(spell.getImage(), (spell.getPositionX() - startPositionX) * Game.pixelX, (spell.getPositionY() - startPositionY) * Game.pixelY, 80, 80, null);
+                    }
+                }
+            }
             if(game.door != null) {
                 if (!game.door.getIsOpen()) {
                     g.drawImage(game.door.getImage(), (game.door.getPositionX() - startPositionX) * Game.pixelX, (game.door.getPositionY() - startPositionY) * Game.pixelY, Game.pixelX, Game.pixelY, null);
@@ -135,17 +148,25 @@ public class Map extends JPanel{
                 BufferedImage keyImg = ImageIO.read(new File("Images/key.png"));
                 BufferedImage heart = ImageIO.read(new File("Images/heart.png"));
                 BufferedImage coin = ImageIO.read(new File("Images/coin.png"));
+                BufferedImage arrow = ImageIO.read(new File("Images/Arrow.png"));
                 // show heart lifes!
-                for (int i = 0; i < game.player.getHealth(); i++) {
+                int j = 0;
+                for (int i = 0; i < Math.floor(game.player.getHealth()); i++) {
                     g.drawImage(heart, 32 * i + 5, Game.shownSizeY * Game.pixelY, 32, 32, null);
+                    j += 1;
                 }
-                g.setColor(Color.BLUE);
-                g.drawRect(5*Game.pixelX, Game.shownSizeY * Game.pixelY + 10, 100, 20);
-                g.fillRect(5*Game.pixelX, Game.shownSizeY * Game.pixelY + 10, 10*game.player.getSpeed(), 20);
+                if(game.player.getHealth() > j){
+                    g.drawImage(heart.getSubimage(0, 0, 8, 16), 32 * j + 5, Game.shownSizeY * Game.pixelY, 16, 32, null);
+                }
                 // show coins counter
                 g.drawImage(coin, 12 , Game.shownSizeY * Game.pixelY + 32, 24, 24, null);
                 g.setColor(Color.WHITE);
                 g.drawString(("x" + game.player.getCoins()), 42 , Game.shownSizeY*Game.pixelY + 49);
+
+                if(game.player.weapon instanceof Bow){
+                    g.drawImage(arrow, 250, Game.shownSizeY * Game.pixelY + 10, 16, 16, null);
+                    g.drawString(("x" + ((Bow)game.player.weapon).arrowsCount), 280, Game.shownSizeY * Game.pixelY + 25);
+                }
                 // inventory!
                 for (int i = 0; i < game.player.inventory.sizeMaxWeapon; i++){
                     g.drawImage(inventoryBg, (Game.shownSizeX - 1 -  (game.player.inventory.sizeMaxWeapon + game.player.inventory.sizeMaxItem + 3 - i))*Game.pixelX, (Game.shownSizeY)*Game.pixelY, Game.pixelX, Game.pixelY, null);

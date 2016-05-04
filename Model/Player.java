@@ -9,12 +9,12 @@ TODO :
 */
 
 public class Player extends Person {
-	public int coins;
+	public int coins = 100;
     public int exp;
     public boolean hasKey = false;
     public Inventory inventory;
-    public int speed = 10;
-    public int speedMax = 10;
+    public boolean isSpelling = false;
+    public Spell spell = null;
 
     public Player(int positionX, int positionY){
         super(positionX, positionY, 7);
@@ -38,28 +38,6 @@ public class Player extends Person {
         hasKey = false;
     }
 
-    public int getSpeed(){
-        return speed;
-    }
-
-    public void setSpeed(int speed){
-        if(speed < 0){
-            this.speed = 0;
-        } else if(speed > speedMax){
-            this.speed = speedMax;
-        }else {
-            this.speed = speed;
-        }
-    }
-
-    public void lowerSpeed(){
-        setSpeed(getSpeed() - 1);
-    }
-
-    public void higherSpeed(){
-        setSpeed(getSpeed() + 1);
-    }
-
     public void setWeapon(Weapon weapon){
         if(weapon != null) {
             if (weapon instanceof Dagger) {
@@ -75,8 +53,9 @@ public class Player extends Person {
             this.weapon = weapon;
             this.weapon.setDirection(direction);
             setImage(attackingImgPath);
-            counter.setCounterMax(this.weapon.counter.getCounterMax());
+            counter.setCounterMax(weapon.counter.getCounterMax());
             setAttackMode(false);
+            isAttacking = false;
             this.weapon.counter.init();
             counter.init();
         } else {
@@ -106,6 +85,17 @@ public class Player extends Person {
         return coins;
     }
 
+    public void setCoins(int coin){
+        this.coins = coin;
+    }
+
+    public void addCoins(Coin coin){
+        this.coins += coin.getValue();
+        if(this.coins  < 0){
+            this.coins = 0;
+        }
+    }
+
     public int getExp(){
         return exp;
     }
@@ -114,13 +104,6 @@ public class Player extends Person {
         this.exp += exp;
         if(this.exp  < 0){
             this.exp = 0;
-        }
-    }
-
-    public void addCoins(Coin coin){
-        this.coins += coin.getValue();
-        if(this.coins  < 0){
-            this.coins = 0;
         }
     }
 
@@ -133,7 +116,7 @@ public class Player extends Person {
             addCoins(((Coin)item));
         } else if (item instanceof Heart){
             if(getHealth() < 5) {
-                setHealth(getHealth() + 1);
+                setHealth(getHealth() + ((Heart) item).getHealth());
             } else {
                 inventory.addItem(item);
             }
@@ -144,4 +127,35 @@ public class Player extends Person {
         }
     }
 
+    public void doSpell(){
+        setCanMove(false);
+        setCanAttack(false);
+        isSpelling = true;
+        setImage("Images/player-spell.png");
+        counter.setCounterMax(6);
+        counter.init();
+        System.out.println(isSpelling);
+
+    }
+
+    public void stopSpelling(){
+        setCanMove(true);
+        setCanAttack(true);
+        isSpelling = false;
+        setImage("Images/player.png");
+        counter.setCounterMax(7);
+        counter.init();
+    }
+
+    public void usePotion(int index){
+        if(inventory.countItems() > 0) {
+            Item item = inventory.getItem(index - 1);
+            if (item instanceof Heart) {
+                setHealth(getHealth() + ((Heart) item).getHealth());
+                inventory.removeItem(item);
+                //}else if(item instanceof Spell){
+                //   setSpell(getSpell() + ((Spell) item).getSpell());
+            }
+        }
+    }
 }
