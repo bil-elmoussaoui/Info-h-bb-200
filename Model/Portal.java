@@ -4,7 +4,7 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 
-public class Portal extends Tile{
+public class Portal extends Tile {
     private String inImgPath = "Images/portal-in.png";
     private BufferedImage inImg;
     private String outImgPath = "Images/portal-out.png";
@@ -12,7 +12,7 @@ public class Portal extends Tile{
     private int outPositionX;
     private int outPositionY;
 
-    public Portal(int positionX, int positionY, int outPositionX, int outPositionY){
+    public Portal(int positionX, int positionY, int outPositionX, int outPositionY) {
         super(positionX, positionY);
         setIsBreakable(false);
         setIsWalkable(true);
@@ -27,11 +27,11 @@ public class Portal extends Tile{
         }
     }
 
-    public int getOutPositionX(){
+    public int getOutPositionX() {
         return this.outPositionX;
     }
 
-    public int getOutPositionY(){
+    public int getOutPositionY() {
         return this.outPositionY;
     }
 

@@ -357,6 +357,7 @@ public class Animation {
                         Thread.sleep(animationRefresh);
                         if (!game.player.isAlive()) {
                             MainWindow.gamePaused = false;
+                            Player.isAlive = false;
                             game.window.showMenuWindow();
                         }
                     }

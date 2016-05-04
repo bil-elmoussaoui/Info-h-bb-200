@@ -12,6 +12,7 @@ import java.util.Calendar;
 public class Main {
     public static Game game;
     public static MainWindow window;
+
     public static void main(String args[]) throws Exception {
         window = new MainWindow();
         game = new Game(window);
@@ -20,9 +21,8 @@ public class Main {
         Animation animation = new Animation(game);
     }
 
-    public static void save(){
-        try
-        {
+    public static void save() {
+        try {
             String fileName = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Calendar.getInstance().getTime());
             FileOutputStream fileOut = new FileOutputStream("Data/" + fileName + ".ser");
             ObjectOutputStream out = new ObjectOutputStream(fileOut);
@@ -30,21 +30,24 @@ public class Main {
             out.flush();
             out.close();
             fileOut.close();
-        }catch(IOException i) {}
+        } catch (IOException i) {
+        }
     }
 
-    public static void load(String fileName){
+    public static void load(String fileName) {
         try {
             FileInputStream fileIn = new FileInputStream("Data/" + fileName);
             ObjectInputStream in = new ObjectInputStream(fileIn);
-            game = (Game)in.readObject();
+            game = (Game) in.readObject();
             game.window = window;
             game.window.showLevelWindow();
             in.close();
             fileIn.close();
+        } catch (IOException i) {
+            i.printStackTrace();
+        } catch (ClassNotFoundException c) {
+            c.printStackTrace();
         }
-        catch(IOException i) {i.printStackTrace();}
-        catch(ClassNotFoundException c) {c.printStackTrace();}
 
     }
 

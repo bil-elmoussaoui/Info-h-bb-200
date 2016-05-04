@@ -63,9 +63,6 @@ public class Keyboard implements KeyListener{
                     nextPositionX -= 1;
                     game.player.isMoving = true;
                     break;
-                case KeyEvent.VK_K:
-                    game.doSpell();
-                    break;
                 case KeyEvent.VK_UP:
                 case KeyEvent.VK_Z:
                     nextPositionY -= 1;

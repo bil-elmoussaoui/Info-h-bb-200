@@ -10,7 +10,7 @@ public class Spikes extends Trap {
     public BufferedImage img = null;
     public String imgPath = "Images/spikes.png";
 
-    public Spikes(int positionX, int positionY){
+    public Spikes(int positionX, int positionY) {
         super(positionX, positionY);
         counter = new Counter(9);
         setDamage(0.5);

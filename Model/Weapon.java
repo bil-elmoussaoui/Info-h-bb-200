@@ -1,71 +1,69 @@
-
-
 package Model;
 
 import java.awt.image.BufferedImage;
 
 
 public class Weapon extends Item {
-	private int damage;
-	private int level;
-	public String imgPath = "Images/sword.png";
+    public String imgPath = "Images/sword.png";
     public String staticImgPath = "Images/sword-static.png";
-	public BufferedImage img = null;
+    public BufferedImage img = null;
     public BufferedImage staticImg = null;
-	private int direction = 1;
     public Counter counter;
-	public boolean isDistanceWeapon;
+    public boolean isDistanceWeapon;
+    private int damage;
+    private int level;
+    private int direction = 1;
 
-	public Weapon (Integer positionX, Integer positionY, int damage, int counterMax){
-		super(positionX, positionY);
-		this.damage = damage;
+    public Weapon(Integer positionX, Integer positionY, int damage, int counterMax) {
+        super(positionX, positionY);
+        this.damage = damage;
         setIsCollectable(true);
         setIsBreakable(false);
         setIsWalkable(true);
         counter = new Counter(counterMax);
-	}
-
-    public void setLevel(int level){
-		try {
-			if(level > 0) {
-				this.level = level;
-			} else {
-				throw new Exception();
-			}
-		}catch (Exception e){
-			this.level = 0;
-		}
-	}
-
-	public int getDamage(){
-        return  damage;
     }
 
-	public int getLevel(){
-		return level;
-	}
+    public int getDamage() {
+        return damage;
+    }
 
-	public void setDirection(int direction){
-		this.direction = direction;
-	}
+    public int getLevel() {
+        return level;
+    }
 
-	public int getDirection(){
-		return  this.direction;
-	}
+    public void setLevel(int level) {
+        try {
+            if (level > 0) {
+                this.level = level;
+            } else {
+                throw new Exception();
+            }
+        } catch (Exception e) {
+            this.level = 0;
+        }
+    }
 
-	public void setIsDistanceWeapon(boolean isDistanceWeapon){
-		this.isDistanceWeapon = isDistanceWeapon;
-	}
+    public int getDirection() {
+        return this.direction;
+    }
 
-	public boolean getIsDistanceWeapon(){
-		return  this.isDistanceWeapon;
-	}
+    public void setDirection(int direction) {
+        this.direction = direction;
+    }
 
-	public BufferedImage getImage(){
-		return img;
-	}
+    public boolean getIsDistanceWeapon() {
+        return this.isDistanceWeapon;
+    }
 
-    public BufferedImage getStaticImg(){
+    public void setIsDistanceWeapon(boolean isDistanceWeapon) {
+        this.isDistanceWeapon = isDistanceWeapon;
+    }
+
+    public BufferedImage getImage() {
+        return img;
+    }
+
+    public BufferedImage getStaticImg() {
         return staticImg;
     }
 

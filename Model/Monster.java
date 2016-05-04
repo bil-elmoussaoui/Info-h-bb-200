@@ -13,16 +13,16 @@ public class Monster extends Person {
         FOV = new FieldOfView(positionX, positionY, direction);
         imgPath = "Images/monster.png";
         Random rand = new Random();
-        switch (rand.nextInt(3)){
+        switch (rand.nextInt(3)) {
             case 0:
                 setWeapon(new Dagger(null, null, 1));
-            break;
+                break;
             case 1:
-                setWeapon(new Spear(null, null , 1));
-            break;
+                setWeapon(new Spear(null, null, 1));
+                break;
             case 2:
                 setWeapon(new Staff(null, null, 1));
-            break;
+                break;
         }
         try {
             img = ImageIO.read(new File(imgPath));

@@ -2,6 +2,8 @@ package View;
 
 import Main.Main;
 import Model.Game;
+import Model.Player;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
@@ -10,27 +12,28 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 
 class MenuWindow {
-	private MainWindow window;
+    private MainWindow window;
 
-	public MenuWindow(MainWindow window){
-		this.window = window;
+    public MenuWindow(MainWindow window) {
+        this.window = window;
     }
 
-	public JPanel getJPanel(){
-		JPanel menuWindow = new JPanel(){
-			@Override
-            public void paintComponent(Graphics g){
-                try{
+    public JPanel getJPanel() {
+        JPanel menuWindow = new JPanel() {
+            @Override
+            public void paintComponent(Graphics g) {
+                try {
                     BufferedImage img = ImageIO.read(new File("Images/tile.png"));
-                    for(int i = 0; i < Game.shownSizeX; i ++){
-                        for(int j = 0 ; j < Game.shownSizeY + 1; j++){
-                            g.drawImage(img, i* Game.pixelX, j*Game.pixelY, Game.pixelX, Game.pixelY, null);
+                    for (int i = 0; i < Game.shownSizeX; i++) {
+                        for (int j = 0; j < Game.shownSizeY + 1; j++) {
+                            g.drawImage(img, i * Game.pixelX, j * Game.pixelY, Game.pixelX, Game.pixelY, null);
                         }
                     }
-                }catch (Exception e){}
+                } catch (Exception e) {
+                }
             }
-		};
-        if(Game.enVie) {
+        };
+        if (Player.isAlive) {
             menuWindow.setBorder(BorderFactory.createEmptyBorder(260, 400, 220, 350));
         } else {
             menuWindow.setBorder(BorderFactory.createEmptyBorder(20, 400, 220, 350));
@@ -40,13 +43,13 @@ class MenuWindow {
         menuPanel.setOpaque(false);
         BButton Play;
 
-		if(MainWindow.gamePaused  && MainWindow.gameStarted){
+        if (MainWindow.gamePaused && MainWindow.gameStarted) {
             menuPanel.setLayout(new GridLayout(5, 0, 10, 10));
-			BButton Resume = new BButton("Resume");
-			Resume.addActionListener((ActionEvent e) -> {
+            BButton Resume = new BButton("Resume");
+            Resume.addActionListener((ActionEvent e) -> {
                 window.showLevelWindow();
                 MainWindow.gamePaused = false;
-			});
+            });
             menuPanel.add(Resume);
             Play = new BButton("New Game");
         } else {
@@ -54,35 +57,35 @@ class MenuWindow {
             Play = new BButton("Play");
         }
 
-		Play.addActionListener((ActionEvent e) -> {
-            if(MainWindow.gamePaused || !Game.enVie){
+        Play.addActionListener((ActionEvent e) -> {
+            if (MainWindow.gamePaused || !Player.isAlive) {
                 MainWindow.newGame = true;
             }
             window.showLevelWindow();
             MainWindow.gamePaused = false;
-		});
-		menuPanel.add(Play);
-		if(MainWindow.gamePaused && MainWindow.gameStarted) {
-			BButton Save = new BButton("Save");
+        });
+        menuPanel.add(Play);
+        if (MainWindow.gamePaused && MainWindow.gameStarted) {
+            BButton Save = new BButton("Save");
             Save.addActionListener((ActionEvent e) -> {
                 Main.save();
-			});
-			menuPanel.add(Save);
-		}
-		BButton Load = new BButton("Load");
-		Load.addActionListener((ActionEvent e) -> {
+            });
+            menuPanel.add(Save);
+        }
+        BButton Load = new BButton("Load");
+        Load.addActionListener((ActionEvent e) -> {
             window.showLoadWindow();
-		});
+        });
         menuPanel.add(Load);
 
         BButton Quit = new BButton("Exit");
-		Quit.addActionListener((ActionEvent e) -> {
+        Quit.addActionListener((ActionEvent e) -> {
             window.closeWindow();
-		});
-		menuPanel.add(Quit);
+        });
+        menuPanel.add(Quit);
 
 
-        if(!Game.enVie){
+        if (!Player.isAlive) {
             MainWindow.gamePaused = true;
             JLabel gameOver = new JLabel();
             gameOver.setIcon(new ImageIcon("Images/death.jpg"));
@@ -90,7 +93,7 @@ class MenuWindow {
             menuWindow.add(gameOver);
         }
         menuWindow.add(menuPanel);
-		return menuWindow;
-	}
+        return menuWindow;
+    }
 
 }

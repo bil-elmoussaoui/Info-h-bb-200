@@ -4,11 +4,11 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 
-public class Wall extends Tile{
+public class Wall extends Tile {
     private String imgPath = "Images/wall.png";
     private BufferedImage img;
 
-    public Wall(int positionX, int positionY){
+    public Wall(int positionX, int positionY) {
         super(positionX, positionY);
         setIsBreakable(false);
         setIsWalkable(false);

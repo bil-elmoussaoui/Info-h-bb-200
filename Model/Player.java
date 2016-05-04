@@ -1,28 +1,27 @@
 package Model;
+
 import javax.imageio.ImageIO;
 import java.io.File;
 import java.io.IOException;
 
 /*
 TODO :
-- implement weapon damage & half heart damage
+- implement weapon damage
+- exp maybe??
 */
 
 public class Player extends Person {
-	public int coins = 100;
-    public int exp;
+    public static boolean isAlive = true;
+    public int coins = 100;
     public boolean hasKey = false;
     public Inventory inventory;
     public boolean isSpelling = false;
     public Spell spell = null;
 
-    public Player(int positionX, int positionY){
+    public Player(int positionX, int positionY) {
         super(positionX, positionY, 7);
         inventory = new Inventory();
         imgPath = "Images/player.png";
-        setWeapon(new Bow(null, null, 1));
-        setWeapon(new Dagger(null, null, 1));
-        setWeapon(new Spear(null, null, 1));
         setWeapon(new Staff(null, null, 1));
 
         try {
@@ -34,12 +33,12 @@ public class Player extends Person {
 
     }
 
-    public void removeKey(){
+    public void removeKey() {
         hasKey = false;
     }
 
-    public void setWeapon(Weapon weapon){
-        if(weapon != null) {
+    public void setWeapon(Weapon weapon) {
+        if (weapon != null) {
             if (weapon instanceof Dagger) {
                 attackingImgPath = "Images/player-attack-dagger.png";
             } else if (weapon instanceof Spear || weapon instanceof Staff) {
@@ -63,14 +62,14 @@ public class Player extends Person {
         }
     }
 
-    public void setWeaponByIndex(int index){
-        if(inventory.countWeapons() >= index){
+    public void setWeaponByIndex(int index) {
+        if (inventory.countWeapons() >= index) {
             setWeapon(inventory.getWeapon(index - 1));
         }
     }
 
-    public void throwWeapon(Weapon weapon){
-        if(inventory.containsWeapon(weapon)){
+    public void throwWeapon(Weapon weapon) {
+        if (inventory.containsWeapon(weapon)) {
             inventory.removeWeapon(weapon);
             if (inventory.countWeapons() > 0) {
                 setWeapon(inventory.randomWeapon());
@@ -81,64 +80,68 @@ public class Player extends Person {
         }
     }
 
-    public int getCoins(){
+    public int getCoins() {
         return coins;
     }
 
-    public void setCoins(int coin){
+    public void setCoins(int coin) {
         this.coins = coin;
     }
 
-    public void addCoins(Coin coin){
+    public void addCoins(Coin coin) {
         this.coins += coin.getValue();
-        if(this.coins  < 0){
+        if (this.coins < 0) {
             this.coins = 0;
         }
     }
 
-    public int getExp(){
-        return exp;
-    }
-
-    public void addExp(int exp){
-        this.exp += exp;
-        if(this.exp  < 0){
-            this.exp = 0;
-        }
-    }
-
-    public void addKey(){
+    public void addKey() {
         hasKey = true;
     }
 
-    public void collect(Item item){
-        if(item instanceof Coin){
-            addCoins(((Coin)item));
-        } else if (item instanceof Heart){
-            if(getHealth() < 5) {
-                setHealth(getHealth() + ((Heart) item).getHealth());
-            } else {
-                inventory.addItem(item);
-            }
-        } else if (item instanceof Key){
+    public void collect(Item item) {
+        if (item instanceof Coin) {
+            addCoins(((Coin) item));
+        } else if (item instanceof Potion) {
+            inventory.addItem(item);
+        } else if (item instanceof Key) {
             addKey();
-        } else if(item instanceof Weapon){
-            setWeapon((Weapon)item);
+        } else if (item instanceof Weapon) {
+            setWeapon((Weapon) item);
         }
     }
 
-    public void doSpell(){
+    public void doSpell(int type) {
+        int positionX = getPositionX();
+        int positionY = getPositionY();
+        switch (direction) {
+            case 1:
+                positionY -= 1;
+                break;
+            case 2:
+                positionX -= 1;
+                break;
+            case 3:
+                positionY += 1;
+                break;
+            case 4:
+                positionX += 1;
+                break;
+        }
         setCanMove(false);
         setCanAttack(false);
         isSpelling = true;
         setImage("Images/player-spell.png");
         counter.setCounterMax(6);
         counter.init();
-        System.out.println(isSpelling);
-
+        if (type == 0) { // FireLion
+            spell = new FireLion(positionX, positionY, direction);
+        } else if (type == 1) { //IceTacle
+            spell = new Icetacle(positionX, positionY, direction);
+        }
     }
 
-    public void stopSpelling(){
+    public void stopSpelling() {
         setCanMove(true);
         setCanAttack(true);
         isSpelling = false;
@@ -147,14 +150,22 @@ public class Player extends Person {
         counter.init();
     }
 
-    public void usePotion(int index){
-        if(inventory.countItems() > 0) {
+    public void usePotion(int index) {
+        if (inventory.countItems() > 0) {
             Item item = inventory.getItem(index - 1);
-            if (item instanceof Heart) {
-                setHealth(getHealth() + ((Heart) item).getHealth());
+            if (item instanceof Potion) {
+                switch (((Potion) item).getType()) {
+                    case 0:
+                        setHealth(getHealth() + ((Potion) item).getHealth());
+                        break;
+                    case 1:
+                        doSpell(0); //FireLion
+                        break;
+                    case 2:
+                        doSpell(1); //IceTacle
+                        break;
+                }
                 inventory.removeItem(item);
-                //}else if(item instanceof Spell){
-                //   setSpell(getSpell() + ((Spell) item).getSpell());
             }
         }
     }

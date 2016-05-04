@@ -18,71 +18,72 @@ public class Tile {
         setPositionY(positionY);
         setIsBreakable(false);
         setIsWalkable(true);
-        imgPath = "Images/tile.png";try {
-        img = ImageIO.read(new File(imgPath));
+        imgPath = "Images/tile.png";
+        try {
+            img = ImageIO.read(new File(imgPath));
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public void setIsWalkable(boolean isWalkable){
+    public boolean getIsWalkable() {
+        return isWalkable;
+    }
+
+    public void setIsWalkable(boolean isWalkable) {
         this.isWalkable = isWalkable;
         Game.freePositions[this.getPositionX()][this.getPositionY()] = isWalkable ? 0 : 1;
     }
 
-    public boolean getIsWalkable(){
-        return isWalkable;
-    }
-
-    public void setIsBreakable(boolean isBreakable){
-        this.isBreakable = isBreakable;
-    }
-
-    public void setIsDangerous(boolean isDangerous){
-        this.isDangerous = isDangerous;
-    }
-
-    public boolean getIsDangerous(){
+    public boolean getIsDangerous() {
         return isDangerous;
     }
 
-    public boolean getIsBreakable(){
+    public void setIsDangerous(boolean isDangerous) {
+        this.isDangerous = isDangerous;
+    }
+
+    public boolean getIsBreakable() {
         return isBreakable;
     }
 
-    public int getPositionX(){
+    public void setIsBreakable(boolean isBreakable) {
+        this.isBreakable = isBreakable;
+    }
+
+    public int getPositionX() {
         return positionX;
     }
 
-    public int getPositionY(){
-        return  positionY;
-    }
-
-    public void setPositionX(int positionX){
-        try{
-            if(positionX < 0){
+    public void setPositionX(int positionX) {
+        try {
+            if (positionX < 0) {
                 throw new Exception("Position X can't be less than 0");
             } else {
                 this.positionX = positionX;
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public void setPositionY(int positionY){
-        try{
-            if(positionY < 0){
+    public int getPositionY() {
+        return positionY;
+    }
+
+    public void setPositionY(int positionY) {
+        try {
+            if (positionY < 0) {
                 throw new Exception("Position Y can't be less than 0");
             } else {
                 this.positionY = positionY;
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public BufferedImage getImage(){
+    public BufferedImage getImage() {
         return img;
     }
 

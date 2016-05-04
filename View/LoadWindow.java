@@ -15,10 +15,10 @@ class LoadWindow {
     private ArrayList<String> filesList = new ArrayList<>();
     private MainWindow window;
 
-    public LoadWindow(MainWindow window){
+    public LoadWindow(MainWindow window) {
         this.window = window;
         File folder = new File("Data/");
-        if(folder.exists()) {
+        if (folder.exists()) {
             for (File fileEntry : folder.listFiles()) {
                 if (!fileEntry.isDirectory()) {
                     filesList.add(fileEntry.getName());
@@ -26,18 +26,20 @@ class LoadWindow {
             }
         }
     }
-    public JPanel getJPanel(){
-        JPanel loadPanel = new JPanel(){
+
+    public JPanel getJPanel() {
+        JPanel loadPanel = new JPanel() {
             @Override
-            public void paintComponent(Graphics g){
-                try{
+            public void paintComponent(Graphics g) {
+                try {
                     BufferedImage img = ImageIO.read(new File("Images/tile.png"));
-                    for(int i = 0; i < Game.shownSizeX; i ++){
-                        for(int j = 0 ; j < Game.shownSizeY + 1; j++){
-                            g.drawImage(img, i* Game.pixelX, j*Game.pixelY, Game.pixelX, Game.pixelY, null);
+                    for (int i = 0; i < Game.shownSizeX; i++) {
+                        for (int j = 0; j < Game.shownSizeY + 1; j++) {
+                            g.drawImage(img, i * Game.pixelX, j * Game.pixelY, Game.pixelX, Game.pixelY, null);
                         }
                     }
-                }catch (Exception e){}
+                } catch (Exception e) {
+                }
             }
         };
         loadPanel.setBorder(BorderFactory.createEmptyBorder(260, 400, 220, 350));
@@ -46,7 +48,7 @@ class LoadWindow {
         menuLoad.setOpaque(false);
 
         menuLoad.setLayout(new GridLayout(filesList.size(), 0, 10, 10));
-        for(int i = 0; i < filesList.size(); i++) {
+        for (int i = 0; i < filesList.size(); i++) {
             final String fileName = filesList.get(i);
             BButton loadButton = new BButton(fileName.replace(".ser", ""));
             loadButton.setPreferredSize(new Dimension(300, 50));

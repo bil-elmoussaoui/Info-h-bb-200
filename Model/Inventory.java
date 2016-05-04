@@ -14,52 +14,52 @@ public class Inventory {
     private ArrayList<Weapon> weaponsInventory = new ArrayList<>();
     private ArrayList<Item> itemsInventory = new ArrayList<>();
 
-	public void addWeapon(Weapon weapon){
-		if (weaponsInventory.size() < sizeMaxWeapon){
+    public void addWeapon(Weapon weapon) {
+        if (weaponsInventory.size() < sizeMaxWeapon) {
             weaponsInventory.add(weapon);
-		}
-	}
+        }
+    }
 
-    public boolean containsWeapon(Weapon weapon){
+    public boolean containsWeapon(Weapon weapon) {
         return weaponsInventory.contains(weapon);
     }
 
-    public void addItem(Item item){
-		if (itemsInventory.size() < sizeMaxItem){
+    public void addItem(Item item) {
+        if (itemsInventory.size() < sizeMaxItem) {
             itemsInventory.add(item);
-		}
-	}
+        }
+    }
 
-    public Item getItem(int index){
-        if(countItems() - 1 >= index) {
+    public Item getItem(int index) {
+        if (countItems() - 1 >= index) {
             return itemsInventory.get(index);
         } else {
             return null;
         }
     }
 
-    public Weapon getWeapon(int index){
+    public Weapon getWeapon(int index) {
         return weaponsInventory.get(index);
     }
 
-    public int countWeapons(){
+    public int countWeapons() {
         return weaponsInventory.size();
     }
 
-    public int countItems(){
+    public int countItems() {
         return itemsInventory.size();
     }
 
-    public Weapon randomWeapon(){
+    public Weapon randomWeapon() {
         Random rand = new Random();
         return weaponsInventory.get(rand.nextInt(countWeapons()));
     }
 
-	public void removeWeapon(Weapon weapon){
+    public void removeWeapon(Weapon weapon) {
         weaponsInventory.remove(weapon);
-	}
-	
-	public void removeItem(Item item){
+    }
+
+    public void removeItem(Item item) {
         itemsInventory.remove(item);
-	}
+    }
 }

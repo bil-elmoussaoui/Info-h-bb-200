@@ -6,14 +6,14 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Random;
 
-public class WoodBox extends Item{
-    private BufferedImage img;
-    private String imgPath = "Images/Wood_Box.png";
+public class WoodBox extends Item {
     public Item content;
     public Counter counter;
+    private BufferedImage img;
+    private String imgPath = "Images/Wood_Box.png";
     private boolean isBeingBroken;
 
-    public WoodBox(int positionX, int positionY){
+    public WoodBox(int positionX, int positionY) {
         super(positionX, positionY);
         setIsCollectable(false);
         setIsBreakable(true);
@@ -23,29 +23,29 @@ public class WoodBox extends Item{
         switch (randomItem.nextInt(4)) {
             case 0:
                 content = new Coin(positionX, positionY);
-            break;
+                break;
             case 1:
-                content = new Heart(positionX, positionY);
-            break;
+                content = new Potion(positionX, positionY);
+                break;
             case 2: // Weapons
-                switch (randomItem.nextInt(4)){
+                switch (randomItem.nextInt(4)) {
                     case 0:
                         content = new Dagger(positionX, positionY, 1);
-                    break;
+                        break;
                     case 1:
                         content = new Staff(positionX, positionY, 1);
-                    break;
+                        break;
                     case 2:
                         content = new Spear(positionX, positionY, 1);
-                    break;
+                        break;
                     case 3:
                         content = new Bow(positionX, positionY, 1);
-                    break;
+                        break;
                 }
-            break;
+                break;
             case 3:
                 content = null;
-            break;
+                break;
         }
         setIsWalkable(false);
         try {
@@ -55,12 +55,12 @@ public class WoodBox extends Item{
         }
     }
 
-    public void setIsBeingBroken(boolean isBeingBroken){
-        this.isBeingBroken = isBeingBroken;
+    public boolean getIsBeingBroken() {
+        return isBeingBroken;
     }
 
-    public boolean getIsBeingBroken(){
-        return isBeingBroken;
+    public void setIsBeingBroken(boolean isBeingBroken) {
+        this.isBeingBroken = isBeingBroken;
     }
 
     public BufferedImage getImage() {

@@ -3,11 +3,6 @@ package Model;
 import java.util.ArrayList;
 import java.util.Random;
 
-/*
-    TODO:
-    - implement two kind of field of views (line - square)
- */
-
 public class FieldOfView {
     private int view;
     private int direction; // 1 bas, 2 gauche 3 haut 4 droite
@@ -24,11 +19,11 @@ public class FieldOfView {
         this.createFov();
     }
 
-    public ArrayList<int[]> getFOV(){
+    public ArrayList<int[]> getFOV() {
         return FOV;
     }
 
-    public void updateFOV(int positionX, int positionY, int direction){
+    public void updateFOV(int positionX, int positionY, int direction) {
         this.positionX = positionX;
         this.positionY = positionY;
         this.direction = direction;
@@ -36,8 +31,8 @@ public class FieldOfView {
         createFov();
     }
 
-    public void addToFov(int positionX, int positionY){
-        if(positionX >= 0 && positionX < Game.sizeX && positionY >= 0 && positionY < Game.sizeY) {
+    public void addToFov(int positionX, int positionY) {
+        if (positionX >= 0 && positionX < Game.sizeX && positionY >= 0 && positionY < Game.sizeY) {
             if (Game.freePositions[positionX][positionY] == 0) {
                 FOV.add(new int[]{positionX, positionY});
             }
@@ -47,9 +42,10 @@ public class FieldOfView {
     public void createFov() {
         int t = ((int) Math.floor(view / 2));
         switch (direction) {
-            case 4: case 2: // 2 gauche, 4 droite
+            case 4:
+            case 2: // 2 gauche, 4 droite
                 for (int i = 1; i <= view; i++) {
-                    if(direction == 4) {
+                    if (direction == 4) {
                         addToFov(positionX + i, positionY);
                     } else {
                         addToFov(positionX - i, positionY);
@@ -59,10 +55,11 @@ public class FieldOfView {
                     addToFov(positionX, positionY - i);
                     addToFov(positionX, positionY + i);
                 }
-            break;
-            case 3: case 1: // 1 bas, 3 haut
+                break;
+            case 3:
+            case 1: // 1 bas, 3 haut
                 for (int i = 1; i <= view; i++) {
-                    if(direction == 3) {
+                    if (direction == 3) {
                         addToFov(positionX, positionY - i);
                     } else {
                         addToFov(positionX, positionY + i);
@@ -72,7 +69,7 @@ public class FieldOfView {
                     addToFov(positionX - i, positionY);
                     addToFov(positionX + i, positionY);
                 }
-            break;
+                break;
         }
     }
 }

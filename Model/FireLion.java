@@ -11,11 +11,11 @@ public class FireLion extends Spell {
     public BufferedImage img = null;
     public String imgPath;
 
-    public FireLion(int positionX, int positionY, int direction){
+    public FireLion(int positionX, int positionY, int direction) {
         super(positionX, positionY, direction);
         setIsMovingSpell(true);
         try {
-            switch (direction){
+            switch (direction) {
                 case 1:
                     imgPath = "Images/firelion_down.png";
                     break;
@@ -30,19 +30,20 @@ public class FireLion extends Spell {
                     break;
             }
             img = ImageIO.read(new File(imgPath));
-        }catch (Exception e){}
+        } catch (Exception e) {
+        }
 
     }
 
 
-    public BufferedImage getImage(){
+    public BufferedImage getImage() {
         BufferedImage tornadoImage;
-        if(counter.getCounter() <= 3) {
+        if (counter.getCounter() <= 3) {
             tornadoImage = img.getSubimage(counter.getCounter() * 128, 0, 128, 128);
-        } else if(counter.getCounter() <= 7 && counter.getCounter() > 3 ){
+        } else if (counter.getCounter() <= 7 && counter.getCounter() > 3) {
             tornadoImage = img.getSubimage((counter.getCounter() - 4) * 128, 128, 128, 128);
-        } else if(counter.getCounter() <= 11 && counter.getCounter() > 7 ){
-            tornadoImage = img.getSubimage((counter.getCounter() - 8)* 128, 256, 128, 128);
+        } else if (counter.getCounter() <= 11 && counter.getCounter() > 7) {
+            tornadoImage = img.getSubimage((counter.getCounter() - 8) * 128, 256, 128, 128);
         } else {
             tornadoImage = img.getSubimage((counter.getCounter() - 12) * 128, 384, 128, 128);
         }

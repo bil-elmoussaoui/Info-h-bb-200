@@ -4,12 +4,12 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 
-public class Key extends Item{
+public class Key extends Item {
     public boolean animated = false;
     private BufferedImage img;
     private String imgPath = "Images/key.png";
 
-    public Key(int positionX, int positionY){
+    public Key(int positionX, int positionY) {
         super(positionX, positionY);
         setIsCollectable(true);
         setIsBreakable(false);

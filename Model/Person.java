@@ -8,16 +8,12 @@ import java.util.ArrayList;
 import java.util.Random;
 
 abstract class Person {
-    private double health;
-    private double armor;
     public Weapon weapon;
     public int direction = 1;
     public int positionX;
     public int positionY;
     public boolean isMoving = false;
     public boolean isAttacking = false;
-    private boolean canMove = true;
-    private boolean canAttack = true;
     public BufferedImage img;
     public BufferedImage shieldImg;
     public String imgPath = "Images/player.png";
@@ -26,6 +22,11 @@ abstract class Person {
     public String attackingShieldImgPath = "Images/shield-attacking.png";
     public Counter counter;
     public double healthMax = 5;
+    public double armorMax = 3;
+    private double health;
+    private double armor;
+    private boolean canMove = true;
+    private boolean canAttack = true;
 
 
     public Person(int positionX, int positionY, int counterMax) {
@@ -48,10 +49,6 @@ abstract class Person {
         return positionX;
     }
 
-    public int getPositionY() {
-        return positionY;
-    }
-
     public void setPositionX(int positionX) {
         try {
             if (positionX < 0) {
@@ -62,6 +59,10 @@ abstract class Person {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public int getPositionY() {
+        return positionY;
     }
 
     public void setPositionY(int positionY) {
@@ -80,23 +81,19 @@ abstract class Person {
         return health;
     }
 
-	public void setHealth(double health){
-		try{
-			if (health >= 0 & health <= healthMax){
-				this.health = health;
-			} else {
-				throw new Exception ("Pb sur les vies");
-			}
-            if(this instanceof Player && this.health == 0){
-                Game.enVie = false;
+    public void setHealth(double health) {
+        try {
+            if (health >= 0 & health <= healthMax) {
+                this.health = health;
+            } else {
+                throw new Exception("Pb sur les vies");
             }
-		}catch (Exception pbVies){
-			this.health = 0;
-		}
-	}
-
-    public void setArmor(double armor) {
-        this.armor = armor;
+            if (this instanceof Player && this.health == 0) {
+                Player.isAlive = false;
+            }
+        } catch (Exception pbVies) {
+            this.health = 0;
+        }
     }
 
     public boolean getHasArmor() {
@@ -107,25 +104,34 @@ abstract class Person {
         return armor;
     }
 
-    public Weapon getWeapon() {
-        return weapon;
+    public void setArmor(double armor) {
+        this.armor = armor;
+        if(this.armor < 0){
+            this.armor = 0;
+        } else if(this.armor > armorMax) {
+            this.armor = armorMax;
+        }
     }
 
-    public void setCanMove(boolean canMove) {
-        this.canMove = canMove;
+    public Weapon getWeapon() {
+        return weapon;
     }
 
     public boolean getCanMove() {
         return canMove;
     }
 
-    public void setCanAttack(boolean canAttack) {
-        this.canAttack = canAttack;
-        if(!this.canAttack) setAttackMode(false);
+    public void setCanMove(boolean canMove) {
+        this.canMove = canMove;
     }
 
     public boolean getCanAttack() {
         return canAttack;
+    }
+
+    public void setCanAttack(boolean canAttack) {
+        this.canAttack = canAttack;
+        if (!this.canAttack) setAttackMode(false);
     }
 
     public int[] getRandomPosition() {
@@ -169,19 +175,27 @@ abstract class Person {
                 && Game.freePositions[positionX][positionY] == 0);
     }
 
-    public int[] getAttackedPosition(){
+    public int[] getAttackedPosition() {
         int attackedX = getPositionX();
         int attackedY = getPositionY();
-        switch(direction){
-            case 2: attackedX -= 1; break; // left
-            case 4: attackedX += 1; break; // right
-            case 1: attackedY -= 1; break; // bottom
-            case 3: attackedY += 1; break;  // top
+        switch (direction) {
+            case 2:
+                attackedX -= 1;
+                break; // left
+            case 4:
+                attackedX += 1;
+                break; // right
+            case 1:
+                attackedY -= 1;
+                break; // bottom
+            case 3:
+                attackedY += 1;
+                break;  // top
         }
         return new int[]{attackedX, attackedY};
     }
 
-	public void move(int positionX , int positionY){
+    public void move(int positionX, int positionY) {
         int oldPositionX = getPositionX();
         int oldPositionY = getPositionY();
         if (oldPositionY - positionY == 0) {
@@ -215,12 +229,12 @@ abstract class Person {
     public void attack(Person person) {
         if (weapon != null && person != this) {
             double armorDiff = person.getArmor() - weapon.getDamage();
-            if(armorDiff > 0){
+            if (armorDiff > 0) {
                 person.setArmor(armorDiff);
             } else {
                 person.setArmor(0);
                 double healthDiff = person.getHealth() - Math.abs(armorDiff);
-                if(healthDiff > 0){
+                if (healthDiff > 0) {
                     person.setHealth(healthDiff);
                 } else {
                     person.setHealth(0);
@@ -229,17 +243,11 @@ abstract class Person {
         }
     }
 
-    public void setImage(String imgPath){
-        try {
-            img = ImageIO.read(new File(imgPath));
-        } catch (Exception e){}
-    }
-
-    public void setAttackMode(boolean attackMode){
+    public void setAttackMode(boolean attackMode) {
         this.isAttacking = attackMode;
         try {
-            if(attackMode && weapon != null) {
-                if(weapon instanceof Spear || weapon instanceof Staff) {
+            if (attackMode && weapon != null) {
+                if (weapon instanceof Spear || weapon instanceof Staff) {
                     shieldImg = ImageIO.read(new File(attackingShieldImgPath));
                 }
                 setImage(attackingImgPath);
@@ -249,12 +257,13 @@ abstract class Person {
                 shieldImg = ImageIO.read(new File(shieldImgPath));
                 counter.setCounterMax(7);
             }
-        } catch (Exception e){}
+        } catch (Exception e) {
+        }
     }
 
-    public BufferedImage getImage(){
-        BufferedImage personImage = img.getSubimage(counter.getCounter()*64, (direction - 1)*64, 64, 64);
-        if(weapon != null) {
+    public BufferedImage getImage() {
+        BufferedImage personImage = img.getSubimage(counter.getCounter() * 64, (direction - 1) * 64, 64, 64);
+        if (weapon != null) {
             BufferedImage buffer = new BufferedImage(Game.pixelX, Game.pixelY, BufferedImage.TYPE_INT_ARGB);
             Graphics2D g2 = buffer.createGraphics();
             g2.drawImage(personImage, null, null);
@@ -264,9 +273,9 @@ abstract class Person {
             g2.dispose();
             personImage = buffer;
         }
-        if(getHasArmor()){
+        if (getHasArmor()) {
             BufferedImage shieldSubImage;
-            if(weapon != null && !weapon.getIsDistanceWeapon()) {
+            if (weapon != null && !weapon.getIsDistanceWeapon()) {
                 shieldSubImage = shieldImg.getSubimage(counter.getCounter() * 64, (direction - 1) * 64, 64, 64);
             } else {
                 shieldSubImage = shieldImg.getSubimage(0, (direction - 1) * 64, 64, 64);
@@ -281,5 +290,12 @@ abstract class Person {
             personImage = buffer;
         }
         return personImage;
+    }
+
+    public void setImage(String imgPath) {
+        try {
+            img = ImageIO.read(new File(imgPath));
+        } catch (Exception e) {
+        }
     }
 }
