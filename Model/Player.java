@@ -3,6 +3,7 @@ package Model;
 import javax.imageio.ImageIO;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 
 /*
 TODO :
@@ -10,8 +11,8 @@ TODO :
 - exp maybe??
 */
 
-public class Player extends Person {
-    public static boolean isAlive = true;
+public class Player extends Person implements PlayerObservateur {
+    private ArrayList <IObservateur> observateur = new ArrayList<>();
     public int coins = 100;
     public boolean hasKey = false;
     public Inventory inventory;
@@ -167,6 +168,31 @@ public class Player extends Person {
                 }
                 inventory.removeItem(item);
             }
+        }
+    }
+
+    public void setHealth(double health) {
+        try {
+            if (health >= 0 & health <= healthMax) {
+                this.health = health;
+            } else {
+                throw new Exception("Pb sur les vies");
+            }
+            if (this instanceof Player && this.health == 0) {
+                notifyObservers();
+            }
+        } catch (Exception pbVies) {
+            this.health = 0;
+        }
+    }
+
+    public void attach(IObservateur o) {
+        observateur.add(o);
+    }
+
+    public void notifyObservers() {
+        for (IObservateur o : observateur) {
+            o.update();
         }
     }
 }

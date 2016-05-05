@@ -5,11 +5,11 @@ import View.MainWindow;
 import java.awt.*;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Iterator;
 
-public class Game implements Serializable {
+public class Game implements Serializable, IObservateur {
     private static final long serialVersionUID = 1L;
     public static int[][] freePositions;
-    public static boolean enVie = true;
     public static boolean playerIsShopping = false;
     // screen information
     public static int sizeY = 25;
@@ -41,6 +41,7 @@ public class Game implements Serializable {
         shownSizeX = (int) Math.floor(screenX / pixelX) + 1;
         shownSizeY = (int) Math.floor(screenY / pixelY) - 1;
         sizeY = shownSizeY;
+        sizeX = shownSizeX;
         freePositions = new int[this.sizeX][this.sizeY];
         map = new int[this.sizeX][this.sizeY];
         this.generateMap();
@@ -77,7 +78,12 @@ public class Game implements Serializable {
     }
 
     public void drawShop() {
-        window.showBuyWindow(this);
+        int[] position = player.getAttackedPosition();
+            if (salesman != null) {
+                if (position[0] == salesman.getPositionX() && position[1] == salesman.getPositionY()) {
+                    window.showBuyWindow(this);
+                }
+            }
     }
 
     public void playerAttack() {
@@ -192,11 +198,11 @@ public class Game implements Serializable {
         items.clear();
         thrownWeapons.clear();
         player.removeKey();
-        if (Player.isAlive) {
+        if (player.isAlive()) {
             player.removeKey();
         } else {
             player = null;
-            Player.isAlive = true;
+            window.menuAlive = true;
         }
         freePositions = new int[this.sizeX][this.sizeY];
         map = new int[this.sizeX][this.sizeY];
@@ -291,6 +297,12 @@ public class Game implements Serializable {
                     break;
             }
             if (wasBought) player.setCoins(player.getCoins() - price);
+        }
+    }
+
+    public void update() {
+        if(!player.isAlive()){
+            window.showMenuWindow();
         }
     }
 

@@ -23,7 +23,7 @@ abstract class Person {
     public Counter counter;
     public double healthMax = 5;
     public double armorMax = 3;
-    private double health;
+    public double health;
     private double armor;
     private boolean canMove = true;
     private boolean canAttack = true;
@@ -87,9 +87,6 @@ abstract class Person {
                 this.health = health;
             } else {
                 throw new Exception("Pb sur les vies");
-            }
-            if (this instanceof Player && this.health == 0) {
-                Player.isAlive = false;
             }
         } catch (Exception pbVies) {
             this.health = 0;

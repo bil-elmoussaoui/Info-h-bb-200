@@ -160,6 +160,8 @@ public class MapGenerator {
             game.player.setPositionY(randomPosition[1]);
         } else {
             game.player = new Player(randomPosition[0], randomPosition[1]);
+            game.player.attach(game);
+            game.player.attach(game.window);
         }
     }
 
@@ -226,17 +228,36 @@ public class MapGenerator {
                 found = Game.freePositions[position[0]][Game.shownSizeY - 2] == 0;
             }
         }
+        breakWall(position[0], position[1]);
         game.door = new Door(position[0], position[1]);
     }
 
     public void initSalesman() {
-        int[] randomPosition = getRandomPosition();
+        Random rand = new Random();
+        boolean found = false;
+        int[] position = new int[2];
+        while (!found) {
+            position = borderPositions.get(rand.nextInt(borderPositions.size()));
+            if (position[0] == 0) {
+                found = Game.freePositions[1][position[1]] == 0;
+            } else if (position[0] == Game.shownSizeX - 1) {
+                found = Game.freePositions[Game.shownSizeX - 2][position[1]] == 0;
+            }
+            if (position[1] == 0) {
+                found = Game.freePositions[position[0]][1] == 0;
+            } else if (position[1] == Game.shownSizeY) {
+                found = Game.freePositions[position[0]][Game.shownSizeY - 2] == 0;
+            }
+        }
+        breakWall(position[0], position[1]);
+        game.salesman = new Salesman(position[0],position[1]);
+        /*int[] randomPosition = getRandomPosition();
         if (game.salesman != null) {
             game.salesman.setPositionX(randomPosition[0]);
             game.salesman.setPositionY(randomPosition[1]);
         } else {
             game.salesman = new Salesman(randomPosition[0], randomPosition[1]);
-        }
+        }*/
     }
 
     public int[] getRandomPosition() {

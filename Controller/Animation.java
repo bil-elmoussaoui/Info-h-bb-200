@@ -3,10 +3,13 @@ package Controller;
 import Model.*;
 import View.MainWindow;
 
-public class Animation {
-    private int monsterMovesTime = 1000;
+import java.util.ArrayList;
+
+public class Animation implements IObservateur {
+    private int monsterMovesTime = 500;
     private int animationRefresh = 100;
     private int monsterAttackTime = 500;
+    private ArrayList<Thread> threadList = new ArrayList<>();
     private Game game;
 
     public Animation(Game game){
@@ -28,14 +31,21 @@ public class Animation {
                                             if (playerPosition[0] == monster.getPositionX()) {
                                                 if ((playerPosition[1] - monster.getPositionY()) > 0) {
                                                     monster.move(monster.getPositionX(), monster.getPositionY() + 1);
+                                                    System.out.println("fuck");
                                                 } else {
                                                     monster.move(monster.getPositionX(), monster.getPositionY() - 1);
+                                                    System.out.println("you");
+
                                                 }
                                             } else if (playerPosition[1] == monster.getPositionY()) {
                                                 if ((playerPosition[0] - monster.getPositionX()) > 0) {
                                                     monster.move(monster.getPositionX() + 1, monster.getPositionY());
+                                                    System.out.println("bastard");
+
                                                 } else {
                                                     monster.move(monster.getPositionX() - 1, monster.getPositionY());
+                                                    System.out.println("dammit");
+
                                                 }
                                             }
                                         }
@@ -58,7 +68,7 @@ public class Animation {
             }
 
         };
-        monstersThread.start();
+        threadList.add(monstersThread);
 
         Thread trapThread = new Thread(){
             public void run(){
@@ -77,7 +87,7 @@ public class Animation {
                 }
             }
         };
-        trapThread.start();
+        threadList.add(trapThread);
 
         Thread arrow = new Thread(){
             @Override
@@ -136,8 +146,7 @@ public class Animation {
                 }
             }
         };
-        arrow.start();
-
+        threadList.add(arrow);
 
         Thread spell = new Thread(){
             @Override
@@ -199,7 +208,7 @@ public class Animation {
                 }
             }
         };
-        spell.start();
+        threadList.add(spell);
 
         Thread monsterAttackThread = new Thread(){
             public void run(){
@@ -250,7 +259,7 @@ public class Animation {
                 }catch (Exception e){}
             }
         };
-        monsterAttackThread.start();
+        threadList.add(monsterAttackThread);
 
         Thread playerAttackThread = new Thread(){
             public void run(){
@@ -291,11 +300,10 @@ public class Animation {
                         }
                     }
 
-                }catch (Exception e){}
-            }
-        };
-        playerAttackThread.start();
-
+            }catch (Exception e){}
+        }
+    };
+    threadList.add(playerAttackThread);
 
 
     Thread trapTornadoAnimation = new Thread(){
@@ -327,7 +335,7 @@ public class Animation {
                 }catch (Exception e){}
             }
         };
-        trapTornadoAnimation.start();
+        threadList.add(trapTornadoAnimation);
 
         Thread spellAnimation = new Thread(){
             public void run(){
@@ -347,26 +355,7 @@ public class Animation {
                 }catch (Exception e){}
             }
         };
-        spellAnimation.start();
-
-
-        Thread playerDeathThread = new Thread(){
-            public void run() {
-                try {
-                    while (true) {
-                        Thread.sleep(animationRefresh);
-                        if (!game.player.isAlive()) {
-                            MainWindow.gamePaused = false;
-                            Player.isAlive = false;
-                            game.window.showMenuWindow();
-                        }
-                    }
-                } catch (Exception e) {
-                }
-            }
-
-        };
-        playerDeathThread.start();
+        threadList.add(spellAnimation);
 
         Thread animationThread = new Thread(){
             public void run() {
@@ -424,7 +413,19 @@ public class Animation {
                 }catch(Exception e){}
             }
         };
-        animationThread.start();
+        threadList.add(animationThread);
+    }
+
+    public void update(){
+        if(MainWindow.gamePaused){
+            for(Thread thread : threadList){
+                thread.interrupt();
+            }
+        } else {
+             for(Thread thread : threadList){
+                thread.start();
+            }
+        }
     }
 
 }

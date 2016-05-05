@@ -1,20 +1,25 @@
 package View;
 
+import Controller.Animation;
 import Model.Game;
-import Model.Player;
-
+import Model.IObservateur;
+import Model.AnimationObserver;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.WindowEvent;
+import java.util.ArrayList;
 
-public class MainWindow {
+public class MainWindow implements IObservateur, AnimationObserver{
+    private IObservateur observer;
     public static boolean gamePaused = false;
     public static boolean newGame = false;
     public static boolean gameStarted = false;
+    public boolean menuAlive = true;
     public GraphicsDevice device;
     private JFrame mainWindow;
+    private Animation animation;
     private Map levelMap = new Map();
 
     public MainWindow() {
@@ -22,6 +27,9 @@ public class MainWindow {
         initialize();
     }
 
+    public void setAnimation(Animation animation){
+        this.animation = animation;
+    }
 
     public static void main(String args[]) {
         new MainWindow();
@@ -42,7 +50,7 @@ public class MainWindow {
             @Override
             public void keyPressed(KeyEvent keyEvent) {
                 if (keyEvent.getKeyCode() == KeyEvent.VK_ESCAPE) {
-                    if (Player.isAlive) {
+                    if (menuAlive) {
                         if (!MainWindow.gamePaused) {
                             MainWindow.gamePaused = true;
                             showMenuWindow();
@@ -51,6 +59,7 @@ public class MainWindow {
                             Game.playerIsShopping = false;
                             showLevelWindow();
                         }
+                        notifier();
                     }
                 }
             }
@@ -75,6 +84,7 @@ public class MainWindow {
         mainWindow.getContentPane().add(Window.getJPanel());
         mainWindow.requestFocusInWindow();
         mainWindow.revalidate();
+        notifier();
     }
 
     public void closeWindow() {
@@ -82,7 +92,7 @@ public class MainWindow {
     }
 
     public void showMenuWindow() {
-        MenuWindow Window = new MenuWindow(this);
+        MenuWindow Window = new MenuWindow(this,  menuAlive, animation);
         mainWindow.getContentPane().removeAll();
         mainWindow.getContentPane().add(Window.getJPanel());
         mainWindow.requestFocusInWindow();
@@ -99,15 +109,29 @@ public class MainWindow {
 
     public void showBuyWindow(Game game) {
         BuyWindow Window = new BuyWindow(game);
+        gamePaused = true;
         mainWindow.getContentPane().removeAll();
         mainWindow.getContentPane().add(Window.getJPanel());
         mainWindow.requestFocusInWindow();
         mainWindow.revalidate();
+        notifier();
     }
 
     public void draw(int[][] map, Game game) {
         levelMap.setGame(game);
         levelMap.setMapMatrix(map);
+    }
+
+    public void update(){
+        this.menuAlive = false;
+    }
+
+    public void attach(IObservateur o) {
+        observer = o;
+    }
+
+    public void notifier() {
+       observer.update();
     }
 
     public void setKeyListener(KeyListener keyboard) {

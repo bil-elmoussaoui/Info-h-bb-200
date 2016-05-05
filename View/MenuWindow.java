@@ -1,7 +1,9 @@
 package View;
-
+import Controller.Animation;
 import Main.Main;
+import Model.AnimationObserver;
 import Model.Game;
+import Model.IObservateur;
 import Model.Player;
 
 import javax.imageio.ImageIO;
@@ -11,11 +13,14 @@ import java.awt.event.ActionEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 
-class MenuWindow {
+class MenuWindow implements AnimationObserver{
     private MainWindow window;
-
-    public MenuWindow(MainWindow window) {
+    private IObservateur observer;
+    private boolean menuAlive;
+    public MenuWindow(MainWindow window, boolean menuAlive, Animation animation) {
+        this.attach(animation);
         this.window = window;
+        this.menuAlive = menuAlive;
     }
 
     public JPanel getJPanel() {
@@ -33,7 +38,7 @@ class MenuWindow {
                 }
             }
         };
-        if (Player.isAlive) {
+        if (menuAlive) {
             menuWindow.setBorder(BorderFactory.createEmptyBorder(260, 400, 220, 350));
         } else {
             menuWindow.setBorder(BorderFactory.createEmptyBorder(20, 400, 220, 350));
@@ -43,12 +48,13 @@ class MenuWindow {
         menuPanel.setOpaque(false);
         BButton Play;
 
-        if (MainWindow.gamePaused && MainWindow.gameStarted) {
+        if (MainWindow.gamePaused && MainWindow.gameStarted && menuAlive) {
             menuPanel.setLayout(new GridLayout(5, 0, 10, 10));
             BButton Resume = new BButton("Resume");
             Resume.addActionListener((ActionEvent e) -> {
                 window.showLevelWindow();
                 MainWindow.gamePaused = false;
+                notifier();
             });
             menuPanel.add(Resume);
             Play = new BButton("New Game");
@@ -58,14 +64,15 @@ class MenuWindow {
         }
 
         Play.addActionListener((ActionEvent e) -> {
-            if (MainWindow.gamePaused || !Player.isAlive) {
+            if (MainWindow.gamePaused || !menuAlive) {
                 MainWindow.newGame = true;
             }
             window.showLevelWindow();
             MainWindow.gamePaused = false;
+            notifier();
         });
         menuPanel.add(Play);
-        if (MainWindow.gamePaused && MainWindow.gameStarted) {
+        if (MainWindow.gamePaused && MainWindow.gameStarted && menuAlive) {
             BButton Save = new BButton("Save");
             Save.addActionListener((ActionEvent e) -> {
                 Main.save();
@@ -85,7 +92,7 @@ class MenuWindow {
         menuPanel.add(Quit);
 
 
-        if (!Player.isAlive) {
+        if (!menuAlive) {
             MainWindow.gamePaused = true;
             JLabel gameOver = new JLabel();
             gameOver.setIcon(new ImageIcon("Images/death.jpg"));
@@ -96,4 +103,11 @@ class MenuWindow {
         return menuWindow;
     }
 
+    public void attach(IObservateur o) {
+        observer = o;
+    }
+
+    public void notifier() {
+        observer.update();
+    }
 }

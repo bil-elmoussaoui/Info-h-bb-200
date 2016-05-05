@@ -139,6 +139,9 @@ public class Map extends JPanel {
                     g.drawImage(game.door.getImage(), (game.door.getPositionX() - startPositionX) * Game.pixelX, (game.door.getPositionY() - startPositionY) * Game.pixelY, Game.pixelX, Game.pixelY, null);
                 }
             }
+            if (game.salesman != null) {
+                g.drawImage(game.salesman.getImage(), (game.salesman.getPositionX() - startPositionX) * Game.pixelX, (game.salesman.getPositionY() - startPositionY) * Game.pixelY, Game.pixelX, Game.pixelY, null);
+            }
 
             g.setFont(new Font("TimesRoman", Font.BOLD, 22));
             try {

@@ -19,6 +19,8 @@ public class Main {
         Keyboard keyboard = new Keyboard(game);
         window.setKeyListener(keyboard);
         Animation animation = new Animation(game);
+        window.setAnimation(animation);
+        window.attach(animation);
     }
 
     public static void save() {

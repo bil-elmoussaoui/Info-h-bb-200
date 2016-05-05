@@ -1,11 +1,16 @@
 package Model;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.File;
+
 /*
 TODO:
 - draw image as for other classes!
  */
 public class Salesman extends Item {
-
+    private String imgPath = "Images/market.png";
+    private BufferedImage img = null;
     public int selectorY = 0;
     public int selectorX = 0;
     public int[][][] carteAchat = new int[4][4][2];
@@ -16,6 +21,11 @@ public class Salesman extends Item {
         setIsBreakable(false);
         setIsCollectable(false);
         setIsWalkable(false);
+        try {
+            img = ImageIO.read(new File(imgPath));
+        } catch (Exception e) {
+
+        }
 
         carteAchat[0][0] = new int[]{1, 10}; // Potion vie
         carteAchat[1][0] = new int[]{2, 50}; // Potion firelion
@@ -54,6 +64,10 @@ public class Salesman extends Item {
         } else {
             this.selectorX = selectorX % 4;
         }
+    }
+
+    public BufferedImage getImage(){
+        return img;
     }
 
 }
