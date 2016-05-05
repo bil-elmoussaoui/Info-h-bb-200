@@ -6,7 +6,7 @@ import java.io.File;
 
 public class Wall extends Tile {
     private String imgPath = "Images/wall.png";
-    private BufferedImage img;
+    private transient BufferedImage img;
 
     public Wall(int positionX, int positionY) {
         super(positionX, positionY);

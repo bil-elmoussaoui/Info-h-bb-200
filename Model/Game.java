@@ -5,9 +5,8 @@ import View.MainWindow;
 import java.awt.*;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Iterator;
 
-public class Game implements Serializable, IObservateur {
+public class Game implements Serializable, Observer {
     private static final long serialVersionUID = 1L;
     public static int[][] freePositions;
     public static boolean playerIsShopping = false;
@@ -29,7 +28,7 @@ public class Game implements Serializable, IObservateur {
     public ArrayList<Weapon> thrownWeapons = new ArrayList<>();
     public ArrayList<Spell> thrownSpells = new ArrayList<>();
     public transient MainWindow window;
-    public MapGenerator mapGenerator;
+    public transient MapGenerator mapGenerator;
     public Door door;
     private int[][] map;
 
@@ -79,11 +78,11 @@ public class Game implements Serializable, IObservateur {
 
     public void drawShop() {
         int[] position = player.getAttackedPosition();
-            if (salesman != null) {
-                if (position[0] == salesman.getPositionX() && position[1] == salesman.getPositionY()) {
-                    window.showBuyWindow(this);
-                }
+        if (salesman != null) {
+            if (position[0] == salesman.getPositionX() && position[1] == salesman.getPositionY()) {
+                window.showBuyWindow(this);
             }
+        }
     }
 
     public void playerAttack() {
@@ -110,7 +109,7 @@ public class Game implements Serializable, IObservateur {
             } else if (player.weapon.getIsDistanceWeapon()) {
                 if (player.weapon instanceof Bow) {
                     if (((Bow) player.weapon).arrowsCount > 0) {
-                        Arrow arrow = new Arrow(1);
+                        Arrow arrow = new Arrow();
                         arrow.setDirection(player.direction);
                         ((Bow) player.weapon).arrow = arrow;
                         ((Bow) player.weapon).addArrows(-1);
@@ -250,17 +249,19 @@ public class Game implements Serializable, IObservateur {
                 case 1:
                 case 2:
                 case 3:
-                    if(player.inventory.countItems() + 1 <= player.inventory.sizeMaxItem) {
+                    if (player.inventory.countItems() + 1 <= player.inventory.sizeMaxItem) {
                         Potion spell = new Potion(null, null);
                         if (selector == 2) spell.setType(1);
                         if (selector == 3) spell.setType(2);
                         player.inventory.addItem(spell);
                         wasBought = true;
                     }
-                break;
+                    break;
                 case 4:
-                    player.setArmor(player.armorMax);
-                    wasBought = true;
+                    if (player.getArmor() < player.armorMax) {
+                        player.setArmor(player.armorMax);
+                        wasBought = true;
+                    }
                     break;
                 case 5: // arrows
                     for (int i = 0; i < player.inventory.countWeapons(); i++) {
@@ -270,27 +271,27 @@ public class Game implements Serializable, IObservateur {
                             wasBought = true;
                         }
                     }
-                break;
+                    break;
                 case 6:
-                    if(player.inventory.countWeapons() + 1 <= player.inventory.sizeMaxWeapon) {
-                        player.inventory.addWeapon(new Bow(null, null, 1));
+                    if (player.inventory.countWeapons() + 1 <= player.inventory.sizeMaxWeapon) {
+                        player.inventory.addWeapon(new Bow(null, null));
                         wasBought = true;
                     }
-                break;
+                    break;
                 case 7:
-                    if(player.inventory.countWeapons() + 1 <= player.inventory.sizeMaxWeapon) {
-                        player.inventory.addWeapon(new Dagger(null, null, 1));
+                    if (player.inventory.countWeapons() + 1 <= player.inventory.sizeMaxWeapon) {
+                        player.inventory.addWeapon(new Dagger(null, null));
                         wasBought = true;
                     }
-                break;
+                    break;
                 case 8:
-                    if(player.inventory.countWeapons() + 1 <= player.inventory.sizeMaxWeapon) {
-                        player.inventory.addWeapon(new Spear(null, null, 1));
+                    if (player.inventory.countWeapons() + 1 <= player.inventory.sizeMaxWeapon) {
+                        player.inventory.addWeapon(new Spear(null, null));
                         wasBought = true;
                     }
-                break;
+                    break;
                 case 16:
-                    if(!player.hasKey) {
+                    if (!player.hasKey) {
                         player.addKey();
                         wasBought = true;
                     }
@@ -301,7 +302,7 @@ public class Game implements Serializable, IObservateur {
     }
 
     public void update() {
-        if(!player.isAlive()){
+        if (!player.isAlive()) {
             window.showMenuWindow();
         }
     }

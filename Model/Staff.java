@@ -5,18 +5,14 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
-/*
- TODO :
-- get a nice static image
- */
 public class Staff extends Weapon {
     public String imgPath = "Images/weapon-staff.png";
-    public String staticImgPath = "Images/sword_iron.png";
-    public BufferedImage img = null;
-    public BufferedImage staticImg = null;
+    public String staticImgPath = "Images/stick-icon.png";
+    public transient BufferedImage img = null;
+    public transient BufferedImage staticImg = null;
 
-    public Staff(Integer positionX, Integer positionY, int damage) {
-        super(positionX, positionY, damage, 7);
+    public Staff(Integer positionX, Integer positionY) {
+        super(positionX, positionY, 0.25, 7);
         setIsDistanceWeapon(false);
         try {
             img = ImageIO.read(new File(imgPath));

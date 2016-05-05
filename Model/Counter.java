@@ -1,7 +1,10 @@
 package Model;
 
 
-public class Counter {
+import java.io.Serializable;
+
+public class Counter implements Serializable {
+    private static final long serialVersionUID = 1L;
     private int counter = 0;
     private int counterMax;
 

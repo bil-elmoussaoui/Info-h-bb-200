@@ -6,20 +6,16 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
-/*
- TODO :
-- get a nice static image
- */
 public class Bow extends Weapon {
     public String imgPath = "Images/weapon-bow.png";
-    public BufferedImage img = null;
-    public BufferedImage staticImg = null;
-    public String staticImgPath = "Images/sword_iron.png";
+    public transient BufferedImage img = null;
+    public transient BufferedImage staticImg = null;
+    public String staticImgPath = "Images/upg_bow.png";
     public int arrowsCount = 1;
     public Arrow arrow;
 
-    public Bow(Integer positionX, Integer positionY, int damage) {
-        super(positionX, positionY, damage, 12);
+    public Bow(Integer positionX, Integer positionY) {
+        super(positionX, positionY, 1, 12);
         setIsDistanceWeapon(true);
         try {
             img = ImageIO.read(new File(imgPath));
@@ -28,7 +24,6 @@ public class Bow extends Weapon {
             e.printStackTrace();
         }
     }
-
 
     public void addArrows(int arrows) {
         this.arrowsCount += arrows;
@@ -40,7 +35,6 @@ public class Bow extends Weapon {
     public int getArrowsCount() {
         return arrowsCount;
     }
-
 
     public BufferedImage getStaticImg() {
         return staticImg;

@@ -21,6 +21,7 @@ public class Main {
         Animation animation = new Animation(game);
         window.setAnimation(animation);
         window.attach(animation);
+        window.showMenuWindow();
     }
 
     public static void save() {
@@ -33,6 +34,7 @@ public class Main {
             out.close();
             fileOut.close();
         } catch (IOException i) {
+            i.printStackTrace();
         }
     }
 

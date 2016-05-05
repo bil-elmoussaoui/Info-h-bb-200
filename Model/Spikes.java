@@ -7,7 +7,7 @@ import java.io.File;
 
 public class Spikes extends Trap {
     public Counter counter;
-    public BufferedImage img = null;
+    public transient BufferedImage img = null;
     public String imgPath = "Images/spikes.png";
 
     public Spikes(int positionX, int positionY) {

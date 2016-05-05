@@ -1,12 +1,11 @@
 package Model;
 
 import java.awt.image.BufferedImage;
+import java.io.Serializable;
 
-/**
- * Created by bilal on 4/05/16.
- */
-public class Spell {
-    public BufferedImage img;
+public class Spell implements Serializable{
+    private static final long serialVersionUID = 1L;
+    public transient BufferedImage img;
     public String imgPath;
     public Counter counter;
     public boolean movingSpell;

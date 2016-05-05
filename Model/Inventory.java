@@ -1,5 +1,6 @@
 package Model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -8,7 +9,8 @@ TODO :
 - handle exceptions
  */
 
-public class Inventory {
+public class Inventory implements Serializable {
+    private static final long serialVersionUID = 1L;
     public int sizeMaxWeapon = 5;
     public int sizeMaxItem = 3;
     private ArrayList<Weapon> weaponsInventory = new ArrayList<>();

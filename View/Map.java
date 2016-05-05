@@ -54,13 +54,8 @@ public class Map extends JPanel {
                 Tile tile = tiles.get(i);
                 if (startPositionX <= tile.getPositionX() && tile.getPositionX() <= endPositionX) {
                     if (startPositionY <= tile.getPositionY() && tile.getPositionY() <= endPositionY) {
-                        if (tile instanceof Portal) {
-                            g.drawImage(((Portal) tile).getInImage(), (tile.getPositionX() - startPositionX) * Game.pixelX, (tile.getPositionY() - startPositionY) * Game.pixelY, Game.pixelX, Game.pixelY, null);
-                            g.drawImage(((Portal) tile).getOutImage(), (tile.getPositionX() - startPositionX) * Game.pixelX, (((Portal) tile).getOutPositionY() - startPositionY) * Game.pixelY, Game.pixelX, Game.pixelY, null);
-                        } else {
-                            if (!(tile instanceof Trap) || (tile instanceof Trap && !((Trap) tile).animationStopped)) {
-                                g.drawImage(tile.getImage(), (tile.getPositionX() - startPositionX) * Game.pixelX, (tile.getPositionY() - startPositionY) * Game.pixelY, Game.pixelX, Game.pixelY, null);
-                            }
+                        if (!(tile instanceof Trap) || (tile instanceof Trap && !((Trap) tile).animationStopped)) {
+                            g.drawImage(tile.getImage(), (tile.getPositionX() - startPositionX) * Game.pixelX, (tile.getPositionY() - startPositionY) * Game.pixelY, Game.pixelX, Game.pixelY, null);
                         }
                     }
                 }
@@ -88,15 +83,7 @@ public class Map extends JPanel {
                         } else if (item instanceof Potion) {
                             g.drawImage(((Potion) item).getImage(), (item.getPositionX() - startPositionX) * Game.pixelX + 16, (item.getPositionY() - startPositionY) * Game.pixelY + 16, 32, 32, null);
                         } else if (item instanceof Weapon) {
-                            if (item instanceof Dagger) {
-                                g.drawImage(((Dagger) item).getStaticImg(), (item.getPositionX() - startPositionX) * Game.pixelX + 16, (item.getPositionY() - startPositionY) * Game.pixelY + 16, 32, 32, null);
-                            } else if (item instanceof Bow) {
-                                g.drawImage(((Bow) item).getStaticImg(), (item.getPositionX() - startPositionX) * Game.pixelX + 16, (item.getPositionY() - startPositionY) * Game.pixelY + 16, 32, 32, null);
-                            } else if (item instanceof Staff) {
-                                g.drawImage(((Staff) item).getStaticImg(), (item.getPositionX() - startPositionX) * Game.pixelX + 16, (item.getPositionY() - startPositionY) * Game.pixelY + 16, 32, 32, null);
-                            } else if (item instanceof Spear) {
-                                g.drawImage(((Spear) item).getStaticImg(), (item.getPositionX() - startPositionX) * Game.pixelX + 16, (item.getPositionY() - startPositionY) * Game.pixelY + 16, 32, 32, null);
-                            }
+                            g.drawImage(((Weapon) item).getStaticImg(), (item.getPositionX() - startPositionX) * Game.pixelX + 16, (item.getPositionY() - startPositionY) * Game.pixelY + 16, 32, 32, null);
                         }
                     }
                 }
@@ -149,7 +136,7 @@ public class Map extends JPanel {
                 BufferedImage keyImg = ImageIO.read(new File("Images/key.png"));
                 BufferedImage heart = ImageIO.read(new File("Images/heart.png"));
                 BufferedImage coin = ImageIO.read(new File("Images/coin.png"));
-                BufferedImage arrow = ImageIO.read(new File("Images/Arrow.png"));
+                BufferedImage arrow = ImageIO.read(new File("Images/arrows.png"));
                 // show heart life's!
                 int j = 0;
                 for (int i = 0; i < Math.floor(game.player.getHealth()); i++) {
@@ -168,6 +155,13 @@ public class Map extends JPanel {
                     g.drawImage(arrow, 250, Game.shownSizeY * Game.pixelY + 10, 16, 16, null);
                     g.drawString(("x" + ((Bow) game.player.weapon).arrowsCount), 280, Game.shownSizeY * Game.pixelY + 25);
                 }
+                if (game.player.weapon instanceof Bow) {
+                    g.drawImage(inventoryBg, (Game.shownSizeX - 1 - (game.player.inventory.sizeMaxItem + game.player.inventory.sizeMaxItem + 7)) * Game.pixelX, (Game.shownSizeY) * Game.pixelY, Game.pixelX, Game.pixelY, null);
+                    g.drawImage(arrow, (Game.shownSizeX - 1 - (game.player.inventory.sizeMaxItem + game.player.inventory.sizeMaxItem + 7)) * Game.pixelX + 6, (Game.shownSizeY) * Game.pixelY + 6, 48 , 48, null);
+
+                    g.drawString(String.valueOf(((Bow) game.player.weapon).arrowsCount),  (Game.shownSizeX - 1 - (game.player.inventory.sizeMaxItem + game.player.inventory.sizeMaxItem + 7)) * Game.pixelX + 30, (Game.shownSizeY + 1) * Game.pixelY);
+                }
+
                 // inventory!
                 for (int i = 0; i < game.player.inventory.sizeMaxWeapon; i++) {
                     g.drawImage(inventoryBg, (Game.shownSizeX - 1 - (game.player.inventory.sizeMaxWeapon + game.player.inventory.sizeMaxItem + 3 - i)) * Game.pixelX, (Game.shownSizeY) * Game.pixelY, Game.pixelX, Game.pixelY, null);
@@ -175,8 +169,8 @@ public class Map extends JPanel {
                 }
                 for (int i = 0; i < game.player.inventory.countWeapons(); i++) {
                     Weapon weapon = game.player.inventory.getWeapon(i);
-                    g.drawImage(weapon.getStaticImg(), (Game.shownSizeX - 1 - (game.player.inventory.sizeMaxWeapon + game.player.inventory.sizeMaxItem + 3 - i)) * Game.pixelX + 16, (Game.shownSizeY) * Game.pixelY + 16, 32, 32, null);
-                }
+                    g.drawImage(weapon.getStaticImg(), (Game.shownSizeX - 1 - (game.player.inventory.sizeMaxWeapon + game.player.inventory.sizeMaxItem + 3 - i)) * Game.pixelX, (Game.shownSizeY) * Game.pixelY, 64, 64, null);
+                 }
                 // potions
                 for (int i = 0; i < game.player.inventory.sizeMaxItem; i++) {
                     g.drawImage(inventoryBg, (Game.shownSizeX - 1 - (game.player.inventory.sizeMaxItem + 2 - i)) * Game.pixelX, (Game.shownSizeY) * Game.pixelY, Game.pixelX, Game.pixelY, null);
@@ -188,7 +182,8 @@ public class Map extends JPanel {
                 }
                 // key case
                 g.drawImage(inventoryBg, (Game.shownSizeX - 2) * Game.pixelX, (Game.shownSizeY) * Game.pixelY, Game.pixelX, Game.pixelY, null);
-                if (game.player.hasKey) {
+                g.drawString("O", (Game.shownSizeX - 2) * Game.pixelX + 5, (Game.shownSizeY + 1) * Game.pixelY - 5);                
+		        if (game.player.hasKey) {
                     g.drawImage(keyImg, (Game.shownSizeX - 2) * Game.pixelX + 16, (Game.shownSizeY) * Game.pixelY + 16, 32, 32, null);
                 }
 

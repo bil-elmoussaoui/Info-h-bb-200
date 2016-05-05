@@ -5,7 +5,7 @@ import View.MainWindow;
 
 import java.util.ArrayList;
 
-public class Animation implements IObservateur {
+public class Animation implements Observer {
     private int monsterMovesTime = 500;
     private int animationRefresh = 100;
     private int monsterAttackTime = 500;
@@ -31,21 +31,14 @@ public class Animation implements IObservateur {
                                             if (playerPosition[0] == monster.getPositionX()) {
                                                 if ((playerPosition[1] - monster.getPositionY()) > 0) {
                                                     monster.move(monster.getPositionX(), monster.getPositionY() + 1);
-                                                    System.out.println("fuck");
                                                 } else {
                                                     monster.move(monster.getPositionX(), monster.getPositionY() - 1);
-                                                    System.out.println("you");
-
                                                 }
                                             } else if (playerPosition[1] == monster.getPositionY()) {
                                                 if ((playerPosition[0] - monster.getPositionX()) > 0) {
                                                     monster.move(monster.getPositionX() + 1, monster.getPositionY());
-                                                    System.out.println("bastard");
-
                                                 } else {
                                                     monster.move(monster.getPositionX() - 1, monster.getPositionY());
-                                                    System.out.println("dammit");
-
                                                 }
                                             }
                                         }
@@ -419,7 +412,7 @@ public class Animation implements IObservateur {
     public void update(){
         if(MainWindow.gamePaused){
             for(Thread thread : threadList){
-                thread.interrupt();
+                //thread.interrupt();
             }
         } else {
              for(Thread thread : threadList){

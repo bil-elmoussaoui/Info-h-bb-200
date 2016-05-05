@@ -4,11 +4,8 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 
-/**
- * Created by bilal on 4/05/16.
- */
 public class FireLion extends Spell {
-    public BufferedImage img = null;
+    public transient BufferedImage img = null;
     public String imgPath;
 
     public FireLion(int positionX, int positionY, int direction) {

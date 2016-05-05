@@ -32,7 +32,11 @@ class BuyWindow {
                     BufferedImage imgIcetaclePotion = ImageIO.read(new File("Images/icetacle-potion.png"));
                     BufferedImage imgCoins = ImageIO.read(new File("Images/coin.png"));
                     BufferedImage imgKey = ImageIO.read(new File("Images/key.png"));
-
+                    BufferedImage imgShield = ImageIO.read(new File("Images/upg_shield.png"));
+                    BufferedImage imgBow = ImageIO.read(new File("Images/upg_bow.png"));
+                    BufferedImage imgDagger = ImageIO.read(new File("Images/upg_dagger.png"));
+                    BufferedImage imgSpear = ImageIO.read(new File("Images/upg_spear.png"));
+                    BufferedImage imgArrows = ImageIO.read(new File("Images/arrows.png"));
 
                     for (int i = 0; i < Game.shownSizeX; i++) {
                         for (int j = 0; j < Game.shownSizeY + 1; j++) {
@@ -106,9 +110,25 @@ class BuyWindow {
                                 case (3):
                                     g.drawImage(imgIcetaclePotion, i * 96 + startX + 12 - 250, j * 96 + 12 + startY, 64, 64, null);
                                     break;
+                                case 4:
+                                    g.drawImage(imgShield, i * 96 + startX + 12 - 250, j * 96 + 12 + startY, 64, 64, null);
+                                    break;
+                                case 5:
+
+                                    g.drawImage(imgArrows, i * 96 + startX + 12 - 250, j * 96 + 12 + startY, 64, 64, null);
+
+                                    break;
+                                case 6:
+                                    g.drawImage(imgBow, i * 96 + startX + 12 - 250, j * 96 + 12 + startY, 64, 64, null);
+                                    break;
+                                case 7:
+                                    g.drawImage(imgDagger, i * 96 + startX + 12 - 250, j * 96 + 12 + startY, 64, 64, null);
+                                    break;
+                                case 8:
+                                    g.drawImage(imgSpear, i * 96 + startX + 12 - 250, j * 96 + 12 + startY, 64, 64, null);
+                                    break;
                                 case 16:
                                     g.drawImage(imgKey, i * 96 + startX + 32 - 250, j * 96 + 32 + startY, 32, 32, null);
-
                                     break;
 
                             }

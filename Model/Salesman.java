@@ -4,17 +4,12 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 
-/*
-TODO:
-- draw image as for other classes!
- */
 public class Salesman extends Item {
-    private String imgPath = "Images/market.png";
-    private BufferedImage img = null;
     public int selectorY = 0;
     public int selectorX = 0;
     public int[][][] carteAchat = new int[4][4][2];
-
+    private String imgPath = "Images/market.png";
+    private transient BufferedImage img = null;
 
     public Salesman(int positionX, int positionY) {
         super(positionX, positionY);
@@ -26,7 +21,6 @@ public class Salesman extends Item {
         } catch (Exception e) {
 
         }
-
         carteAchat[0][0] = new int[]{1, 10}; // Potion vie
         carteAchat[1][0] = new int[]{2, 50}; // Potion firelion
         carteAchat[2][0] = new int[]{3, 50}; // Potion icetacle
@@ -36,10 +30,6 @@ public class Salesman extends Item {
         carteAchat[2][1] = new int[]{7, 150}; // Dagger
         carteAchat[3][1] = new int[]{8, 100};  //Spear
         carteAchat[3][3] = new int[]{16, 1000}; // key
-
-        // carteAchat[1][0] = new int[]{5, 25};; // Potion sorts 1
-        // carteAchat[1][1] = new int[]{6, 500};; // Armes
-        // carteAchat[1][2] = new int[]{7, 25};; // Potion sorts 2
     }
 
     public int getSelectorY() {
@@ -66,7 +56,7 @@ public class Salesman extends Item {
         }
     }
 
-    public BufferedImage getImage(){
+    public BufferedImage getImage() {
         return img;
     }
 

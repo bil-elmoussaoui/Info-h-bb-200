@@ -3,11 +3,13 @@ package Model;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.Serializable;
 
-public class Tile {
+public class Tile implements Serializable{
+    private static final long serialVersionUID = 1L;
     private int positionX;
     private int positionY;
-    private BufferedImage img;
+    private transient BufferedImage img;
     private String imgPath;
     private boolean isWalkable;
     private boolean isBreakable;

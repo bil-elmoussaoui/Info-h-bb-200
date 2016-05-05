@@ -6,15 +6,15 @@ import java.awt.image.BufferedImage;
 public class Weapon extends Item {
     public String imgPath = "Images/sword.png";
     public String staticImgPath = "Images/sword-static.png";
-    public BufferedImage img = null;
-    public BufferedImage staticImg = null;
+    public transient BufferedImage img = null;
+    public transient BufferedImage staticImg = null;
     public Counter counter;
     public boolean isDistanceWeapon;
-    private int damage;
+    private double damage;
     private int level;
     private int direction = 1;
 
-    public Weapon(Integer positionX, Integer positionY, int damage, int counterMax) {
+    public Weapon(Integer positionX, Integer positionY, double damage, int counterMax) {
         super(positionX, positionY);
         this.damage = damage;
         setIsCollectable(true);
@@ -23,7 +23,7 @@ public class Weapon extends Item {
         counter = new Counter(counterMax);
     }
 
-    public int getDamage() {
+    public double getDamage() {
         return damage;
     }
 

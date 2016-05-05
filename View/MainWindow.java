@@ -2,17 +2,16 @@ package View;
 
 import Controller.Animation;
 import Model.Game;
-import Model.IObservateur;
+import Model.Observer;
 import Model.AnimationObserver;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.WindowEvent;
-import java.util.ArrayList;
 
-public class MainWindow implements IObservateur, AnimationObserver{
-    private IObservateur observer;
+public class MainWindow implements Observer, AnimationObserver{
+    private Observer observer;
     public static boolean gamePaused = false;
     public static boolean newGame = false;
     public static boolean gameStarted = false;
@@ -69,7 +68,6 @@ public class MainWindow implements IObservateur, AnimationObserver{
         mainWindow.setExtendedState(JFrame.MAXIMIZED_BOTH);
         mainWindow.setUndecorated(true);
         mainWindow.setResizable(false);
-        showMenuWindow();
         mainWindow.pack();
         mainWindow.setLocationRelativeTo(null);
         mainWindow.setLocationByPlatform(true);
@@ -126,7 +124,7 @@ public class MainWindow implements IObservateur, AnimationObserver{
         this.menuAlive = false;
     }
 
-    public void attach(IObservateur o) {
+    public void attach(Observer o) {
         observer = o;
     }
 

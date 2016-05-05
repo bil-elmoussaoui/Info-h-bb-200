@@ -5,20 +5,14 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
-/*
- TODO :
- - better image maybe?
- */
 public class Arrow extends Bow {
     public String imgPath = "Images/weapon-arrow.png";
-    public BufferedImage img = null;
+    public transient BufferedImage img = null;
     public Counter counter;
     public boolean beenThrown = false;
-    private int damage;
 
-    public Arrow(int damage) {
-        super(null, null, damage);
-        this.damage = damage;
+    public Arrow() {
+        super(null, null);
         counter = new Counter(12);
         try {
             img = ImageIO.read(new File(imgPath));
@@ -28,11 +22,19 @@ public class Arrow extends Bow {
     }
 
     public void attack(Person person) {
-        if (person.getHasArmor()) {
-            person.setArmor(person.getArmor() - damage);
+        double armorDiff = person.getArmor() - this.getDamage();
+        if (armorDiff > 0) {
+            person.setArmor(armorDiff);
         } else {
-            person.setHealth(person.getHealth() - damage);
+            person.setArmor(0);
+            double healthDiff = person.getHealth() - Math.abs(armorDiff);
+            if (healthDiff > 0) {
+                person.setHealth(healthDiff);
+            } else {
+                person.setHealth(0);
+            }
         }
+
     }
 
     public BufferedImage getImage() {

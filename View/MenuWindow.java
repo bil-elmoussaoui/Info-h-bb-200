@@ -3,8 +3,7 @@ import Controller.Animation;
 import Main.Main;
 import Model.AnimationObserver;
 import Model.Game;
-import Model.IObservateur;
-import Model.Player;
+import Model.Observer;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -15,7 +14,7 @@ import java.io.File;
 
 class MenuWindow implements AnimationObserver{
     private MainWindow window;
-    private IObservateur observer;
+    private Observer observer;
     private boolean menuAlive;
     public MenuWindow(MainWindow window, boolean menuAlive, Animation animation) {
         this.attach(animation);
@@ -103,7 +102,7 @@ class MenuWindow implements AnimationObserver{
         return menuWindow;
     }
 
-    public void attach(IObservateur o) {
+    public void attach(Observer o) {
         observer = o;
     }
 

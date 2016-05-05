@@ -13,7 +13,7 @@ TODO:
 public class Potion extends Item {
     int type = 0;
     private double health;
-    private BufferedImage img;
+    private transient BufferedImage img;
     private String imgPath = "Images/health-potion.png";
 
     public Potion(Integer positionX, Integer positionY) {

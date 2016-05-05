@@ -5,19 +5,15 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
-/*
- TODO :
-- get a nice static image
- */
 public class Dagger extends Weapon {
 
-    public BufferedImage img = null;
+    public transient BufferedImage img = null;
     public String imgPath = "Images/weapon-dagger.png";
-    public BufferedImage staticImg = null;
-    public String staticImgPath = "Images/sword_iron.png";
+    public transient BufferedImage staticImg = null;
+    public String staticImgPath = "Images/upg_dagger.png";
 
-    public Dagger(Integer positionX, Integer positionY, int damage) {
-        super(positionX, positionY, damage, 5);
+    public Dagger(Integer positionX, Integer positionY) {
+        super(positionX, positionY, 0.5, 5);
         setIsDistanceWeapon(false);
         try {
             img = ImageIO.read(new File(imgPath));

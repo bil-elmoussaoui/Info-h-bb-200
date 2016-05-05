@@ -7,24 +7,22 @@ import java.util.ArrayList;
 
 /*
 TODO :
-- implement weapon damage
 - exp maybe??
 */
 
-public class Player extends Person implements PlayerObservateur {
-    private ArrayList <IObservateur> observateur = new ArrayList<>();
+public class Player extends Person implements PlayerObserver {
     public int coins = 100;
     public boolean hasKey = false;
     public Inventory inventory;
     public boolean isSpelling = false;
     public Spell spell = null;
+    private ArrayList<Observer> observers = new ArrayList<>();
 
     public Player(int positionX, int positionY) {
         super(positionX, positionY, 7);
         inventory = new Inventory();
         imgPath = "Images/player.png";
-        setWeapon(new Staff(null, null, 1));
-
+        setWeapon(new Staff(null, null));
         try {
             img = ImageIO.read(new File(imgPath));
             shieldImg = ImageIO.read(new File(shieldImgPath));
@@ -157,41 +155,39 @@ public class Player extends Person implements PlayerObservateur {
             if (item instanceof Potion) {
                 switch (((Potion) item).getType()) {
                     case 0:
-                        setHealth(getHealth() + ((Potion) item).getHealth());
+                        if (getHealth() < healthMax) {
+                            setHealth(getHealth() + ((Potion) item).getHealth());
+                            inventory.removeItem(item);
+                        }
                         break;
                     case 1:
                         doSpell(0); //FireLion
+                        inventory.removeItem(item);
                         break;
                     case 2:
                         doSpell(1); //IceTacle
+                        inventory.removeItem(item);
                         break;
                 }
-                inventory.removeItem(item);
             }
         }
     }
 
     public void setHealth(double health) {
-        try {
-            if (health >= 0 & health <= healthMax) {
-                this.health = health;
-            } else {
-                throw new Exception("Pb sur les vies");
-            }
-            if (this instanceof Player && this.health == 0) {
-                notifyObservers();
-            }
-        } catch (Exception pbVies) {
-            this.health = 0;
+        this.health = health;
+        if (this.health < 0) this.health = 0;
+        if (this.health > healthMax) this.health = healthMax;
+        if (this.health == 0) {
+            notifyObservers();
         }
     }
 
-    public void attach(IObservateur o) {
-        observateur.add(o);
+    public void attach(Observer o) {
+        observers.add(o);
     }
 
     public void notifyObservers() {
-        for (IObservateur o : observateur) {
+        for (Observer o : observers) {
             o.update();
         }
     }

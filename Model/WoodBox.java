@@ -9,7 +9,7 @@ import java.util.Random;
 public class WoodBox extends Item {
     public Item content;
     public Counter counter;
-    private BufferedImage img;
+    private transient BufferedImage img;
     private String imgPath = "Images/Wood_Box.png";
     private boolean isBeingBroken;
 
@@ -30,16 +30,16 @@ public class WoodBox extends Item {
             case 2: // Weapons
                 switch (randomItem.nextInt(4)) {
                     case 0:
-                        content = new Dagger(positionX, positionY, 1);
+                        content = new Dagger(positionX, positionY);
                         break;
                     case 1:
-                        content = new Staff(positionX, positionY, 1);
+                        content = new Staff(positionX, positionY);
                         break;
                     case 2:
-                        content = new Spear(positionX, positionY, 1);
+                        content = new Spear(positionX, positionY);
                         break;
                     case 3:
-                        content = new Bow(positionX, positionY, 1);
+                        content = new Bow(positionX, positionY);
                         break;
                 }
                 break;

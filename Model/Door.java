@@ -7,7 +7,7 @@ import java.io.File;
 
 public class Door extends Tile {
     private String imgPath = "Images/door.png";
-    private BufferedImage img = null;
+    private transient BufferedImage img = null;
     private boolean isOpen = false;
 
     public Door(int positionX, int positionY) {

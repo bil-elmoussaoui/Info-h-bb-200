@@ -7,7 +7,7 @@ import java.io.File;
 
 public class Tornado extends Trap {
     public Counter counter;
-    public BufferedImage img = null;
+    public transient BufferedImage img = null;
     public String imgPath = "Images/tornado.png";
 
     public Tornado(int positionX, int positionY) {

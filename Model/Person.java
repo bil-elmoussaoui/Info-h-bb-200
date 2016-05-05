@@ -4,18 +4,20 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Random;
 
-abstract class Person {
+abstract class Person implements Serializable {
+    private static final long serialVersionUID = 1L;
     public Weapon weapon;
     public int direction = 1;
     public int positionX;
     public int positionY;
     public boolean isMoving = false;
     public boolean isAttacking = false;
-    public BufferedImage img;
-    public BufferedImage shieldImg;
+    public transient BufferedImage img;
+    public transient BufferedImage shieldImg;
     public String imgPath = "Images/player.png";
     public String attackingImgPath;
     public String shieldImgPath = "Images/shield-walking.png";
@@ -103,9 +105,9 @@ abstract class Person {
 
     public void setArmor(double armor) {
         this.armor = armor;
-        if(this.armor < 0){
+        if (this.armor < 0) {
             this.armor = 0;
-        } else if(this.armor > armorMax) {
+        } else if (this.armor > armorMax) {
             this.armor = armorMax;
         }
     }

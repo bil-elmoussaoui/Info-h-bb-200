@@ -36,7 +36,7 @@ public class MapGenerator {
             if (Game.freePositions[x][y] == 0) {
                 game.walls.add(new Wall(x, y));
                 generatedMap[x][y] = 1;
-                //Game.freePositions[x][y] = 1;
+                Game.freePositions[x][y] = 1;
             }
         }
     }
@@ -194,16 +194,16 @@ public class MapGenerator {
                 case 3: // Weapons
                     switch (0) { // rand.nextInt(4)
                         case 0:
-                            game.items.add(new Dagger(randomPosition[0], randomPosition[1], 1));
+                            game.items.add(new Dagger(randomPosition[0], randomPosition[1]));
                             break;
                         case 1:
-                            game.items.add(new Staff(randomPosition[0], randomPosition[1], 1));
+                            game.items.add(new Staff(randomPosition[0], randomPosition[1]));
                             break;
                         case 2:
-                            game.items.add(new Spear(randomPosition[0], randomPosition[1], 1));
+                            game.items.add(new Spear(randomPosition[0], randomPosition[1]));
                             break;
                         case 3:
-                            game.items.add(new Bow(randomPosition[0], randomPosition[1], 1));
+                            game.items.add(new Bow(randomPosition[0], randomPosition[1]));
                             break;
                     }
                     break;
@@ -230,6 +230,7 @@ public class MapGenerator {
         }
         breakWall(position[0], position[1]);
         game.door = new Door(position[0], position[1]);
+        borderPositions.remove(position);
     }
 
     public void initSalesman() {
@@ -250,14 +251,8 @@ public class MapGenerator {
             }
         }
         breakWall(position[0], position[1]);
-        game.salesman = new Salesman(position[0],position[1]);
-        /*int[] randomPosition = getRandomPosition();
-        if (game.salesman != null) {
-            game.salesman.setPositionX(randomPosition[0]);
-            game.salesman.setPositionY(randomPosition[1]);
-        } else {
-            game.salesman = new Salesman(randomPosition[0], randomPosition[1]);
-        }*/
+        game.salesman = new Salesman(position[0], position[1]);
+        borderPositions.remove(position);
     }
 
     public int[] getRandomPosition() {

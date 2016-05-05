@@ -6,7 +6,7 @@ import java.io.File;
 
 
 public class Icetacle extends Spell {
-    public BufferedImage img = null;
+    public transient BufferedImage img = null;
     public String imgPath = "Images/icetacle.png";
 
     public Icetacle(int positionX, int positionY, int direction) {

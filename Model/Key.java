@@ -6,7 +6,7 @@ import java.io.File;
 
 public class Key extends Item {
     public boolean animated = false;
-    private BufferedImage img;
+    private transient BufferedImage img;
     private String imgPath = "Images/key.png";
 
     public Key(int positionX, int positionY) {

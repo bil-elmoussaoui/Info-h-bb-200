@@ -5,19 +5,15 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
-/*
- TODO :
-- get a nice static image
- */
 public class Spear extends Weapon {
     public String imgPath = "Images/weapon-spear.png";
-    public BufferedImage img = null;
-    public BufferedImage staticImg = null;
-    public String staticImgPath = "Images/sword_iron.png";
+    public transient BufferedImage img = null;
+    public transient BufferedImage staticImg = null;
+    public String staticImgPath = "Images/upg_spear.png";
 
 
-    public Spear(Integer positionX, Integer positionY, int damage) {
-        super(positionX, positionY, damage, 7);
+    public Spear(Integer positionX, Integer positionY) {
+        super(positionX, positionY, 1, 7);
         setIsDistanceWeapon(false);
         try {
             img = ImageIO.read(new File(imgPath));
