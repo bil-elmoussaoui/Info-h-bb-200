@@ -118,8 +118,6 @@ public class Keyboard implements KeyListener{
                 break;
                 case KeyEvent.VK_B:
                     if (!MainWindow.gamePaused) {
-                        MainWindow.gamePaused = true;
-                        Game.playerIsShopping = true;
                         game.drawShop();
                     }
                 break;

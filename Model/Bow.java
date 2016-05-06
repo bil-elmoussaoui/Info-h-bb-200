@@ -17,6 +17,10 @@ public class Bow extends Weapon {
     public Bow(Integer positionX, Integer positionY) {
         super(positionX, positionY, 1, 12);
         setIsDistanceWeapon(true);
+        createImage();
+    }
+
+    public void createImage(){
         try {
             img = ImageIO.read(new File(imgPath));
             staticImg = ImageIO.read(new File(staticImgPath));

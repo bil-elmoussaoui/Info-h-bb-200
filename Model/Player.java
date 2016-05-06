@@ -16,20 +16,23 @@ public class Player extends Person implements PlayerObserver {
     public Inventory inventory;
     public boolean isSpelling = false;
     public Spell spell = null;
-    private ArrayList<Observer> observers = new ArrayList<>();
+    private transient ArrayList<Observer> observers = new ArrayList<>();
 
     public Player(int positionX, int positionY) {
         super(positionX, positionY, 7);
         inventory = new Inventory();
         imgPath = "Images/player.png";
         setWeapon(new Staff(null, null));
+        createImage();
+    }
+
+    public void createImage(){
         try {
             img = ImageIO.read(new File(imgPath));
             shieldImg = ImageIO.read(new File(shieldImgPath));
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
 
     public void removeKey() {

@@ -11,12 +11,10 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.ArrayList;
 
-class LoadWindow {
+class LoadWindow extends JPanel {
     private ArrayList<String> filesList = new ArrayList<>();
-    private MainWindow window;
 
-    public LoadWindow(MainWindow window) {
-        this.window = window;
+    public LoadWindow() {
         File folder = new File("Data/");
         if (folder.exists()) {
             for (File fileEntry : folder.listFiles()) {
@@ -25,24 +23,8 @@ class LoadWindow {
                 }
             }
         }
-    }
 
-    public JPanel getJPanel() {
-        JPanel loadPanel = new JPanel() {
-            @Override
-            public void paintComponent(Graphics g) {
-                try {
-                    BufferedImage img = ImageIO.read(new File("Images/tile.png"));
-                    for (int i = 0; i < Game.shownSizeX; i++) {
-                        for (int j = 0; j < Game.shownSizeY + 1; j++) {
-                            g.drawImage(img, i * Game.pixelX, j * Game.pixelY, Game.pixelX, Game.pixelY, null);
-                        }
-                    }
-                } catch (Exception e) {
-                }
-            }
-        };
-        loadPanel.setBorder(BorderFactory.createEmptyBorder(260, 400, 220, 350));
+        this .setBorder(BorderFactory.createEmptyBorder(260, 400, 220, 350));
 
         JPanel menuLoad = new JPanel();
         menuLoad.setOpaque(false);
@@ -57,8 +39,20 @@ class LoadWindow {
             });
             menuLoad.add(loadButton);
         }
-        loadPanel.add(menuLoad);
-        return loadPanel;
+        this.add(menuLoad);
+    }
+
+    @Override
+    public void paintComponent(Graphics g) {
+        try {
+            BufferedImage img = ImageIO.read(new File("Images/tile.png"));
+            for (int i = 0; i < Game.shownSizeX; i++) {
+                for (int j = 0; j < Game.shownSizeY + 1; j++) {
+                    g.drawImage(img, i * Game.pixelX, j * Game.pixelY, Game.pixelX, Game.pixelY, null);
+                }
+            }
+        } catch (Exception e) {
+        }
     }
 
 }

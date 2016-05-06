@@ -10,7 +10,6 @@ TODO :
  */
 
 public class Inventory implements Serializable {
-    private static final long serialVersionUID = 1L;
     public int sizeMaxWeapon = 5;
     public int sizeMaxItem = 3;
     private ArrayList<Weapon> weaponsInventory = new ArrayList<>();

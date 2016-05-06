@@ -12,9 +12,14 @@ public class Icetacle extends Spell {
     public Icetacle(int positionX, int positionY, int direction) {
         super(positionX, positionY, direction);
         setIsMovingSpell(false);
+        createImage();
+    }
+
+    public void createImage(){
         try {
             img = ImageIO.read(new File(imgPath));
         } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

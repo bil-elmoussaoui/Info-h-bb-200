@@ -3,11 +3,13 @@ package Model;
 import View.MainWindow;
 
 import java.awt.*;
+import java.io.FileInputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Properties;
 
 public class Game implements Serializable, Observer {
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 42L;
     public static int[][] freePositions;
     public static boolean playerIsShopping = false;
     // screen information
@@ -27,7 +29,7 @@ public class Game implements Serializable, Observer {
     public ArrayList<Tile> tiles = new ArrayList<>();
     public ArrayList<Weapon> thrownWeapons = new ArrayList<>();
     public ArrayList<Spell> thrownSpells = new ArrayList<>();
-    public transient MainWindow window;
+    transient public MainWindow window;
     public transient MapGenerator mapGenerator;
     public Door door;
     private int[][] map;
@@ -39,8 +41,16 @@ public class Game implements Serializable, Observer {
         screenY = (int) screenSize.getHeight();
         shownSizeX = (int) Math.floor(screenX / pixelX) + 1;
         shownSizeY = (int) Math.floor(screenY / pixelY) - 1;
-        sizeY = shownSizeY;
-        sizeX = shownSizeX;
+        try {
+            Properties p = new Properties();
+            p.load(new FileInputStream("settings.ini"));
+            int mapX = Integer.valueOf(p.getProperty("sizeX"));
+            int mapY = Integer.valueOf(p.getProperty("sizeY"));
+            sizeX = (mapX >= shownSizeX && mapX <= 100) ? sizeX : shownSizeX;
+            sizeY = (mapY >= shownSizeY && mapY <= 100) ? sizeY : shownSizeY;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         freePositions = new int[this.sizeX][this.sizeY];
         map = new int[this.sizeX][this.sizeY];
         this.generateMap();
@@ -68,6 +78,11 @@ public class Game implements Serializable, Observer {
         map = mapGenerator.getGeneratedMap();
     }
 
+
+    public void setWindow(MainWindow window) {
+        this.window = window;
+    }
+
     public void refreshMap() {
         if (MainWindow.newGame) {
             MainWindow.newGame = false;
@@ -76,10 +91,39 @@ public class Game implements Serializable, Observer {
         window.draw(map, this);
     }
 
+    public void refreshImages() {
+        player.createImage();
+        salesman.createImage();
+        door.createImage();
+        for (Tile tile : getTiles()) {
+            tile.createImage();
+        }
+        for (Item item : getItems()) {
+            if (item instanceof WoodBox) {
+                ((WoodBox) item).createImage();
+            } else if (item instanceof Key) {
+                ((Key) item).createImage();
+            } else if (item instanceof Coin) {
+                ((Coin) item).createImage();
+            } else if (item instanceof Potion) {
+                ((Potion) item).createImage();
+            }
+        }
+        for (Monster monster : getMonsters()) {
+            monster.createImage();
+        }
+
+        for (Wall wall : getWalls()) {
+            wall.createImage();
+        }
+    }
+
     public void drawShop() {
         int[] position = player.getAttackedPosition();
         if (salesman != null) {
             if (position[0] == salesman.getPositionX() && position[1] == salesman.getPositionY()) {
+                MainWindow.gamePaused = true;
+                Game.playerIsShopping = true;
                 window.showBuyWindow(this);
             }
         }

@@ -48,6 +48,10 @@ public class WoodBox extends Item {
                 break;
         }
         setIsWalkable(false);
+        createImage();
+    }
+
+    public void createImage(){
         try {
             img = ImageIO.read(new File(imgPath));
         } catch (IOException e) {

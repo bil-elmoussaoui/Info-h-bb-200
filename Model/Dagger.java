@@ -15,6 +15,10 @@ public class Dagger extends Weapon {
     public Dagger(Integer positionX, Integer positionY) {
         super(positionX, positionY, 0.5, 5);
         setIsDistanceWeapon(false);
+        createImage();
+    }
+
+    public void createImage(){
         try {
             img = ImageIO.read(new File(imgPath));
             staticImg = ImageIO.read(new File(staticImgPath));

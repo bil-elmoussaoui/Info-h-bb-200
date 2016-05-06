@@ -1,9 +1,10 @@
 package View;
 
 import Controller.Animation;
+import Model.AnimationObserver;
 import Model.Game;
 import Model.Observer;
-import Model.AnimationObserver;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -16,27 +17,24 @@ public class MainWindow implements Observer, AnimationObserver{
     public static boolean newGame = false;
     public static boolean gameStarted = false;
     public boolean menuAlive = true;
-    public GraphicsDevice device;
+    public transient GraphicsDevice device;
     private JFrame mainWindow;
-    private Animation animation;
+    private transient Animation animation;
     private Map levelMap = new Map();
 
     public MainWindow() {
+        // utilisé pour pouvoir jouer en plein écran
         device = GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices()[0];
         initialize();
-    }
-
-    public void setAnimation(Animation animation){
-        this.animation = animation;
     }
 
     public static void main(String args[]) {
         new MainWindow();
     }
 
-
     public void initialize() {
         mainWindow = new JFrame();
+        // pour pouvoir accéder au menu en appyuant sur la touche escape
         mainWindow.addKeyListener(new KeyListener() {
             @Override
             public void keyTyped(KeyEvent keyEvent) {
@@ -71,15 +69,21 @@ public class MainWindow implements Observer, AnimationObserver{
         mainWindow.pack();
         mainWindow.setLocationRelativeTo(null);
         mainWindow.setLocationByPlatform(true);
+        //pour pouvoir jouer en plein écran
         device.setFullScreenWindow(mainWindow);
         mainWindow.setVisible(true);
     }
 
+    // utilisé pour l'obeserver de MenuWindow
+    public void setAnimation(Animation animation){
+        this.animation = animation;
+    }
+
     public void showLevelWindow() {
+        // afficher la map
         if (!MainWindow.gameStarted) MainWindow.gameStarted = true;
-        LevelWindow Window = new LevelWindow(levelMap);
         mainWindow.getContentPane().removeAll();
-        mainWindow.getContentPane().add(Window.getJPanel());
+        mainWindow.getContentPane().add(this.levelMap);
         mainWindow.requestFocusInWindow();
         mainWindow.revalidate();
         notifier();
@@ -90,44 +94,56 @@ public class MainWindow implements Observer, AnimationObserver{
     }
 
     public void showMenuWindow() {
-        MenuWindow Window = new MenuWindow(this,  menuAlive, animation);
+        // afficher le menu principale
         mainWindow.getContentPane().removeAll();
-        mainWindow.getContentPane().add(Window.getJPanel());
+        mainWindow.getContentPane().add(new MenuWindow(this,  menuAlive, animation));
         mainWindow.requestFocusInWindow();
         mainWindow.revalidate();
     }
 
     public void showLoadWindow() {
-        LoadWindow Window = new LoadWindow(this);
+        // afficher les diffèrentes parties sauvgardées
         mainWindow.getContentPane().removeAll();
-        mainWindow.getContentPane().add(Window.getJPanel());
+        mainWindow.getContentPane().add(new LoadWindow());
+        mainWindow.requestFocusInWindow();
+        mainWindow.revalidate();
+    }
+
+    public void showSettingsWindow(){
+        mainWindow.getContentPane().removeAll();
+        mainWindow.getContentPane().add(new SettingsWindow(this));
         mainWindow.requestFocusInWindow();
         mainWindow.revalidate();
     }
 
     public void showBuyWindow(Game game) {
-        BuyWindow Window = new BuyWindow(game);
+        // afficher le marchand
         gamePaused = true;
         mainWindow.getContentPane().removeAll();
-        mainWindow.getContentPane().add(Window.getJPanel());
+        mainWindow.getContentPane().add(new BuyWindow(game));
         mainWindow.requestFocusInWindow();
         mainWindow.revalidate();
         notifier();
     }
 
     public void draw(int[][] map, Game game) {
+        // mettre à jour la map
         levelMap.setGame(game);
         levelMap.setMapMatrix(map);
     }
 
+    @Override
     public void update(){
+        // pour afficher un menu diffèrent quand le joueur est mort
         this.menuAlive = false;
     }
 
+    @Override
     public void attach(Observer o) {
         observer = o;
     }
 
+    @Override
     public void notifier() {
        observer.update();
     }

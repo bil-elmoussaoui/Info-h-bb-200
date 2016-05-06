@@ -1,9 +1,10 @@
 package Model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class FieldOfView {
+public class FieldOfView implements Serializable{
     private int view;
     private int direction; // 1 bas, 2 gauche 3 haut 4 droite
     private int positionX;
@@ -51,6 +52,8 @@ public class FieldOfView {
                         addToFov(positionX - i, positionY);
                     }
                 }
+                if(direction == 4) addToFov(positionX - 1, positionY);
+                if(direction == 2) addToFov(positionX + 1, positionY);
                 for (int i = 1; i <= t; i++) {
                     addToFov(positionX, positionY - i);
                     addToFov(positionX, positionY + i);
@@ -65,6 +68,8 @@ public class FieldOfView {
                         addToFov(positionX, positionY + i);
                     }
                 }
+                if(direction == 3) addToFov(positionX, positionY + 1);
+                if(direction == 1) addToFov(positionX, positionY - 1);
                 for (int i = 1; i <= t; i++) {
                     addToFov(positionX - i, positionY);
                     addToFov(positionX + i, positionY);

@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.Random;
 
 abstract class Person implements Serializable {
-    private static final long serialVersionUID = 1L;
     public Weapon weapon;
     public int direction = 1;
     public int positionX;

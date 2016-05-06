@@ -27,9 +27,14 @@ public class Potion extends Item {
             setHealth(1);
         }
         setIsWalkable(true);
+        createImage();
+    }
+
+    public void createImage(){
         try {
             img = ImageIO.read(new File(imgPath));
         } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -50,10 +55,7 @@ public class Potion extends Item {
                 imgPath = "Images/icetacle-potion.png";
                 break;
         }
-        try {
-            img = ImageIO.read(new File(imgPath));
-        } catch (Exception e) {
-        }
+        createImage();
     }
 
     public double getHealth() {

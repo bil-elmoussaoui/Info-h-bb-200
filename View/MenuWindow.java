@@ -1,4 +1,5 @@
 package View;
+
 import Controller.Animation;
 import Main.Main;
 import Model.AnimationObserver;
@@ -12,35 +13,17 @@ import java.awt.event.ActionEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 
-class MenuWindow implements AnimationObserver{
-    private MainWindow window;
+class MenuWindow extends JPanel implements AnimationObserver{
     private Observer observer;
-    private boolean menuAlive;
-    public MenuWindow(MainWindow window, boolean menuAlive, Animation animation) {
-        this.attach(animation);
-        this.window = window;
-        this.menuAlive = menuAlive;
-    }
 
-    public JPanel getJPanel() {
-        JPanel menuWindow = new JPanel() {
-            @Override
-            public void paintComponent(Graphics g) {
-                try {
-                    BufferedImage img = ImageIO.read(new File("Images/tile.png"));
-                    for (int i = 0; i < Game.shownSizeX; i++) {
-                        for (int j = 0; j < Game.shownSizeY + 1; j++) {
-                            g.drawImage(img, i * Game.pixelX, j * Game.pixelY, Game.pixelX, Game.pixelY, null);
-                        }
-                    }
-                } catch (Exception e) {
-                }
-            }
-        };
+    public MenuWindow(MainWindow window, boolean menuAlive, Animation animation) {
+        // observer utilisé pour arreter les threads durant l'arret du jeu
+        this.attach(animation);
+
         if (menuAlive) {
-            menuWindow.setBorder(BorderFactory.createEmptyBorder(260, 400, 220, 350));
+            this.setBorder(BorderFactory.createEmptyBorder(260, 400, 220, 350));
         } else {
-            menuWindow.setBorder(BorderFactory.createEmptyBorder(20, 400, 220, 350));
+            this.setBorder(BorderFactory.createEmptyBorder(20, 400, 220, 350));
         }
 
         JPanel menuPanel = new JPanel();
@@ -48,7 +31,7 @@ class MenuWindow implements AnimationObserver{
         BButton Play;
 
         if (MainWindow.gamePaused && MainWindow.gameStarted && menuAlive) {
-            menuPanel.setLayout(new GridLayout(5, 0, 10, 10));
+            menuPanel.setLayout(new GridLayout(6, 0, 10, 10));
             BButton Resume = new BButton("Resume");
             Resume.addActionListener((ActionEvent e) -> {
                 window.showLevelWindow();
@@ -58,7 +41,7 @@ class MenuWindow implements AnimationObserver{
             menuPanel.add(Resume);
             Play = new BButton("New Game");
         } else {
-            menuPanel.setLayout(new GridLayout(3, 0, 10, 10));
+            menuPanel.setLayout(new GridLayout(4, 0, 10, 10));
             Play = new BButton("Play");
         }
 
@@ -83,7 +66,13 @@ class MenuWindow implements AnimationObserver{
             window.showLoadWindow();
         });
         menuPanel.add(Load);
-
+        if(!MainWindow.gamePaused) {
+            BButton Settings = new BButton("Settings");
+            Settings.addActionListener((ActionEvent e) -> {
+                window.showSettingsWindow();
+            });
+            menuPanel.add(Settings);
+        }
         BButton Quit = new BButton("Exit");
         Quit.addActionListener((ActionEvent e) -> {
             window.closeWindow();
@@ -96,16 +85,31 @@ class MenuWindow implements AnimationObserver{
             JLabel gameOver = new JLabel();
             gameOver.setIcon(new ImageIcon("Images/death.jpg"));
             gameOver.setPreferredSize(new Dimension(500, 500));
-            menuWindow.add(gameOver);
+            this.add(gameOver);
         }
-        menuWindow.add(menuPanel);
-        return menuWindow;
+        this.add(menuPanel);
     }
 
+    @Override
+    public void paintComponent(Graphics g) {
+        try {
+            BufferedImage img = ImageIO.read(new File("Images/tile.png"));
+            for (int i = 0; i < Game.shownSizeX; i++) {
+                for (int j = 0; j < Game.shownSizeY + 1; j++) {
+                    g.drawImage(img, i * Game.pixelX, j * Game.pixelY, Game.pixelX, Game.pixelY, null);
+                }
+            }
+        } catch (Exception e) {
+        }
+    }
+
+
+    @Override
     public void attach(Observer o) {
         observer = o;
     }
 
+    @Override
     public void notifier() {
         observer.update();
     }

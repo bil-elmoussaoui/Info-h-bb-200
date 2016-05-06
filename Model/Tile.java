@@ -6,11 +6,10 @@ import java.io.File;
 import java.io.Serializable;
 
 public class Tile implements Serializable{
-    private static final long serialVersionUID = 1L;
     private int positionX;
     private int positionY;
     private transient BufferedImage img;
-    private String imgPath;
+    private String imgPath = "Images/tile.png";
     private boolean isWalkable;
     private boolean isBreakable;
     private boolean isDangerous;
@@ -20,7 +19,10 @@ public class Tile implements Serializable{
         setPositionY(positionY);
         setIsBreakable(false);
         setIsWalkable(true);
-        imgPath = "Images/tile.png";
+        createImage();
+    }
+
+    public void createImage(){
         try {
             img = ImageIO.read(new File(imgPath));
         } catch (Exception e) {

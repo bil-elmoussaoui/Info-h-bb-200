@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.util.Random;
 
 public class Monster extends Person {
-    public transient FieldOfView FOV;
+    public FieldOfView FOV;
 
     public Monster(int positionX, int positionY) {
         super(positionX, positionY, 8);
@@ -24,6 +24,10 @@ public class Monster extends Person {
                 setWeapon(new Staff(null, null));
                 break;
         }
+        createImage();
+    }
+
+    public void createImage(){
         try {
             img = ImageIO.read(new File(imgPath));
             shieldImg = ImageIO.read(new File(shieldImgPath));

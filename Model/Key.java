@@ -14,6 +14,10 @@ public class Key extends Item {
         setIsCollectable(true);
         setIsBreakable(false);
         setIsWalkable(true);
+        createImage();
+    }
+
+    public void createImage(){
         try {
             img = ImageIO.read(new File(imgPath));
         } catch (Exception e) {

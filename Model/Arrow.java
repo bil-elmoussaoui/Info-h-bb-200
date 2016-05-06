@@ -14,6 +14,10 @@ public class Arrow extends Bow {
     public Arrow() {
         super(null, null);
         counter = new Counter(12);
+        createImage();
+    }
+
+    public void createImage(){
         try {
             img = ImageIO.read(new File(imgPath));
         } catch (IOException e) {

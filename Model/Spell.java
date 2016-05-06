@@ -4,7 +4,6 @@ import java.awt.image.BufferedImage;
 import java.io.Serializable;
 
 public class Spell implements Serializable{
-    private static final long serialVersionUID = 1L;
     public transient BufferedImage img;
     public String imgPath;
     public Counter counter;

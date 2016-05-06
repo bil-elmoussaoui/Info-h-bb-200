@@ -7,7 +7,7 @@ import java.io.File;
 public class Salesman extends Item {
     public int selectorY = 0;
     public int selectorX = 0;
-    public int[][][] carteAchat = new int[4][4][2];
+    public transient int[][][] carteAchat = new int[4][4][2];
     private String imgPath = "Images/market.png";
     private transient BufferedImage img = null;
 
@@ -16,11 +16,11 @@ public class Salesman extends Item {
         setIsBreakable(false);
         setIsCollectable(false);
         setIsWalkable(false);
-        try {
-            img = ImageIO.read(new File(imgPath));
-        } catch (Exception e) {
+        createImage();
+        initCartedAchat();
+    }
 
-        }
+    public void initCartedAchat(){
         carteAchat[0][0] = new int[]{1, 10}; // Potion vie
         carteAchat[1][0] = new int[]{2, 50}; // Potion firelion
         carteAchat[2][0] = new int[]{3, 50}; // Potion icetacle
@@ -31,6 +31,16 @@ public class Salesman extends Item {
         carteAchat[3][1] = new int[]{8, 100};  //Spear
         carteAchat[3][3] = new int[]{16, 1000}; // key
     }
+
+
+    public void createImage(){
+        try {
+            img = ImageIO.read(new File(imgPath));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 
     public int getSelectorY() {
         return selectorY;

@@ -236,18 +236,20 @@ public class MapGenerator {
     public void initSalesman() {
         Random rand = new Random();
         boolean found = false;
+        boolean notInTheDoor = true;
         int[] position = new int[2];
         while (!found) {
             position = borderPositions.get(rand.nextInt(borderPositions.size()));
+            notInTheDoor = position[0] != game.door.getPositionX() && position[1] != game.door.getPositionY();
             if (position[0] == 0) {
-                found = Game.freePositions[1][position[1]] == 0;
+                found = Game.freePositions[1][position[1]] == 0 && notInTheDoor;
             } else if (position[0] == Game.shownSizeX - 1) {
-                found = Game.freePositions[Game.shownSizeX - 2][position[1]] == 0;
+                found = Game.freePositions[Game.shownSizeX - 2][position[1]] == 0 && notInTheDoor;
             }
             if (position[1] == 0) {
-                found = Game.freePositions[position[0]][1] == 0;
+                found = Game.freePositions[position[0]][1] == 0 && notInTheDoor;
             } else if (position[1] == Game.shownSizeY) {
-                found = Game.freePositions[position[0]][Game.shownSizeY - 2] == 0;
+                found = Game.freePositions[position[0]][Game.shownSizeY - 2] == 0 && notInTheDoor;
             }
         }
         breakWall(position[0], position[1]);

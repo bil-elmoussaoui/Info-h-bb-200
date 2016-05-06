@@ -11,25 +11,30 @@ public class FireLion extends Spell {
     public FireLion(int positionX, int positionY, int direction) {
         super(positionX, positionY, direction);
         setIsMovingSpell(true);
+        switch (direction) {
+            case 1:
+                imgPath = "Images/firelion_down.png";
+                break;
+            case 3:
+                imgPath = "Images/firelion_up.png";
+                break;
+            case 2:
+                imgPath = "Images/firelion_left.png";
+                break;
+            case 4:
+                imgPath = "Images/firelion_right.png";
+                break;
+        }
+        createImage();
+
+    }
+
+    public void createImage() {
         try {
-            switch (direction) {
-                case 1:
-                    imgPath = "Images/firelion_down.png";
-                    break;
-                case 3:
-                    imgPath = "Images/firelion_up.png";
-                    break;
-                case 2:
-                    imgPath = "Images/firelion_left.png";
-                    break;
-                case 4:
-                    imgPath = "Images/firelion_right.png";
-                    break;
-            }
             img = ImageIO.read(new File(imgPath));
         } catch (Exception e) {
+            e.printStackTrace();
         }
-
     }
 
 

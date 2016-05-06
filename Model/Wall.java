@@ -13,6 +13,10 @@ public class Wall extends Tile {
         setIsBreakable(false);
         setIsWalkable(false);
         setIsDangerous(false);
+        createImage();
+    }
+
+    public void createImage(){
         try {
             img = ImageIO.read(new File(imgPath));
         } catch (Exception e) {

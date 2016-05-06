@@ -6,7 +6,7 @@ import java.io.File;
 import java.io.IOException;
 
 public class BButton extends JButton {
-
+    //Button utilisant une police de caractère et une taille diffèrente
     public BButton(String text) {
         try {
             Font customFont = Font.createFont(Font.TRUETYPE_FONT, new File("Fonts/ARCADE.TTF")).deriveFont(22f);

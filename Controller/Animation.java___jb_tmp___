@@ -60,7 +60,6 @@ public class Animation implements Observer {
                             Monster monster = game.monsters.get(i);
                             if (!MainWindow.gamePaused && monster.getCanMove()) {
                                 int[] playerPosition = new int[]{game.player.getPositionX(), game.player.getPositionY()};
-                                if (monster.getCanMove()) {
                                     for (int k = 0; k < monster.FOV.getFOV().size(); k++) {
                                         if (monster.FOV.getFOV().get(k)[0] == playerPosition[0] && monster.FOV.getFOV().get(k)[1] == playerPosition[1]) {
                                             monster.isMoving = true;
@@ -88,7 +87,7 @@ public class Animation implements Observer {
                                         }
                                     }
                                     monster.isMoving = false;
-                                }
+
                             }
                         }
                     }
