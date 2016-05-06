@@ -253,7 +253,7 @@ abstract class Person implements Serializable {
             } else {
                 setImage(imgPath);
                 shieldImg = ImageIO.read(new File(shieldImgPath));
-                counter.setCounterMax(7);
+                counter.setCounterMax(8);
             }
         } catch (Exception e) {
         }

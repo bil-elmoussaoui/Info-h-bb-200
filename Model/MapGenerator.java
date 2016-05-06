@@ -23,6 +23,7 @@ public class MapGenerator {
         generatedMap = new int[Game.sizeX][Game.sizeX];
         // create random walls!
         initWalls();
+        // give a random position to random elements in the map
         initPlayer();
         intiMonsters();
         intiItems();
@@ -32,6 +33,7 @@ public class MapGenerator {
     }
 
     public void createWall(int x, int y) {
+        // used to create a wall
         if (x >= 0 && x < Game.sizeX && y >= 0 && y < Game.sizeY) {
             if (Game.freePositions[x][y] == 0) {
                 game.walls.add(new Wall(x, y));
@@ -42,6 +44,7 @@ public class MapGenerator {
     }
 
     public void initTraps() {
+        // init a random number of traps
         Random rand = new Random();
         int nbTraps = rand.nextInt(maxTraps - minTraps) + minTraps;
         for (int i = 0; i < nbTraps; i++) {
@@ -58,7 +61,9 @@ public class MapGenerator {
     }
 
     public void initWalls() {
+        // recursive function to create a random map
         divide(new Rectangle(1, 1, Game.sizeX - 1, Game.sizeY - 1), false);
+        // break uneeded walls to create passages btw different rooms
         breakUnneededWalls();
         // draw outline walls
         for (int i = 0; i < Game.sizeX; i++) {
@@ -86,7 +91,7 @@ public class MapGenerator {
         if ((width >= 3 && !isHorizontal) || (height >= 3 && isHorizontal)) {
             boolean found = false;
             int wall = 0;
-            int itter = 0;
+            int itter = 0; // limit number of itter
             while (!found && itter < 4) {
                 if (isHorizontal) {
                     wall = square.y + rand.nextInt(square.height - 2);
@@ -98,7 +103,7 @@ public class MapGenerator {
                 itter += 1;
             }
             if (found) {
-                if (isHorizontal) {
+                if (isHorizontal) { // if the room is going to be divided horizontally
                     int passage = square.x + rand.nextInt(square.width);
                     ArrayList<Integer> passageList = new ArrayList<>();
                     for (int i = -1; i < 1; i++) {
@@ -113,6 +118,7 @@ public class MapGenerator {
                         }
                         i++;
                     }
+                    // divide the two rooms sperated by the created wall
                     divide(new Rectangle(square.x, square.y, square.width, wall - square.y + 1), isHorizontal);
                     divide(new Rectangle(square.x, wall + 1, square.width, square.y + square.height - wall - 1), isHorizontal);
                 } else {
@@ -130,6 +136,7 @@ public class MapGenerator {
                         }
                         i++;
                     }
+                    // divide the two rooms sperated by the created wall
                     divide(new Rectangle(square.x, square.y, wall - square.x + 1, square.height), isHorizontal);
                     divide(new Rectangle(wall + 1, square.y, square.x + square.width - wall - 1, square.height), isHorizontal);
                 }
@@ -156,6 +163,7 @@ public class MapGenerator {
     public void initPlayer() {
         int[] randomPosition = getRandomPosition();
         if (game.player != null) {
+            // if the player start a new game even if he is not dead (to store his weapons, money and potions)
             game.player.setPositionX(randomPosition[0]);
             game.player.setPositionY(randomPosition[1]);
         } else {
@@ -179,6 +187,7 @@ public class MapGenerator {
         game.items.add(new Key(keyPosition[0], keyPosition[1]));
         Random rand = new Random();
         int nbItems = rand.nextInt(maxItems - minItems) + minItems;
+        // init random elements in the map
         for (int i = 0; i < nbItems; i++) {
             int[] randomPosition = getRandomPosition();
             switch (rand.nextInt(3)) {
@@ -240,6 +249,7 @@ public class MapGenerator {
         int[] position = new int[2];
         while (!found) {
             position = borderPositions.get(rand.nextInt(borderPositions.size()));
+            // be sure that the salesman does not have the same position as the door
             notInTheDoor = position[0] != game.door.getPositionX() && position[1] != game.door.getPositionY();
             if (position[0] == 0) {
                 found = Game.freePositions[1][position[1]] == 0 && notInTheDoor;
@@ -273,6 +283,7 @@ public class MapGenerator {
     }
 
     public void breakWall(int positionX, int positionY) {
+        // remove a wall and create a simple tile instead
         if (positionX >= 0 && positionX < Game.sizeX && positionY >= 0 && positionY < Game.sizeY) {
             if (Game.freePositions[positionX][positionY] == 1) {
                 for (int i = 0; i < game.walls.size(); i++) {

@@ -35,12 +35,14 @@ public class FieldOfView implements Serializable{
     public void addToFov(int positionX, int positionY) {
         if (positionX >= 0 && positionX < Game.sizeX && positionY >= 0 && positionY < Game.sizeY) {
             if (Game.freePositions[positionX][positionY] == 0) {
+                // vérifier que la position est bien libre avant de la rajouter au field of view
                 FOV.add(new int[]{positionX, positionY});
             }
         }
     }
 
     public void createFov() {
+        //creation d'un champ de vision
         int t = ((int) Math.floor(view / 2));
         switch (direction) {
             case 4:

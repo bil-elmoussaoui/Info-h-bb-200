@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.Properties;
 
 public class Game implements Serializable, Observer {
-    private static final long serialVersionUID = 42L;
     public static int[][] freePositions;
     public static boolean playerIsShopping = false;
     // screen information
@@ -42,6 +41,7 @@ public class Game implements Serializable, Observer {
         shownSizeX = (int) Math.floor(screenX / pixelX) + 1;
         shownSizeY = (int) Math.floor(screenY / pixelY) - 1;
         try {
+            // read the settings file
             Properties p = new Properties();
             p.load(new FileInputStream("settings.ini"));
             int mapX = Integer.valueOf(p.getProperty("sizeX"));
@@ -78,11 +78,11 @@ public class Game implements Serializable, Observer {
         map = mapGenerator.getGeneratedMap();
     }
 
-
     public void setWindow(MainWindow window) {
         this.window = window;
     }
 
+    // refresh map
     public void refreshMap() {
         if (MainWindow.newGame) {
             MainWindow.newGame = false;
@@ -91,6 +91,7 @@ public class Game implements Serializable, Observer {
         window.draw(map, this);
     }
 
+    // refresh image objects
     public void refreshImages() {
         player.createImage();
         salesman.createImage();
@@ -118,6 +119,7 @@ public class Game implements Serializable, Observer {
         }
     }
 
+    // draw a shop
     public void drawShop() {
         int[] position = player.getAttackedPosition();
         if (salesman != null) {
@@ -129,9 +131,12 @@ public class Game implements Serializable, Observer {
         }
     }
 
+    // player attack
     public void playerAttack() {
         if (player.weapon != null) {
+            // if the player is using a bow
             if (!player.weapon.getIsDistanceWeapon()) {
+                player.setAttackMode(true);
                 int[] position = player.getAttackedPosition();
                 Monster monster = getMonster(position[0], position[1]);
                 Item item = getItem(position[0], position[1]);
@@ -157,18 +162,16 @@ public class Game implements Serializable, Observer {
                         arrow.setDirection(player.direction);
                         ((Bow) player.weapon).arrow = arrow;
                         ((Bow) player.weapon).addArrows(-1);
+                        player.setAttackMode(true);
                     } else {
-                        player.isAttacking = false;
-                        player.isMoving = false;
-                        player.isSpelling = false;
-                        player.weapon.counter.init();
-                        player.counter.init();
+                        player.setAttackMode(false);
                     }
                 }
             }
         }
     }
 
+    // throw a weapon
     public void playerThrowWeapon() {
         if (player.weapon != null) {
             player.weapon.setPositionX(player.getPositionX());
@@ -179,6 +182,7 @@ public class Game implements Serializable, Observer {
         }
     }
 
+    // trap damage (trap attacks person)
     public void trapDamage(Tile tile) {
         int[] position = new int[]{tile.getPositionX(), tile.getPositionY()};
         for (int i = 0; i < monsters.size(); i++) {
@@ -199,6 +203,7 @@ public class Game implements Serializable, Observer {
         }
     }
 
+    // collect function, verify if the invenotry is not full
     public void playerCollect() {
         Item item = getItem(player.getPositionX(), player.getPositionY());
         if (item != null) {
@@ -207,8 +212,11 @@ public class Game implements Serializable, Observer {
                     if (player.inventory.countItems() < player.inventory.sizeMaxItem) {
                         player.collect(item);
                         items.remove(item);
-                    } else if (player.getHealth() < player.healthMax) {
-                        player.setHealth(player.getHealth() + ((Potion) item).getHealth());
+                    }
+                } else if(item instanceof Weapon) {
+                    if (player.inventory.countWeapons() < player.inventory.sizeMaxWeapon) {
+                        player.collect(item);
+                        items.remove(item);
                     }
                 } else {
                     player.collect(item);
@@ -218,6 +226,7 @@ public class Game implements Serializable, Observer {
         }
     }
 
+    // open the door only if the player has the key, and start a new game
     public void openDoor() {
         int[] position = player.getAttackedPosition();
         if (player.hasKey && door != null) {
@@ -234,6 +243,7 @@ public class Game implements Serializable, Observer {
         }
     }
 
+    // generate new map, and remove old walls, monsters..
     public void newGame() {
         monsters.clear();
         tiles.clear();
@@ -247,13 +257,14 @@ public class Game implements Serializable, Observer {
             player = null;
             window.menuAlive = true;
         }
-        freePositions = new int[this.sizeX][this.sizeY];
-        map = new int[this.sizeX][this.sizeY];
+        freePositions = new int[Game.sizeX][Game.sizeY];
+        map = new int[Game.sizeX][Game.sizeY];
         generateMap();
         refreshMap();
 
     }
 
+    // get a wall if it exists
     public Wall getWall(int positionX, int positionY) {
         Wall wall = null;
         for (int i = 0; i < walls.size(); i++) {
@@ -264,6 +275,7 @@ public class Game implements Serializable, Observer {
         return wall;
     }
 
+    // get a monster if it exists
     public Monster getMonster(int positionX, int positionY) {
         Monster monster = null;
         for (int i = 0; i < monsters.size(); i++) {
@@ -274,6 +286,7 @@ public class Game implements Serializable, Observer {
         return monster;
     }
 
+    //get an item if it exists
     public Item getItem(int positionX, int positionY) {
         Item item = null;
         for (int i = 0; i < items.size(); i++) {
@@ -284,6 +297,7 @@ public class Game implements Serializable, Observer {
         return item;
     }
 
+    // verify if the user has enough money to buy and add elements bought to his inventory
     public void playerBuy() {
         int price = salesman.carteAchat[salesman.getSelectorX()][salesman.getSelectorY()][1];
         if (player.getCoins() >= price) {
@@ -345,6 +359,7 @@ public class Game implements Serializable, Observer {
         }
     }
 
+    @Override
     public void update() {
         if (!player.isAlive()) {
             window.showMenuWindow();

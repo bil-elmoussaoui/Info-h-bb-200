@@ -3,7 +3,6 @@ package Model;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.util.Random;
 
 /*
 TODO:
@@ -11,7 +10,7 @@ TODO:
  */
 
 public class Potion extends Item {
-    int type = 0;
+    int type = 0; // 0 for health potion, 1 for Firelion potion & 2 for IceTacle potion
     private double health;
     private transient BufferedImage img;
     private String imgPath = "Images/health-potion.png";
@@ -20,7 +19,8 @@ public class Potion extends Item {
         super(positionX, positionY);
         setIsCollectable(true);
         setIsBreakable(false);
-        int ran = new Random().nextInt(2);
+        // random value
+        double ran = Math.random();
         if (ran >= 0 && ran < 0.5) {
             setHealth(0.5);
         } else {
@@ -55,7 +55,11 @@ public class Potion extends Item {
                 imgPath = "Images/icetacle-potion.png";
                 break;
         }
-        createImage();
+        try {
+            img = ImageIO.read(new File(imgPath));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public double getHealth() {

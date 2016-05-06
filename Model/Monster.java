@@ -24,7 +24,12 @@ public class Monster extends Person {
                 setWeapon(new Staff(null, null));
                 break;
         }
-        createImage();
+        try {
+            img = ImageIO.read(new File(imgPath));
+            shieldImg = ImageIO.read(new File(shieldImgPath));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void createImage(){
@@ -39,11 +44,9 @@ public class Monster extends Person {
     public void setWeapon(Weapon weapon) {
         if (weapon != null) {
             if (weapon instanceof Dagger) {
-                attackingImgPath = "Images/player-attack-dagger.png";
+                attackingImgPath = "Images/monster-attack-dagger.png";
             } else if (weapon instanceof Spear || weapon instanceof Staff) {
-                attackingImgPath = "Images/player-attack-spear.png";
-            } else if (weapon instanceof Bow) {
-                attackingImgPath = "Images/player-attack-bow.png";
+                attackingImgPath = "Images/monster-attack-spear.png";
             }
 
             this.weapon = weapon;

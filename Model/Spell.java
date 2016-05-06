@@ -11,7 +11,7 @@ public class Spell implements Serializable{
     private int positionX;
     private int positionY;
     private int direction;
-    private int damage = 10; // so the monster will die just after that nigga!
+    private int damage = 10; // so the monster will die just after that!
 
     public Spell(int positionX, int positionY, int direction) {
         setPositionX(positionX);
@@ -24,6 +24,7 @@ public class Spell implements Serializable{
         return movingSpell;
     }
 
+    // like the fireLion
     public void setIsMovingSpell(boolean movingSpell) {
         this.movingSpell = movingSpell;
     }

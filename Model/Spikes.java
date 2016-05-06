@@ -14,11 +14,14 @@ public class Spikes extends Trap {
         super(positionX, positionY);
         counter = new Counter(9);
         setDamage(0.5);
-        createImage();
-
+        try {
+            img = ImageIO.read(new File(imgPath));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
-    public void createImage(){
+    public void createImage() {
         try {
             img = ImageIO.read(new File(imgPath));
         } catch (Exception e) {

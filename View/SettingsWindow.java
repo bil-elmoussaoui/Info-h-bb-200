@@ -24,6 +24,7 @@ public class SettingsWindow extends JPanel {
         this.setLayout(new GridLayout(3, 1, 10, 10));
         int mapX = 0, mapY = 0;
         try {
+            // read settings file
             Properties p = new Properties();
             p.load(new FileInputStream("settings.ini"));
             mapX = Integer.valueOf(p.getProperty("sizeX"));
@@ -56,6 +57,7 @@ public class SettingsWindow extends JPanel {
         save.addActionListener((ActionEvent e) -> {
             int mapXRead, mapYRead;
             try {
+                // update settings file
                 Properties p = new Properties();
                 p.load(new FileInputStream("settings.ini"));
                 mapXRead = Integer.valueOf(sizeXField.getText());

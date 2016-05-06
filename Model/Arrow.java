@@ -12,9 +12,15 @@ public class Arrow extends Bow {
     public boolean beenThrown = false;
 
     public Arrow() {
+        // position null par défault
         super(null, null);
+        // nombre d'image -1 dans le fichier png pour l'animation
         counter = new Counter(12);
-        createImage();
+        try {
+            this.img = ImageIO.read(new File(imgPath));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void createImage(){
@@ -26,6 +32,7 @@ public class Arrow extends Bow {
     }
 
     public void attack(Person person) {
+        // faire des dégats aux personnes!
         double armorDiff = person.getArmor() - this.getDamage();
         if (armorDiff > 0) {
             person.setArmor(armorDiff);
@@ -42,6 +49,7 @@ public class Arrow extends Bow {
     }
 
     public BufferedImage getImage() {
+        // renvoie une image selon la direction/animation
         return img.getSubimage(counter.getCounter() * 64, (this.getDirection() - 1) * 64, 64, 64);
     }
 }

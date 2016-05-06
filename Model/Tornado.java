@@ -14,9 +14,12 @@ public class Tornado extends Trap {
         super(positionX, positionY);
         counter = new Counter(15);
         setDamage(1);
-        createImage();
+        try {
+            img = ImageIO.read(new File(imgPath));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
-
 
     public void createImage(){
         try {

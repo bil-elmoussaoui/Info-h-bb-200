@@ -14,7 +14,11 @@ public class Door extends Tile {
         super(positionX, positionY);
         setIsWalkable(false);
         setIsBreakable(false);
-        createImage();
+        try {
+            img = ImageIO.read(new File(imgPath));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void createImage(){

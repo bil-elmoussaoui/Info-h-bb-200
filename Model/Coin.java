@@ -16,11 +16,16 @@ public class Coin extends Item {
         setIsBreakable(false);
         setIsWalkable(true);
         counter = new Counter(7);
+        // random value
         value = (int) Math.floor(Math.random() * 10) + 1;
-        createImage();
+        try {
+            img = ImageIO.read(new File(imgPath));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
-    public void createImage(){
+    public void createImage() {
         try {
             img = ImageIO.read(new File(imgPath));
         } catch (Exception e) {
@@ -34,10 +39,6 @@ public class Coin extends Item {
 
     public BufferedImage getImage() {
         return img.getSubimage(counter.getCounter() * (img.getWidth() / 8), 0, 32, 32);
-    }
-
-    public void setImage(BufferedImage img) {
-        this.img = img;
     }
 
 }

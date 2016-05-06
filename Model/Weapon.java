@@ -4,14 +4,11 @@ import java.awt.image.BufferedImage;
 
 
 public class Weapon extends Item {
-    public String imgPath = "Images/sword.png";
-    public String staticImgPath = "Images/sword-static.png";
     public transient BufferedImage img = null;
     public transient BufferedImage staticImg = null;
     public Counter counter;
     public boolean isDistanceWeapon;
     private double damage;
-    private int level;
     private int direction = 1;
 
     public Weapon(Integer positionX, Integer positionY, double damage, int counterMax) {
@@ -20,6 +17,7 @@ public class Weapon extends Item {
         setIsCollectable(true);
         setIsBreakable(false);
         setIsWalkable(true);
+        // counter is used for weapon animation
         counter = new Counter(counterMax);
     }
 
@@ -27,26 +25,11 @@ public class Weapon extends Item {
         return damage;
     }
 
-    public int getLevel() {
-        return level;
-    }
-
-    public void setLevel(int level) {
-        try {
-            if (level > 0) {
-                this.level = level;
-            } else {
-                throw new Exception();
-            }
-        } catch (Exception e) {
-            this.level = 0;
-        }
-    }
-
     public int getDirection() {
         return this.direction;
     }
-
+    
+    // weapon direction used to get the right animation image
     public void setDirection(int direction) {
         this.direction = direction;
     }

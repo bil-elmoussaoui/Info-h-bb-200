@@ -16,14 +16,21 @@ public class Player extends Person implements PlayerObserver {
     public Inventory inventory;
     public boolean isSpelling = false;
     public Spell spell = null;
+    private String imgPath = "Images/player.png";
+    // lists of obervers used to notify the mainwindow that the user is dead or not yet!
     private transient ArrayList<Observer> observers = new ArrayList<>();
 
     public Player(int positionX, int positionY) {
         super(positionX, positionY, 7);
         inventory = new Inventory();
-        imgPath = "Images/player.png";
+        setWeapon(new Bow(null, null));
         setWeapon(new Staff(null, null));
-        createImage();
+        try {
+            img = ImageIO.read(new File(imgPath));
+            shieldImg = ImageIO.read(new File(shieldImgPath));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void createImage(){
@@ -41,6 +48,7 @@ public class Player extends Person implements PlayerObserver {
 
     public void setWeapon(Weapon weapon) {
         if (weapon != null) {
+            // change attacking animation!
             if (weapon instanceof Dagger) {
                 attackingImgPath = "Images/player-attack-dagger.png";
             } else if (weapon instanceof Spear || weapon instanceof Staff) {
@@ -62,6 +70,7 @@ public class Player extends Person implements PlayerObserver {
         } else {
             this.weapon = null;
         }
+        setAttackMode(false);
     }
 
     public void setWeaponByIndex(int index) {
@@ -71,6 +80,7 @@ public class Player extends Person implements PlayerObserver {
     }
 
     public void throwWeapon(Weapon weapon) {
+        // remove a weapon from the inventory, can be collected again after that
         if (inventory.containsWeapon(weapon)) {
             inventory.removeWeapon(weapon);
             if (inventory.countWeapons() > 0) {
@@ -114,6 +124,7 @@ public class Player extends Person implements PlayerObserver {
     }
 
     public void doSpell(int type) {
+        // start the spell animation
         int positionX = getPositionX();
         int positionY = getPositionY();
         switch (direction) {
@@ -144,6 +155,7 @@ public class Player extends Person implements PlayerObserver {
     }
 
     public void stopSpelling() {
+        // stop player animation before starting the spell
         setCanMove(true);
         setCanAttack(true);
         isSpelling = false;
@@ -185,10 +197,12 @@ public class Player extends Person implements PlayerObserver {
         }
     }
 
+    @Override
     public void attach(Observer o) {
         observers.add(o);
     }
 
+    @Override
     public void notifyObservers() {
         for (Observer o : observers) {
             o.update();

@@ -25,8 +25,11 @@ public class FireLion extends Spell {
                 imgPath = "Images/firelion_right.png";
                 break;
         }
-        createImage();
-
+        try {
+            img = ImageIO.read(new File(imgPath));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void createImage() {

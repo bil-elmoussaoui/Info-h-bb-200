@@ -10,8 +10,8 @@ TODO :
  */
 
 public class Inventory implements Serializable {
-    public int sizeMaxWeapon = 5;
-    public int sizeMaxItem = 3;
+    public int sizeMaxWeapon = 5; // nombre de weapons maximale que peut le joueur avoir
+    public int sizeMaxItem = 3; // nombre d'items(potions) maximale que le joueur peut avoir
     private ArrayList<Weapon> weaponsInventory = new ArrayList<>();
     private ArrayList<Item> itemsInventory = new ArrayList<>();
 

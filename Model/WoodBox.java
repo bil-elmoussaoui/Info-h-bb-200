@@ -11,6 +11,7 @@ public class WoodBox extends Item {
     public Counter counter;
     private transient BufferedImage img;
     private String imgPath = "Images/Wood_Box.png";
+    // used to start an animation before breaking the box
     private boolean isBeingBroken;
 
     public WoodBox(int positionX, int positionY) {
@@ -20,6 +21,7 @@ public class WoodBox extends Item {
         setIsBeingBroken(false);
         Random randomItem = new Random();
         counter = new Counter(7);
+        // random content item
         switch (randomItem.nextInt(4)) {
             case 0:
                 content = new Coin(positionX, positionY);
@@ -48,10 +50,14 @@ public class WoodBox extends Item {
                 break;
         }
         setIsWalkable(false);
-        createImage();
+        try {
+            img = ImageIO.read(new File(imgPath));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
-    public void createImage(){
+    public void createImage() {
         try {
             img = ImageIO.read(new File(imgPath));
         } catch (IOException e) {

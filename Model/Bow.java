@@ -11,16 +11,22 @@ public class Bow extends Weapon {
     public transient BufferedImage img = null;
     public transient BufferedImage staticImg = null;
     public String staticImgPath = "Images/upg_bow.png";
-    public int arrowsCount = 1;
+    public int arrowsCount = 10;
     public Arrow arrow;
 
     public Bow(Integer positionX, Integer positionY) {
+        // positionX, positionY, damage, counterMax (used for counter animation)
         super(positionX, positionY, 1, 12);
         setIsDistanceWeapon(true);
-        createImage();
+        try {
+            img = ImageIO.read(new File(imgPath));
+            staticImg = ImageIO.read(new File(staticImgPath));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
-    public void createImage(){
+    public void createImage() {
         try {
             img = ImageIO.read(new File(imgPath));
             staticImg = ImageIO.read(new File(staticImgPath));
@@ -30,14 +36,11 @@ public class Bow extends Weapon {
     }
 
     public void addArrows(int arrows) {
+        // used when the player buys some arrows
         this.arrowsCount += arrows;
         if (this.arrowsCount < 0) {
             this.arrowsCount = 0;
         }
-    }
-
-    public int getArrowsCount() {
-        return arrowsCount;
     }
 
     public BufferedImage getStaticImg() {

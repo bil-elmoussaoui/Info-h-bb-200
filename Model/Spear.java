@@ -15,8 +15,12 @@ public class Spear extends Weapon {
     public Spear(Integer positionX, Integer positionY) {
         super(positionX, positionY, 1, 7);
         setIsDistanceWeapon(false);
-        createImage();
-    }
+        try {
+            img = ImageIO.read(new File(imgPath));
+            staticImg = ImageIO.read(new File(staticImgPath));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }    }
 
     public void createImage(){
         try {

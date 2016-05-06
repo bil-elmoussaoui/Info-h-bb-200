@@ -19,7 +19,11 @@ public class Tile implements Serializable{
         setPositionY(positionY);
         setIsBreakable(false);
         setIsWalkable(true);
-        createImage();
+        try {
+            img = ImageIO.read(new File(imgPath));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void createImage(){
@@ -30,25 +34,13 @@ public class Tile implements Serializable{
         }
     }
 
-    public boolean getIsWalkable() {
-        return isWalkable;
-    }
-
     public void setIsWalkable(boolean isWalkable) {
         this.isWalkable = isWalkable;
         Game.freePositions[this.getPositionX()][this.getPositionY()] = isWalkable ? 0 : 1;
     }
 
-    public boolean getIsDangerous() {
-        return isDangerous;
-    }
-
     public void setIsDangerous(boolean isDangerous) {
         this.isDangerous = isDangerous;
-    }
-
-    public boolean getIsBreakable() {
-        return isBreakable;
     }
 
     public void setIsBreakable(boolean isBreakable) {

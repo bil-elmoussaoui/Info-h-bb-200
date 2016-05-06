@@ -16,11 +16,18 @@ public class Salesman extends Item {
         setIsBreakable(false);
         setIsCollectable(false);
         setIsWalkable(false);
-        createImage();
         initCartedAchat();
+        try {
+            img = ImageIO.read(new File(imgPath));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void initCartedAchat(){
+        // the map of different elements that user can buy
+        // [0] is the type of the element
+        // [1] is the price
         carteAchat[0][0] = new int[]{1, 10}; // Potion vie
         carteAchat[1][0] = new int[]{2, 50}; // Potion firelion
         carteAchat[2][0] = new int[]{3, 50}; // Potion icetacle
@@ -46,6 +53,7 @@ public class Salesman extends Item {
         return selectorY;
     }
 
+    // selector used to show a white border around the selected element
     public void setSelectorY(int selectorY) {
         if (selectorY < 0) {
             this.selectorY = (4 + selectorY) % 4;

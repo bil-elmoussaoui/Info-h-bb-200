@@ -14,7 +14,12 @@ public class Staff extends Weapon {
     public Staff(Integer positionX, Integer positionY) {
         super(positionX, positionY, 0.25, 7);
         setIsDistanceWeapon(false);
-        createImage();
+        try {
+            img = ImageIO.read(new File(imgPath));
+            staticImg = ImageIO.read(new File(staticImgPath));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void createImage(){
